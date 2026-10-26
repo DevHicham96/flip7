@@ -3,9 +3,9 @@ keys={'apiKey':'FIREBASE_API_KEY','authDomain':'FIREBASE_AUTH_DOMAIN','projectId
 cfg={k:os.environ.get(v,'') for k,v in keys.items()}
 missing=[v for k,v in keys.items() if not cfg[k]]
 if missing:sys.exit('Variables manquantes dans Netlify : '+', '.join(missing))
-src=open('index.template.html',encoding='utf-8').read()
-i=src.index('<script>')
-out=src[:i]+'<script>window.F7_FIREBASE='+json.dumps(cfg)+';</script>\n'+src[i:]
 os.makedirs('dist',exist_ok=True)
-open('dist/index.html','w',encoding='utf-8').write(out)
-print('ok',len(out))
+for src,dst in (('index.template.html','index.html'),('ronda.template.html','ronda.html')):
+    s=open(src,encoding='utf-8').read()
+    i=s.index('<script>')
+    out=s[:i]+'<script>window.F7_FIREBASE='+json.dumps(cfg)+';</script>\n'+s[i:]
+    open('dist/'+dst,'w',encoding='utf-8').write(out);print('ok',dst,len(out))
