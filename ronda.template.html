@@ -34,8 +34,8 @@ input.t{min-height:44px;border-radius:12px;border:2px solid #B88B45;background:#
 .rc{position:relative;width:var(--cw);height:calc(var(--cw)*1.5);border-radius:calc(var(--cw)*.12);background:#F6ECD2;border:1px solid #b99b62;box-shadow:0 2px 0 rgba(60,35,10,.45),0 6px 10px rgba(0,0,0,.25);flex:none;overflow:hidden;user-select:none;-webkit-user-select:none}
 .rc img,.rc svg{position:absolute;inset:0;width:100%;height:100%;display:block}
 .rc img{object-fit:fill}
-.rc.back{background:repeating-linear-gradient(45deg,#7C3AED 0 6px,#5B21B6 6px 12px);border:3px solid #fff}
-.rc.back::after{content:'7';position:absolute;inset:0;display:grid;place-items:center;font:800 calc(var(--cw)*.5) var(--f-display);color:rgba(255,255,255,.85);text-shadow:0 2px 0 rgba(0,0,0,.3)}
+
+
 .rc.sm{--cw:calc(var(--cwb)*.62)}
 .rc.hl{outline:4px solid #FFE066;outline-offset:1px;transform:translateY(-6px);box-shadow:0 0 18px #FFE066,0 8px 12px rgba(0,0,0,.3)}
 .rc.drop{animation:rdrop .45s cubic-bezier(.2,1.2,.4,1) both}
@@ -78,7 +78,7 @@ input.t{min-height:44px;border-radius:12px;border:2px solid #B88B45;background:#
 .rules{display:grid;gap:3px;font-size:14px;color:var(--ink-2);background:#FFF8E1;border:2px solid #C9A15A;border-radius:12px;padding:8px 12px}.rules b{color:#B8430A}
 .center{position:relative;z-index:1;display:flex;justify-content:center;align-items:center;gap:calc(var(--cw)*.5);padding:8px;min-height:calc(var(--cw)*1.5 + 24px)}
 .deck{position:relative;border:0;background:none;padding:0;cursor:default;border-radius:10px}
-.deck .rc.back{box-shadow:3px 3px 0 #3b2a6e,6px 6px 0 #2a1d52,0 8px 12px rgba(0,0,0,.3)}
+.deck 
 .deck.can{cursor:pointer;animation:dpulse 1.1s ease-in-out infinite}.deck.can:hover{transform:translateY(-4px)}
 @keyframes dpulse{50%{filter:drop-shadow(0 0 12px #FFE066)}}
 .deck .cnt{position:absolute;right:-8px;bottom:-8px;background:#3E2410;color:#FFE066;font:800 13px var(--f-body);border-radius:99px;padding:2px 8px;border:2px solid #FFE066}
@@ -92,6 +92,9 @@ input.t{min-height:44px;border-radius:12px;border:2px solid #B88B45;background:#
 .seat.fin .plate{opacity:.75}
 .suits{display:grid;grid-template-columns:1fr 1fr;gap:10px}.suits .btn{min-height:64px;display:grid;gap:2px;justify-items:center;padding:6px 10px;font-size:15px}.suits .si{font-size:26px}
 .av.has{background:none!important;overflow:hidden;border-color:#fff6d2}.av svg{width:100%;height:100%;display:block}
+/* dos gris façon cartes marocaines */
+.rc.back{background-color:#8c8478;background-image:radial-gradient(circle at 50% 50%,#5f584e 0 2.2px,transparent 2.6px),radial-gradient(circle at 50% 50%,#a8a094 0 1.6px,transparent 2px);background-size:7px 7px,7px 7px;background-position:0 0,3.5px 3.5px;border:3px solid #d9d3c6;box-shadow:0 2px 0 rgba(60,35,10,.45),0 6px 10px rgba(0,0,0,.25),inset 0 0 0 1px #6b645a}
+.deck .rc.back{box-shadow:3px 3px 0 #6b645a,6px 6px 0 #4f493f,0 8px 12px rgba(0,0,0,.3)}
 </style></head><body><div id="app"></div>
 <script>
 /*ENGINE_START*/
