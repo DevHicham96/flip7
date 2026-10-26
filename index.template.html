@@ -858,6 +858,10 @@ h2{color:#E8632B;text-shadow:0 2px 0 rgba(255,246,210,.9),0 3px 0 rgba(120,60,10
 .op-c.lose{opacity:.45;filter:grayscale(.6);transform:scale(.92)}
 .op-c.tie .op-flip,.op-c.win .op-flip{filter:drop-shadow(0 0 10px #FFE066)}.op-c.win{transform:scale(1.12)}
 .op-fin{text-align:center;font:800 20px var(--f-display);color:#FFE066;min-height:1.4em;opacity:0;transform:scale(.8);transition:all .4s cubic-bezier(.2,1.6,.4,1)}.op-fin.on{opacity:1;transform:none}
+.netp{cursor:pointer;font-family:var(--f-body)}.netp:hover{filter:brightness(1.15)}
+.netpop{min-width:260px;right:0;left:auto;padding:10px;display:grid;gap:8px;color:#4A2B10}
+.np-r{display:grid;grid-template-columns:1fr auto;gap:0 10px;align-items:baseline;font-size:14px}.np-r small{grid-column:1/-1;color:#7A5224;font-size:11.5px}
+.np-v{font-weight:800;font-size:13.5px;border-radius:10px;padding:8px 10px;background:rgba(150,100,30,.14)}.np-v.warn{background:rgba(247,169,59,.28)}.np-v.bad{background:rgba(229,72,77,.22)}.np-v.ok{background:rgba(47,182,124,.22)}
 /* ===== fin thème ===== */
 </style>
 
@@ -892,6 +896,7 @@ h2{color:#E8632B;text-shadow:0 2px 0 rgba(255,246,210,.9),0 3px 0 rgba(120,60,10
       <button class="btn sm" id="rk-btn" type="button" title="Classement et historique" hidden>🏆 Classement</button>
       <button class="btn sm" id="fs-btn" type="button" aria-pressed="false" title="Plein écran">⛶ Plein écran</button>
       <button class="btn sm" id="ph-btn" type="button" aria-pressed="false" title="Mode téléphone : plein écran et table en paysage">📱 Mode téléphone</button>
+      <span class="tbwrap"><button class="pill netp" id="net-btn" type="button" aria-haspopup="true" aria-expanded="false" title="Latence et état du réseau"><span class="dot" id="net-dot"></span><span id="net-t">… ms</span></button><div class="tbpop netpop" id="net-pop" hidden role="dialog" aria-label="Latence"></div></span>
       <span class="pill" id="conn"><span class="dot" id="dot"></span><span id="conn-t">Connexion…</span></span>
       <span id="newgame-slot"></span>
     </div>
@@ -3029,6 +3034,53 @@ function reactPick(k){
   reactPlayers().forEach(p=>kids.push(h('button',{type:'button',onclick:ev=>{ev.stopPropagation();sendReact(k,p.id,em);}},h('b',null,p.id===uid?'🪞':'🎯'),p.name+(p.id===uid?' (moi)':''))));
   pop.replaceChildren(...kids);
 }
+const NET={s:[],fail:0,w:null,wt:0,lag:[],last:performance.now()};
+const netAvg=()=>NET.s.length?Math.round(NET.s.reduce((a,b)=>a+b,0)/NET.s.length):null;
+const netJit=()=>NET.s.length>2?Math.max(...NET.s)-Math.min(...NET.s):0;
+const netLag=()=>NET.lag.length?Math.max(...NET.lag):0;
+function netVerdict(){
+  const a=netAvg(),off=navigator.onLine===false||NET.fail>=2;
+  if(off)return['bad','🔴 Pas de connexion : c\'est ton réseau, pas l\'application.'];
+  if(netLag()>200)return['warn','🟠 Ton appareil ou le navigateur rame (la page est surchargée). Ferme des onglets ou applis.'];
+  if(a!=null&&(a>300||netJit()>250))return['warn','🟠 Réseau lent ou instable : ce n\'est pas un bug de l\'application.'];
+  if(NET.w!=null&&NET.w>1500&&Date.now()-NET.wt<60000)return['warn','🟠 Le serveur du jeu répond lentement en ce moment (Firebase).'];
+  return['ok','🟢 Tout va bien.'];
+}
+function netRender(){
+  const a=netAvg(),v=netVerdict(),t=document.getElementById('net-t'),d=document.getElementById('net-dot');
+  if(!t)return;
+  t.textContent=(NET.fail>=2||navigator.onLine===false)?'hors ligne':(a==null?'… ms':a+' ms');
+  d.className='dot'+(v[0]==='ok'?' on':'');d.style.background=v[0]==='bad'?'#E5484D':v[0]==='warn'?'#F7A93B':'';
+  const pop=document.getElementById('net-pop');
+  if(pop&&!pop.hidden){
+    const row=(k,val,hint)=>h('div',{class:'np-r'},h('span',null,k),h('b',null,val),hint?h('small',null,hint):null);
+    pop.replaceChildren(
+      h('div',{class:'tbh'},'Latence'),
+      row('Réseau (ping)',a==null?'…':a+' ms','Aller-retour vers Google. Bon < 100 ms'),
+      row('Instabilité',netJit()+' ms','Écart entre le meilleur et le pire ping'),
+      row('Serveur du jeu',NET.w==null?'pas encore mesuré':NET.w+' ms','Durée de ta dernière action envoyée'),
+      row('Ton appareil',netLag()<=60?'fluide':netLag()+' ms de retard','Si ça monte, c\'est la page qui rame'),
+      h('div',{class:'np-v '+v[0]},v[1]));
+  }
+}
+async function netPing(){
+  if(document.hidden)return;
+  const t0=performance.now();
+  try{
+    const ac=new AbortController(),to=setTimeout(()=>ac.abort(),6000);
+    await fetch('https://firestore.googleapis.com/?_='+Date.now(),{mode:'no-cors',cache:'no-store',signal:ac.signal});
+    clearTimeout(to);NET.fail=0;NET.s.push(Math.round(performance.now()-t0));if(NET.s.length>12)NET.s.shift();
+  }catch(e){NET.fail++;}
+  netRender();
+}
+function initNet(){
+  const b=$('net-btn'),pop=$('net-pop');if(!b)return;
+  b.addEventListener('click',ev=>{ev.stopPropagation();pop.hidden=!pop.hidden;b.setAttribute('aria-expanded',pop.hidden?'false':'true');netRender();});
+  document.addEventListener('click',ev=>{if(!ev.target.closest('.netpop')&&!ev.target.closest('#net-btn')&&!pop.hidden){pop.hidden=true;b.setAttribute('aria-expanded','false');}});
+  setInterval(()=>{const n=performance.now();NET.lag.push(Math.max(0,Math.round(n-NET.last-500)));if(NET.lag.length>8)NET.lag.shift();NET.last=n;},500);
+  window.addEventListener('online',netPing);window.addEventListener('offline',netRender);
+  netPing();setInterval(netPing,5000);
+}
 function initReacts(){
   const pop=$('react-pop'),fab=$('react-fab');
   reactMenu();
@@ -3411,7 +3463,7 @@ function renderAll(){renderRooms();renderHeader();renderLobby();renderGame();ren
 async function writeState(s){
   if(!db)throw new Error('db');
   for(let i=0;i<3;i++){
-    try{await db.doc(gp('state')).set(CLONE(s));return;}
+    try{const w0=performance.now();await db.doc(gp('state')).set(CLONE(s));NET.w=Math.round(performance.now()-w0);NET.wt=Date.now();return;}
     catch(e){
       if(i<2&&(!e||e.code==='unavailable'||navigator.onLine===false)){await new Promise(r=>setTimeout(r,300+Math.random()*500));continue;}
       say('Action non envoyée. Réessayez.');local=lastSnap;renderAll();throw e;
@@ -3701,7 +3753,7 @@ async function boot(){
   initTables();
   initSnd();
   initEmoji();
-  initReacts();
+  initReacts();initNet();
   $('pause-btn').addEventListener('click',()=>setPause(!(local&&local.paused)));
   $('resume-btn').addEventListener('click',()=>setPause(false));
   $('dev-btn').addEventListener('click',()=>{if(isAdmin())startDev(modeSel,4);});
