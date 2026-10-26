@@ -74,110 +74,133 @@ input.t{min-height:44px;border-radius:12px;border:2px solid #B88B45;background:#
 .err{color:#c0262d;font-weight:700}
 @media (max-width:560px){:root{--cwb:clamp(44px,13.5vw,70px)}.brand{font-size:17px}.felt{padding:12px 6px 10px}}
 @media (prefers-reduced-motion:reduce){.rc.drop,.seat.turn .plate{animation:none}}
+/* nouvelles règles */
+.rules{display:grid;gap:3px;font-size:14px;color:var(--ink-2);background:#FFF8E1;border:2px solid #C9A15A;border-radius:12px;padding:8px 12px}.rules b{color:#B8430A}
+.center{position:relative;z-index:1;display:flex;justify-content:center;align-items:center;gap:calc(var(--cw)*.5);padding:8px;min-height:calc(var(--cw)*1.6 + 24px)}
+.deck{position:relative;border:0;background:none;padding:0;cursor:default;border-radius:10px}
+.deck .rc.back{box-shadow:3px 3px 0 #3b2a6e,6px 6px 0 #2a1d52,0 8px 12px rgba(0,0,0,.3)}
+.deck.can{cursor:pointer;animation:dpulse 1.1s ease-in-out infinite}.deck.can:hover{transform:translateY(-4px)}
+@keyframes dpulse{50%{filter:drop-shadow(0 0 12px #FFE066)}}
+.deck .cnt{position:absolute;right:-8px;bottom:-8px;background:#3E2410;color:#FFE066;font:800 13px var(--f-body);border-radius:99px;padding:2px 8px;border:2px solid #FFE066}
+.pilewrap{position:relative;display:grid;justify-items:center;gap:6px}
+.suitb{background:rgba(74,43,16,.92);color:#FFF3CC;border:2px solid #FFE066;border-radius:99px;font:800 13px var(--f-body);padding:3px 12px;white-space:nowrap}
+.pend{position:absolute;right:6%;top:-4px;background:#E5484D;color:#fff;font:800 22px var(--f-display);border-radius:99px;padding:4px 14px;border:3px solid #fff;box-shadow:0 4px 12px rgba(0,0,0,.4);animation:pulse2 .8s ease-in-out infinite}
+@keyframes pulse2{50%{transform:scale(1.12)}}
+.mehand{flex-wrap:wrap}
+.rc.mine.ok{outline:3px solid rgba(255,224,102,.9);outline-offset:1px}.rc.mine.ok:hover{transform:translateY(-14px);box-shadow:0 0 16px #FFE066,0 8px 12px rgba(0,0,0,.3)}
+.rc.mine.dis{opacity:.62;filter:saturate(.6) brightness(.9)}
+.seat.fin .plate{opacity:.75}
+.suits{display:grid;grid-template-columns:1fr 1fr;gap:10px}.suits .btn{min-height:64px;display:grid;gap:2px;justify-items:center;padding:6px 10px;font-size:15px}.suits .si{font-size:26px}
 </style></head><body><div id="app"></div>
 <script>
 /*ENGINE_START*/
 const SUITS=['s','c','b','o'],ORD=[1,2,3,4,5,6,7,10,11,12];
 const SUIT_N={s:'Épées',c:'Coupes',b:'Bâtons',o:'Deniers'};
+const SUIT_I={s:'🗡️',c:'🏆',b:'🪵',o:'🪙'};
 const cv=c=>+c.slice(1),csu=c=>c[0];
 const VNAME={1:'As',10:'Valet',11:'Cavalier',12:'Roi'};
 const vName=v=>VNAME[v]||String(v);
 function mkDeck(){const d=[];SUITS.forEach(su=>ORD.forEach(v=>d.push(su+v)));return d;}
 function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));const t=a[i];a[i]=a[j];a[j]=t;}return a;}
-function maxSame(t){const m={};let x=0;t.forEach(c=>{m[cv(c)]=(m[cv(c)]||0)+1;x=Math.max(x,m[cv(c)]);});return x;}
 const nameOf=(s,id)=>(s.players.find(p=>p.id===id)||{name:'?'}).name;
-function rdNew(players,target){
-  const s={v:1,rev:1,gid:Date.now().toString(36)+Math.random().toString(36).slice(2,6),phase:'playing',hand:0,target:target===41?41:21,
-    players:players.map(p=>({id:p.id,name:p.name,av:p.av||'',bot:!!p.bot})),scores:{},first:0,turn:0,table:[],deck:[],hands:{},cap:{},played:{},ann:{},
-    lastPlay:null,lastCap:null,log:[],fx:[],fxc:0,winner:null,hres:null};
-  s.players.forEach(p=>{s.scores[p.id]=0;});
-  rdHand(s);return s;
-}
 function logp(s,t){s.log.push(t);if(s.log.length>60)s.log.shift();}
-function rdDeal(s){
-  const n=s.players.length;
-  for(let k=0;k<n;k++){const p=s.players[(s.first+k)%n];s.hands[p.id]=s.deck.splice(0,3);s.played[p.id]=0;s.ann[p.id]=false;}
-  s.turn=s.first;
+const HAND=5;
+function rdNew(players){
+  const s={v:2,rev:1,gid:Date.now().toString(36)+Math.random().toString(36).slice(2,6),phase:'playing',
+    players:players.map(p=>({id:p.id,name:p.name,av:p.av||'',bot:!!p.bot})),deck:shuffle(mkDeck()),pile:[],hands:{},
+    turn:0,suit:'o',pending:0,drew:false,rank:[],log:[],fx:[],fxc:0};
+  s.players.forEach(p=>{s.hands[p.id]=s.deck.splice(0,HAND);});
+  let g=0;
+  while(g++<100){const c=s.deck.shift();if([1,2,7].includes(cv(c))){s.deck.push(c);s.deck=shuffle(s.deck);continue;}s.pile.push(c);s.suit=csu(c);break;}
+  logp(s,'La partie commence : '+nameOf(s,s.players[0].id)+' joue en premier');
+  return s;
 }
-function rdHand(s){
-  const n=s.players.length;
-  s.hand=(s.hand||0)+1;s.deck=shuffle(mkDeck());
-  for(let g=0;g<60;g++){s.table=s.deck.splice(0,4);if(maxSame(s.table)<3)break;s.deck=shuffle(s.deck.concat(s.table));}
-  s.cap={};s.players.forEach(p=>{s.cap[p.id]=0;});
-  s.lastPlay=null;s.lastCap=null;s.hres=null;s.first=(s.hand-1)%n;s.phase='playing';s.fx=[];
-  rdDeal(s);logp(s,'Donne '+s.hand+' : '+nameOf(s,s.players[s.first].id)+' commence');
-}
-function rdNextHand(s){if(s.phase!=='handEnd')return false;s.rev++;rdHand(s);return true;}
 const rdTurnId=s=>s.players[s.turn].id;
-const rdCan=(s,pid)=>s.phase==='playing'&&rdTurnId(s)===pid;
-function add(s,pid,pts){s.scores[pid]+=pts;if(s.scores[pid]>=s.target&&!s.winner)s.winner=pid;}
-function rdAnnOpts(s,pid){
-  if(!rdCan(s,pid)||s.played[pid]||s.ann[pid])return null;
-  const cnt={};s.hands[pid].forEach(c=>{cnt[cv(c)]=(cnt[cv(c)]||0)+1;});
-  let best=null;for(const v in cnt){if(cnt[v]>=3)return{kind:'tringla',v:+v,pts:5};if(cnt[v]===2)best={kind:'ronda',v:+v,pts:1};}
-  return best;
+const rdCan=(s,pid)=>s.phase==='playing'&&rdTurnId(s)===pid&&!s.rank.includes(pid);
+const rdTop=s=>s.pile[s.pile.length-1];
+function rdLegal(s,pid,c){
+  if(!rdCan(s,pid)||!s.hands[pid].includes(c))return false;
+  if(s.pending>0)return cv(c)===2;
+  const t=rdTop(s);
+  return cv(c)===cv(t)||csu(c)===s.suit;
 }
-function rdAnnounce(s,pid){
-  const o=rdAnnOpts(s,pid);if(!o)return false;
-  s.ann[pid]=true;s.fx=[{k:o.kind,by:pid,v:o.v,pts:o.pts}];s.fxc=(s.fxc||0)+1;
-  add(s,pid,o.pts);logp(s,nameOf(s,pid)+' annonce '+(o.kind==='tringla'?'TRINGLA':'RONDA')+' de '+vName(o.v)+' (+'+o.pts+')');
-  if(s.winner)rdFinish(s);
-  s.rev++;return true;
+const rdPlayable=(s,pid)=>s.hands[pid].filter(c=>rdLegal(s,pid,c));
+const active=s=>s.players.filter(p=>!s.rank.includes(p.id));
+function nextIdx(s,from){
+  const n=s.players.length;
+  for(let k=1;k<=n;k++){const j=(from+k)%n;if(!s.rank.includes(s.players[j].id))return j;}
+  return from;
 }
-function rdTake(s,card){
-  const v=cv(card),took=s.table.filter(c=>cv(c)===v);
-  if(!took.length)return[];
-  let k=ORD.indexOf(v)+1;
-  while(k<ORD.length){const g=s.table.filter(c=>cv(c)===ORD[k]);if(!g.length)break;took.push(...g);k++;}
-  return took;
+function advance(s,skip){
+  s.drew=false;
+  let j=nextIdx(s,s.turn);
+  if(skip&&active(s).length>1){s.fx.push({k:'skip',to:s.players[j].id});logp(s,nameOf(s,s.players[j].id)+' passe son tour');j=nextIdx(s,j);}
+  s.turn=j;
 }
-function rdFinish(s){s.phase='gameEnd';s.winner=s.winner||null;logp(s,nameOf(s,s.winner)+' gagne la partie');}
-function rdPlay(s,pid,card){
-  if(!rdCan(s,pid))return false;
-  const hd=s.hands[pid],i=hd.indexOf(card);if(i<0)return false;
-  s.fx=[];hd.splice(i,1);s.played[pid]++;
-  const nm=nameOf(s,pid),v=cv(card),took=rdTake(s,card);
-  const last=!s.deck.length&&s.players.every(p=>!s.hands[p.id].length);
-  if(took.length){
-    const lp=s.lastPlay;
-    s.table=s.table.filter(c=>!took.includes(c));
-    s.cap[pid]+=took.length+1;s.lastCap=pid;
-    s.fx.push({k:'capture',by:pid,card,took:took.slice()});
-    logp(s,nm+' prend '+(took.length+1)+' cartes avec '+vName(v));
-    if(lp&&lp.by!==pid&&lp.v===v){add(s,pid,1);s.fx.push({k:'taper',by:pid,pts:1});logp(s,nm+' fait un TAPER (+1)');}
-    if(!s.table.length&&!last){add(s,pid,1);s.fx.push({k:'missa',by:pid,pts:1});logp(s,nm+' fait MISSA (+1)');}
-    s.lastPlay=null;
-  }else{
-    s.table.push(card);s.lastPlay={by:pid,v};
-    s.fx.push({k:'place',by:pid,card});logp(s,nm+' pose '+vName(v));
+function checkEnd(s){
+  const act=active(s);
+  if(act.length<=1){
+    if(act.length===1){s.rank.push(act[0].id);}
+    s.phase='gameEnd';logp(s,'Fin de la partie');return true;
   }
+  return false;
+}
+function refill(s){
+  if(s.deck.length)return true;
+  if(s.pile.length>1){const top=s.pile.pop();s.deck=shuffle(s.pile);s.pile=[top];s.fx.push({k:'shuffle'});logp(s,'La pioche est remélangée');return true;}
+  return false;
+}
+function draw(s,pid,n){
+  let k=0;for(;k<n;k++){if(!refill(s))break;s.hands[pid].push(s.deck.shift());}return k;
+}
+function rdPlay(s,pid,card,suit){
+  if(!rdLegal(s,pid,card))return false;
+  const hd=s.hands[pid],v=cv(card),nm=nameOf(s,pid);
+  hd.splice(hd.indexOf(card),1);s.pile.push(card);s.fx=[{k:'place',by:pid,card}];
+  s.suit=csu(card);
+  let skip=false;
+  const out=!hd.length;
+  if(v===7&&!out&&SUITS.includes(suit)){s.suit=suit;s.fx.push({k:'suit',by:pid,suit});logp(s,nm+' joue un 7 et demande '+SUIT_N[suit]);}
+  else if(v===1){skip=true;logp(s,nm+' joue un As');}
+  else if(v===2){s.pending+=2;s.fx.push({k:'stack',by:pid,n:s.pending});logp(s,nm+' joue un 2 : '+s.pending+' cartes à piocher');}
+  else logp(s,nm+' joue '+vName(v)+' d\''+SUIT_N[csu(card)].toLowerCase());
+  if(out){s.rank.push(pid);s.fx.push({k:'out',by:pid,rank:s.rank.length});logp(s,nm+' a fini en position '+s.rank.length);}
   s.fxc=(s.fxc||0)+1;s.rev++;
-  if(s.winner){rdFinish(s);return true;}
-  if(s.players.every(p=>!s.hands[p.id].length)){
-    if(s.deck.length){rdDeal(s);}
-    else rdEndHand(s);
-  }else s.turn=(s.turn+1)%s.players.length;
+  if(checkEnd(s))return true;
+  advance(s,skip);
   return true;
 }
-function rdEndHand(s){
-  const n=s.players.length,per=Math.floor(40/n),res={cap:{},pts:{},rest:0,by:s.lastCap};
-  if(s.lastCap&&s.table.length){res.rest=s.table.length;s.cap[s.lastCap]+=s.table.length;s.fx.push({k:'last',by:s.lastCap,n:s.table.length});logp(s,nameOf(s,s.lastCap)+' ramasse le tapis (dernière main)');}
-  s.table=[];
-  s.players.forEach(p=>{res.cap[p.id]=s.cap[p.id];const pt=Math.max(0,s.cap[p.id]-per);res.pts[p.id]=pt;add(s,p.id,pt);});
-  s.hres=res;
-  const mx=Math.max(...s.players.map(p=>s.scores[p.id]));
-  if(mx>=s.target){const top=s.players.filter(p=>s.scores[p.id]===mx);if(top.length===1){s.winner=top[0].id;rdFinish(s);return;}}
-  s.winner=null;s.phase='handEnd';
+function rdDraw(s,pid){
+  if(!rdCan(s,pid))return false;
+  s.fx=[];const nm=nameOf(s,pid);
+  if(s.pending>0){
+    const n=draw(s,pid,s.pending);s.fx.push({k:'draw',by:pid,n});logp(s,nm+' pioche '+n+' cartes');s.pending=0;
+    s.fxc=(s.fxc||0)+1;s.rev++;advance(s,false);return true;
+  }
+  if(s.drew)return false;
+  const n=draw(s,pid,1);s.fx.push({k:'draw',by:pid,n});logp(s,nm+' pioche une carte');
+  s.fxc=(s.fxc||0)+1;s.rev++;s.drew=true;
+  if(!n||!rdPlayable(s,pid).length)advance(s,false);
+  return true;
+}
+function rdPass(s,pid){
+  if(!rdCan(s,pid)||!s.drew)return false;
+  s.fx=[];logp(s,nameOf(s,pid)+' passe');s.rev++;advance(s,false);return true;
 }
 function rdBot(s,pid){
-  const hd=s.hands[pid];let best=null,bs=-1e9;
-  hd.forEach(c=>{
-    const t=rdTake(s,c);let sc=0;
-    if(t.length){sc=10+t.length*3;const lp=s.lastPlay;if(lp&&lp.by!==pid&&lp.v===cv(c))sc+=4;if(t.length===s.table.length)sc+=5;}
-    else{const same=hd.filter(x=>cv(x)===cv(c)).length;sc=Math.random()*2-(same>1?1:0)-(cv(c)>=10?.5:0);}
+  const pl=rdPlayable(s,pid);
+  if(!pl.length)return null;
+  const hd=s.hands[pid],cnt={};hd.forEach(c=>{cnt[csu(c)]=(cnt[csu(c)]||0)+1;});
+  let best=null,bs=-1e9;
+  pl.forEach(c=>{
+    let sc=Math.random();
+    if(cv(c)===2)sc+=3;if(cv(c)===1)sc+=2;if(cv(c)===7)sc-=1.5;
+    sc+=(cnt[csu(c)]||0)*.4;
     if(sc>bs){bs=sc;best=c;}
   });
-  return best;
+  const rest=hd.filter(c=>c!==best);const c2={};rest.forEach(c=>{c2[csu(c)]=(c2[csu(c)]||0)+1;});
+  let suit=csu(best),m=-1;SUITS.forEach(su=>{if((c2[su]||0)>m){m=c2[su]||0;suit=su;}});
+  return{card:best,suit};
 }
 /*ENGINE_END*/
 
@@ -280,12 +303,12 @@ function joinRoom(n){
 function leaveRoom(){
   if(db&&ROOM)db.doc('lobby/rd_'+uid).delete().catch(()=>{});
   if(stateUnsub){stateUnsub();stateUnsub=null;}
-  clearInterval(hb);hb=null;ROOM=0;mode=null;S=null;prevTable=[];lastFxc=-1;lastGid=null;render();
+  clearInterval(hb);hb=null;ROOM=0;mode=null;S=null;prevTop='';lastFxc=-1;lastGid=null;render();
 }
 function toggleReady(){myReady=!myReady;beat();render();}
 function startOnline(){
   const ps=roomPlayers(ROOM).slice(0,4);if(ps.length<2||!ps.every(p=>p.ready||p.id===uid))return;
-  commit(rdNew(ps.map(p=>({id:p.id,name:p.name})),cfgTarget));
+  commit(rdNew(ps.map(p=>({id:p.id,name:p.name}))));
 }
 function commit(s){
   S=s;onLocalChange(null);render();
@@ -293,81 +316,71 @@ function commit(s){
 }
 function onState(d){
   const prev=S;
-  if(!d){if(mode==='online'){S=null;prevTable=[];lastFxc=-1;lastGid=null;render();}return;}
+  if(!d){if(mode==='online'){S=null;prevTop='';lastFxc=-1;lastGid=null;render();}return;}
   if(prev&&d.rev<prev.rev&&d.gid===prev.gid)return;
   S=d;onLocalChange(prev);render();
 }
+/* ---- effets lors d'un changement d'état ---- */
 /* ---- effets lors d'un changement d'état ---- */
 function onLocalChange(prev){
   if(!S)return;
   if(S.gid!==lastGid){lastGid=S.gid;lastFxc=-1;}
   if(S.fxc!==lastFxc&&lastFxc!==-1&&S.fx&&S.fx.length)playFx(S);
   lastFxc=S.fxc||0;
-  const key=S.gid+':'+S.hand+':'+S.turn+':'+S.phase+':'+Object.values(S.hands||{}).reduce((a,x)=>a+x.length,0);
+  const key=S.gid+':'+S.turn+':'+S.phase+':'+S.rev;
   if(key!==lastTurnKey){lastTurnKey=key;if(S.phase==='playing'&&rdTurnId(S)===uid&&!isSpec()&&mode==='online')setTimeout(()=>Snd.play('turn'),400);}
 }
 function playFx(s){
   s.fx.forEach(f=>{
-    const nm=nameOf(s,f.by);
+    const nm=f.by?nameOf(s,f.by):'';
     if(f.k==='place')Snd.play('place');
-    else if(f.k==='capture'){Snd.play('take');}
-    else if(f.k==='ronda'){Snd.play('ronda');banner('📣 '+nm+' : RONDA de '+vName(f.v)+' ! +1','#FFE066');}
-    else if(f.k==='tringla'){Snd.play('tringla');banner('🔥 '+nm+' : TRINGLA de '+vName(f.v)+' ! +5','#FF8A3D');}
-    else if(f.k==='missa'){setTimeout(()=>{Snd.play('missa');banner('✨ '+nm+' : MISSA ! +1','#7CE7B0');},350);}
-    else if(f.k==='taper'){setTimeout(()=>{Snd.play('taper');banner('👊 '+nm+' : TAPER ! +1','#4D8DF7');},200);}
-    else if(f.k==='last'){banner('🧺 '+nm+' ramasse le tapis (dernière main)','#E8632B');}
+    else if(f.k==='draw'){Snd.play('take');if(f.n>1)banner('🃏 '+nm+' pioche '+f.n+' cartes','#FF8A3D');}
+    else if(f.k==='skip'){Snd.play('taper');banner('🚫 '+nameOf(s,f.to)+' passe son tour','#E5484D');}
+    else if(f.k==='stack'){Snd.play('ronda');banner('✌️ +'+f.n+' cartes à piocher !','#FF8A3D');}
+    else if(f.k==='suit'){Snd.play('missa');banner(SUIT_I[f.suit]+' '+nm+' demande '+SUIT_N[f.suit],'#7CE7B0');}
+    else if(f.k==='out'){Snd.play('win');banner('🏁 '+nm+' a fini '+(f.rank===1?'1er !':f.rank+'e'),'#FFE066');}
+    else if(f.k==='shuffle'){banner('🔀 Pioche remélangée','#4D8DF7');}
   });
 }
 /* ---- actions ---- */
-function playCard(c){
-  if(!S||isSpec()||busy||!rdCan(S,uid)||!S.hands[uid].includes(c))return;
-  selCard=null;hoverCard=null;
+let pick=null;
+function playCard(c,suit){
+  if(!S||isSpec()||busy||!rdLegal(S,uid,c))return;
+  if(cv(c)===7&&S.hands[uid].length>1&&!suit){pick=c;render();return;}
+  pick=null;
   const s=CLONE(S);
-  const pre=snapTable();
-  if(!rdPlay(s,uid,c))return;
-  animateCapture(pre,s);
+  if(!rdPlay(s,uid,c,suit))return;
   commit(s);
 }
-function announce(){
-  if(!S||isSpec()||!rdAnnOpts(S,uid))return;
-  const s=CLONE(S);if(rdAnnounce(s,uid))commit(s);
+function drawCard(){
+  if(!S||isSpec()||!rdCan(S,uid))return;
+  const s=CLONE(S);if(rdDraw(s,uid)){pick=null;commit(s);}
 }
-function snapTable(){const m={};document.querySelectorAll('#tbl [data-c]').forEach(e=>{const r=e.getBoundingClientRect();m[e.dataset.c]=r;});return m;}
-function animateCapture(pre,s){
-  const f=(s.fx||[]).find(x=>x.k==='capture');if(!f)return;
-  const tgt=seatEl(f.by);const r2=tgt?tgt.getBoundingClientRect():{left:innerWidth/2,top:innerHeight,width:0,height:0};
-  const cards=f.took.concat([f.card]);
-  cards.forEach((c,i)=>{
-    const r=pre[c];if(!r&&c!==f.card)return;
-    const src=r||(()=>{const e=document.querySelector('.mehand [data-c="'+c+'"]');return e?e.getBoundingClientRect():null;})();
-    if(!src)return;
-    const el=cardEl(c,{cls:'fly'});el.style.left=src.left+'px';el.style.top=src.top+'px';el.style.width=src.width+'px';el.style.height=src.height+'px';el.style.setProperty('--cw',src.width+'px');
-    document.body.append(el);
-    const dx=r2.left+r2.width/2-(src.left+src.width/2),dy=r2.top+r2.height/2-(src.top+src.height/2);
-    setTimeout(()=>{el.style.transform='translate('+dx+'px,'+dy+'px) scale(.4) rotate('+((i%2?1:-1)*25)+'deg)';el.style.opacity='.1';},60+i*70);
-    setTimeout(()=>el.remove(),1000+i*70);
-  });
+function passTurn(){
+  if(!S||isSpec()||!rdCan(S,uid))return;
+  const s=CLONE(S);if(rdPass(s,uid)){commit(s);}
 }
 /* ---- bots (mode solo) ---- */
 function botStep(){
   if(mode!=='solo'||!S||S.phase!=='playing')return;
   const p=S.players[S.turn];if(!p.bot)return;
+  const key=S.gid+':'+S.rev+':'+S.turn+':'+S.drew;
+  if(botKey===key)return;botKey=key;
   setTimeout(()=>{
     if(mode!=='solo'||!S||S.phase!=='playing'||S.players[S.turn].id!==p.id)return;
-    const s=CLONE(S);
-    if(rdAnnOpts(s,p.id)){rdAnnounce(s,p.id);S=s;onLocalChange(null);render();if(s.phase!=='playing')return;setTimeout(()=>botPlay(p.id),900);return;}
-    botPlay(p.id);
-  },1100);
+    const s=CLONE(S),b=rdBot(s,p.id);
+    let ok=false;
+    if(b)ok=rdPlay(s,p.id,b.card,b.suit);
+    else if(!s.drew||s.pending>0)ok=rdDraw(s,p.id);
+    else ok=rdPass(s,p.id);
+    if(ok){S=s;onLocalChange(null);render();}
+  },S.players.every(x=>x.bot||S.rank.includes(x.id))?350:1000);
 }
-function botPlay(id){
-  if(mode!=='solo'||!S||S.phase!=='playing'||S.players[S.turn].id!==id)return;
-  const s=CLONE(S),c=rdBot(s,id),pre=snapTable();
-  if(rdPlay(s,id,c)){animateCapture(pre,s);S=s;onLocalChange(null);render();}
-}
+let botKey='';
 function startSolo(){
   const names=['Karim','Yasmine','Omar'];
   const ps=[{id:uid,name:myName||'Moi'}].concat([...Array(setup.bots)].map((_,i)=>({id:'bot'+i,name:names[i]+' 🤖',bot:true})));
-  mode='solo';ROOM=0;S=rdNew(ps,setup.target);lastGid=S.gid;lastFxc=S.fxc||0;prevTable=[];render();
+  mode='solo';ROOM=0;S=rdNew(ps);lastGid=S.gid;lastFxc=S.fxc||0;prevTop='';botKey='';render();
 }
 /* ---- rendus ---- */
 function avEl(p,cls){return h('span',{class:'av'+(cls?' '+cls:''),style:'background:hsl('+hue(p.id)+' 45% 38%)'},(p.name||'?')[0].toUpperCase());}
@@ -387,29 +400,35 @@ function render(){
   if(S&&mode==='solo')botStep();
   handOverlays();
 }
+let prevTop='';
 function renderPicker(){
   const rooms=[1,2,3].map(n=>{
-    const ps=roomPlayers(n),run=ps.length&&false;
+    const ps=roomPlayers(n);
     return h('button',{class:'rcard',type:'button',onclick:()=>joinRoom(n),disabled:!db||!(myName&&myName.trim().length>=2)},
       h('b',null,'Table '+n),h('span',{class:'st '+(ps.length?'':'free')},ps.length?ps.length+' joueur'+(ps.length>1?'s':''):'Libre'),
       h('span',{class:'muted'},ps.length?ps.map(p=>p.name).join(', '):'Aucun joueur'));
   });
   const nm=h('input',{id:'nm-in',class:'t',maxlength:'16',placeholder:'Ton pseudo',value:myName,'aria-label':'Pseudo'});
-  nm.addEventListener('input',()=>{myName=nm.value.trim().slice(0,16);lsSet(NAME_K,myName);const dis=!db||myName.length<2;document.querySelectorAll('.rcard,#solo-go').forEach(b=>b.disabled=dis);});
-  return[renderTop('Jeu de cartes marocain'),
+  nm.addEventListener('input',()=>{myName=nm.value.trim().slice(0,16);lsSet(NAME_K,myName);const dis=!db||myName.length<2;document.querySelectorAll('.rcard').forEach(b=>b.disabled=dis);const sg=$('solo-go');if(sg)sg.disabled=myName.length<2;});
+  return[renderTop('Jeu de cartes espagnoles'),
     h('div',{class:'panel'},h('h2',null,'Bienvenue à la Ronda'),
-      h('p',{class:'muted'},'40 cartes espagnoles. Capture les cartes du tapis, annonce Ronda ou Tringla, fais Missa et Taper. Premier à '+setup.target+' points.'),
+      h('p',{class:'muted'},'Vide ta main le plus vite possible ! Joue une carte de la même famille ou de la même valeur que celle du tapis, sinon pioche.'),
+      h('div',{class:'rules'},
+        h('div',null,h('b',null,'As'),' : le suivant passe son tour'),
+        h('div',null,h('b',null,'2'),' : le suivant pioche 2 (ou pose un 2 : +4, +6…)'),
+        h('div',null,h('b',null,'7'),' : tu choisis la famille à jouer'),
+        h('div',null,h('b',null,'10 · 11 · 12'),' : aucun effet'),
+        h('div',null,h('b',null,'Fin'),' : le premier sans carte gagne, les autres finissent la manche')),
       mySlug?h('p',{class:'muted'},'Profil : '+(myName||mySlug)):h('p',{class:'muted'},'Tu peux jouer sans profil.'),
       nm),
     h('div',{class:'panel'},h('h2',null,'Jouer en ligne'),h('div',{class:'rooms'},rooms),
       !db?h('p',{class:'err'},'Connexion à la base impossible : seul le mode solo est disponible.'):null),
     h('div',{class:'panel'},h('h2',null,'Contre l\'ordinateur'),
       h('div',{class:'row'},h('span',null,'Adversaires'),h('div',{class:'seg'},[1,2,3].map(n=>h('button',{type:'button',class:setup.bots===n?'on':'',onclick:()=>{setup.bots=n;render();}},String(n))))),
-      h('div',{class:'row'},h('span',null,'Objectif'),h('div',{class:'seg'},[21,41].map(n=>h('button',{type:'button',class:setup.target===n?'on':'',onclick:()=>{setup.target=n;render();}},n+' pts')))),
       h('button',{id:'solo-go',class:'btn primary',type:'button',disabled:myName.length<2,onclick:startSolo},'🤖 Lancer la partie'))];
 }
 function renderLobby(){
-  const ps=roomPlayers(ROOM),me=ps.find(p=>p.id===uid);
+  const ps=roomPlayers(ROOM);
   const host=ps[0]&&ps[0].id===uid;
   const can=host&&ps.length>=2&&ps.slice(0,4).every(p=>p.ready||p.id===uid);
   return[renderTop('Table '+ROOM,h('button',{class:'btn sm',type:'button',onclick:leaveRoom},'↩ Quitter la table')),
@@ -417,96 +436,93 @@ function renderLobby(){
       h('p',{class:'muted'},'2 à 4 joueurs. Chacun clique sur Prêt, puis l\'hôte lance la partie.'),
       ...ps.slice(0,4).map((p,i)=>h('div',{class:'pl'},avEl(p),h('b',null,p.name+(p.id===uid?' (toi)':'')),i===0?h('span',{class:'muted'},'Hôte'):null,h('span',{class:'rdy'},p.ready?'✅ Prêt':'⏳ Pas prêt'))),
       ps.length>4?h('p',{class:'muted'},'Seuls les 4 premiers arrivés jouent.'):null,
-      host?h('div',{class:'row'},h('span',null,'Objectif'),h('div',{class:'seg'},[21,41].map(n=>h('button',{type:'button',class:cfgTarget===n?'on':'',onclick:()=>{cfgTarget=n;render();}},n+' pts')))):h('p',{class:'muted'},'L\'hôte choisit l\'objectif (21 ou 41 points).'),
       h('div',{class:'row'},h('button',{class:'btn'+(myReady?'':' primary'),type:'button',onclick:toggleReady},myReady?'Je ne suis plus prêt':'✅ Je suis prêt'),
         host?h('button',{class:'btn primary',type:'button',disabled:!can,onclick:startOnline},'▶ Lancer la partie'):null),
       ps.length<2?h('p',{class:'muted'},'En attente d\'un autre joueur… partage le lien du site.'):(host&&!can?h('p',{class:'muted'},'Tout le monde doit être prêt.'):null))];
 }
+const MEDAL=['🥇','🥈','🥉','4e'];
 function renderGame(){
   const s=S,n=s.players.length,spec=isSpec(),myTurn=!spec&&rdCan(s,uid);
   const meIdx=spec?0:s.players.findIndex(p=>p.id===uid);
   const opps=[];for(let k=1;k<n;k++)opps.push(s.players[(meIdx+k)%n]);
-  const seat=(p)=>h('div',{class:'seat'+(s.phase==='playing'&&rdTurnId(s)===p.id?' turn':''),'data-seat':p.id},
-    h('div',{class:'plate'},avEl(p),h('div',null,h('div',{class:'nm'},p.name+(p.id===uid?' (toi)':'')),h('small',null,'🂠 '+s.cap[p.id]+' cartes')),h('span',{class:'sc'},s.scores[p.id])),
-    p.id!==uid?h('div',{class:'hnd'},(s.hands[p.id]||[]).map(()=>backEl())):null);
-  const tbl=h('div',{class:'tbl',id:'tbl'});
-  const prevSet=new Set(prevTable);
-  const hl=new Set();const sel=hoverCard||selCard;if(sel&&myTurn)rdTake(s,sel).forEach(c=>hl.add(c));
-  if(!s.table.length)tbl.append(h('span',{class:'empty'},'Tapis vide'));
-  s.table.forEach(c=>tbl.append(cardEl(c,{cls:(hl.has(c)?'hl ':'')+(prevSet.has(c)||!prevTable.length&&false?'':'drop')})));
-  prevTable=s.table.slice();
-  const mine=spec?[]:(s.hands[uid]||[]);
-  const touch=window.matchMedia&&matchMedia('(hover:none)').matches;
+  const seat=(p)=>{
+    const r=s.rank.indexOf(p.id);
+    return h('div',{class:'seat'+(s.phase==='playing'&&rdTurnId(s)===p.id?' turn':'')+(r>=0?' fin':''),'data-seat':p.id},
+      h('div',{class:'plate'},avEl(p),h('div',null,h('div',{class:'nm'},p.name+(p.id===uid?' (toi)':'')),h('small',null,r>=0?'Terminé':'🂠 '+s.hands[p.id].length+' carte'+(s.hands[p.id].length>1?'s':''))),r>=0?h('span',{class:'sc'},MEDAL[r]):null),
+      p.id!==uid&&r<0?h('div',{class:'hnd'},s.hands[p.id].slice(0,10).map(()=>backEl())):null);
+  };
+  const top=rdTop(s);
+  const topEl=cardEl(top,{cls:prevTop!==s.gid+':'+top+':'+s.pile.length?'drop':''});
+  prevTop=s.gid+':'+top+':'+s.pile.length;
+  const canDraw=myTurn&&(s.pending>0||!s.drew);
+  const deckEl=h('button',{class:'deck'+(canDraw?' can':''),type:'button',disabled:!canDraw,'aria-label':'Piocher',onclick:drawCard},backEl(),h('span',{class:'cnt'},String(s.deck.length)));
+  const mid=h('div',{class:'center',id:'tbl'},deckEl,h('div',{class:'pilewrap'},topEl,
+    h('div',{class:'suitb',title:'Famille demandée'},SUIT_I[s.suit]+' '+SUIT_N[s.suit])),
+    s.pending>0?h('div',{class:'pend'},'+'+s.pending):null);
+  const mine=spec?[]:s.hands[uid];
+  const meOut=!spec&&s.rank.includes(uid);
   const hand=h('div',{class:'mehand'},mine.map(c=>{
-    const e=cardEl(c,{cls:'mine'+(myTurn?'':' dis')+(selCard===c?' sel':'')});
-    if(myTurn){
-      e.tabIndex=0;e.setAttribute('role','button');
-      e.addEventListener('mouseenter',()=>{if(!touch){hoverCard=c;refreshHl();}});
-      e.addEventListener('mouseleave',()=>{if(!touch){hoverCard=null;refreshHl();}});
-      e.addEventListener('click',()=>{if(touch&&selCard!==c){selCard=c;render();}else playCard(c);});
-      e.addEventListener('keydown',ev=>{if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();playCard(c);}});
-    }
+    const ok=myTurn&&rdLegal(s,uid,c);
+    const e=cardEl(c,{cls:'mine'+(ok?' ok':' dis')+(pick===c?' sel':'')});
+    if(ok){e.tabIndex=0;e.setAttribute('role','button');
+      e.addEventListener('click',()=>playCard(c));
+      e.addEventListener('keydown',ev=>{if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();playCard(c);}});}
     return e;
   }));
-  const ao=!spec&&rdAnnOpts(s,uid);
-  const preview=myTurn&&(selCard||hoverCard)?(rdTake(s,selCard||hoverCard).length?'👆 Cette carte prend '+(rdTake(s,selCard||hoverCard).length+1)+' cartes':'Pas de prise : la carte reste sur le tapis'):'';
-  const status=s.phase==='playing'?(spec?'Tu regardes la partie':myTurn?'🎯 À toi de jouer'+(touch&&selCard?' (touche la carte une 2e fois)':''):'⏳ Au tour de '+nameOf(s,rdTurnId(s))):'';
+  let status='';
+  if(s.phase==='playing'){
+    if(spec)status='Tu regardes la partie';
+    else if(meOut)status='🏁 Tu as fini ('+MEDAL[s.rank.indexOf(uid)]+') — attends les autres';
+    else if(myTurn){
+      const pl=rdPlayable(s,uid).length;
+      status=s.pending>0?(pl?'⚠️ Pose un 2 ou pioche '+s.pending+' cartes':'⚠️ Tu dois piocher '+s.pending+' cartes'):
+        (s.drew?(pl?'Tu peux jouer la carte piochée ou passer':'Rien à jouer'):(pl?'🎯 À toi de jouer':'Rien à jouer : pioche une carte'));
+    }else status='⏳ Au tour de '+nameOf(s,rdTurnId(s));
+  }
   const me=spec?null:s.players[meIdx];
   const lastLog=s.log.slice(-2).reverse().join(' · ');
-  return[renderTop('Donne '+s.hand+' · objectif '+s.target,h('div',{class:'row'},mode==='online'&&isHost()?h('button',{class:'btn sm',type:'button',onclick:endGameHost},'■ Terminer'):null,h('button',{class:'btn sm',type:'button',onclick:leaveRoom},'↩ Quitter'))),
+  const pickEl=pick&&myTurn?h('div',{class:'ov',id:'rdpick'},h('div',{class:'ovc'},h('h3',null,'7 : quelle famille ?'),
+    h('div',{class:'suits'},SUITS.map(su=>h('button',{type:'button',class:'btn suit-'+su,onclick:()=>playCard(pick,su)},h('span',{class:'si'},SUIT_I[su]),SUIT_N[su]))),
+    h('button',{class:'btn sm',type:'button',onclick:()=>{pick=null;render();}},'Annuler'))):null;
+  const oldPick=$('rdpick');if(oldPick)oldPick.remove();
+  if(pickEl)setTimeout(()=>document.body.append(pickEl),0);
+  return[renderTop('Manche en cours',h('div',{class:'row'},mode==='online'&&isHost()?h('button',{class:'btn sm',type:'button',onclick:endGameHost},'■ Terminer'):null,h('button',{class:'btn sm',type:'button',onclick:leaveRoom},'↩ Quitter'))),
     h('div',{class:'felt'},
       h('div',{class:'opps'},opps.map(seat)),
-      tbl,
-      h('div',{class:'status'},status+(preview?'  ·  '+preview:'')),
-      h('div',{class:'acts'},ao?h('button',{class:'btn primary',type:'button',onclick:announce},ao.kind==='tringla'?'🔥 Annoncer TRINGLA de '+vName(ao.v)+' (+5)':'📣 Annoncer RONDA de '+vName(ao.v)+' (+1)'):null),
+      mid,
+      h('div',{class:'status'},status),
+      h('div',{class:'acts'},myTurn&&s.drew&&s.pending===0?h('button',{class:'btn',type:'button',onclick:passTurn},'⏭ Passer'):null,
+        myTurn&&canDraw&&!(s.drew)?h('button',{class:'btn primary',type:'button',onclick:drawCard},s.pending>0?'🃏 Piocher '+s.pending:'🃏 Piocher'):null,
+        myTurn&&s.pending>0?h('button',{class:'btn primary',type:'button',onclick:drawCard},'🃏 Piocher '+s.pending):null),
       hand,
       me?h('div',{class:'opps'},seat(me)):null),
     lastLog?h('div',{class:'logline'},lastLog):null];
 }
-function refreshHl(){
-  if(!S)return;
-  const sel=hoverCard||selCard,set=new Set(sel&&rdCan(S,uid)?rdTake(S,sel):[]);
-  document.querySelectorAll('#tbl [data-c]').forEach(e=>e.classList.toggle('hl',set.has(e.dataset.c)));
-}
 function endGameHost(){if(!confirm('Terminer la partie pour tout le monde ?'))return;db.doc(gp(ROOM)).delete().catch(()=>{});}
-/* ---- fenêtres de fin de donne / partie ---- */
-let ovKey='',ovTm=null;
-function closeOv(){const o=$('rdov');if(o)o.remove();if(ovTm){clearInterval(ovTm);ovTm=null;}ovKey='';}
+/* ---- fin de partie ---- */
+let ovKey='';
+function closeOv(){const o=$('rdov');if(o)o.remove();ovKey='';}
 function handOverlays(){
-  if(!S){closeOv();return;}
+  if(!S){closeOv();const p=$('rdpick');if(p)p.remove();return;}
   if(S.phase==='playing'){closeOv();return;}
-  const key=S.gid+':'+S.hand+':'+S.phase;if(key===ovKey)return;
-  closeOv();ovKey=key;
-  if(S.phase==='handEnd')showRecap();else if(S.phase==='gameEnd')showEnd();
+  const key=S.gid+':'+S.phase;if(key===ovKey)return;
+  closeOv();ovKey=key;showEnd();
 }
-function showRecap(){
-  const s=S,res=s.hres||{cap:{},pts:{}};
-  const rows=s.players.slice().sort((a,b)=>(res.cap[b.id]||0)-(res.cap[a.id]||0)).map((p,i)=>h('div',{class:'ovr'+(res.by===p.id?' best':'')},avEl(p),h('div',null,h('b',null,p.name),h('br'),h('small',null,(res.cap[p.id]||0)+' cartes · total '+s.scores[p.id]+' / '+s.target)),h('span',{class:'p'},'+'+(res.pts[p.id]||0))));
-  const SEC=8,left=h('span',null,'Donne suivante dans '+SEC+' s'),bar=h('i'),host=isHost();
-  const ov=h('div',{class:'ov',id:'rdov'},h('div',{class:'ovc'},h('h3',null,'Fin de la donne '+s.hand),
-    h('p',{class:'muted',style:'text-align:center;color:rgba(255,255,255,.75)'},(res.rest&&res.by?nameOf(s,res.by)+' ramasse les '+res.rest+' dernières cartes. ':'')+'Chaque carte au-delà de '+Math.floor(40/s.players.length)+' rapporte 1 point.'),
-    ...rows,h('div',{class:'row',style:'justify-content:space-between'},left,host?h('button',{class:'btn sm primary',type:'button',onclick:nextHand},'Passer ›'):null),h('div',{class:'prog'},bar)));
-  document.body.append(ov);Snd.play('win');
-  const t0=Date.now(),gid=s.gid,hd=s.hand;
-  ovTm=setInterval(()=>{const rem=Math.max(0,SEC-(Date.now()-t0)/1000);bar.style.transform='scaleX('+(rem/SEC)+')';left.textContent='Donne suivante dans '+Math.ceil(rem)+' s';
-    if(rem<=0){clearInterval(ovTm);ovTm=null;if(S&&S.gid===gid&&S.hand===hd&&S.phase==='handEnd'&&isHost())nextHand();}},150);
-}
-function nextHand(){if(!S||S.phase!=='handEnd'||!isHost())return;const s=CLONE(S);if(rdNextHand(s)){closeOv();prevTable=[];commit(s);}}
 function showEnd(){
-  const s=S,w=s.winner,win=w===uid;
-  const rows=s.players.slice().sort((a,b)=>s.scores[b.id]-s.scores[a.id]).map(p=>h('div',{class:'ovr'+(p.id===w?' best':'')},avEl(p),h('b',null,(p.id===w?'🏆 ':'')+p.name),h('span',{class:'p'},s.scores[p.id])));
+  const s=S,w=s.rank[0],pos=s.rank.indexOf(uid);
+  const rows=s.rank.map((id,i)=>{const p=s.players.find(x=>x.id===id);return h('div',{class:'ovr'+(i===0?' best':'')},avEl(p),h('b',null,p.name+(id===uid?' (toi)':'')),h('span',{class:'p'},MEDAL[i]));});
   const host=isHost();
-  const ov=h('div',{class:'ov',id:'rdov'},h('div',{class:'ovc'},h('h3',null,win?'🏆 Victoire !':(nameOf(s,w)+' gagne la partie')),...rows,
+  const ov=h('div',{class:'ov',id:'rdov'},h('div',{class:'ovc'},h('h3',null,pos===0?'🏆 Victoire !':(pos<0?nameOf(s,w)+' gagne':nameOf(s,w)+' gagne — tu finis '+MEDAL[pos])),...rows,
     h('div',{class:'row',style:'justify-content:center'},
       host?h('button',{class:'btn primary',type:'button',onclick:rematch},'🔁 Revanche'):h('span',{class:'muted',style:'color:rgba(255,255,255,.75)'},'En attente de l\'hôte…'),
       host&&mode==='online'?h('button',{class:'btn',type:'button',onclick:()=>{closeOv();db.doc(gp(ROOM)).delete().catch(()=>{});}},'Retour à la salle'):null,
       h('button',{class:'btn',type:'button',onclick:()=>{closeOv();leaveRoom();}},'Quitter'))));
-  document.body.append(ov);Snd.play(win?'win':'lose');
+  document.body.append(ov);Snd.play(pos===0?'win':'lose');
 }
 function rematch(){
-  if(!S||!isHost())return;closeOv();prevTable=[];
+  if(!S||!isHost())return;closeOv();prevTop='';botKey='';
   const ps=S.players.map(p=>({id:p.id,name:p.name,bot:p.bot}));
-  commit(rdNew(ps,S.target));
+  commit(rdNew(ps));
 }
 /* ---- démarrage ---- */
 async function boot(){
@@ -527,6 +543,5 @@ async function boot(){
   window.addEventListener('beforeunload',()=>{if(db&&ROOM)db.doc('lobby/rd_'+uid).delete().catch(()=>{});});
   document.addEventListener('visibilitychange',()=>{if(!document.hidden)beat();});
 }
-
 boot();
 </script></body></html>
