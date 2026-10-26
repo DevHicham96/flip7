@@ -805,6 +805,44 @@ body[data-tb="pool"] .felt::after{opacity:.8;background:url("data:image/svg+xml,
 .bar.myturn{box-shadow:0 -6px 24px rgba(247,201,59,.45);animation:myturn 1.4s ease-in-out infinite}
 @keyframes myturn{50%{box-shadow:0 -6px 34px rgba(247,201,59,.9)}}
 @media (prefers-reduced-motion:reduce){.bar.myturn{animation:none}}
+
+/* ===== THEME AVENTURE (cohérent avec l'écran de connexion) ===== */
+:root:root:root{color-scheme:light;--bg:#8FD6E8;--surface:#FBEFC4;--ink:#4A2B10;--ink-2:#7A5224;--line:#C9A15A;--accent:#E8590C;--accent-ink:#fff;--good:#2E8B2E;--bad:#C0262D;--gold:#E9A91C;--card:#FFF8E1;--felt:#2F8240;--felt-hi:#5DB85A;--rim:#6B3F1A;--fb:rgba(255,236,150,.55)}
+html{background:#8FD6E8}
+body{background:linear-gradient(#5CC3E6 0%,#A5E1F0 45%,#D8F4EE 75%) fixed;position:relative}
+body::before{content:'';position:fixed;inset:0;z-index:-2;opacity:.13;pointer-events:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .55 0'/></filter><rect width='160' height='160' filter='url(%23n)'/></svg>")}
+body::after{content:'';position:fixed;left:0;right:0;bottom:0;height:26vh;min-height:140px;z-index:-1;pointer-events:none;background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 300' preserveAspectRatio='none'><path d='M0 120 C200 40 380 60 560 120 S950 170 1200 80 V300 H0Z' fill='%237BC36B'/><path d='M0 190 C220 120 420 150 640 200 S1000 230 1200 160 V300 H0Z' fill='%234FA24A'/><path d='M0 250 C300 210 600 260 900 235 S1120 230 1200 245 V300 H0Z' fill='%232F8240'/></svg>") bottom/100% 100% no-repeat}
+h2{color:#E8632B;text-shadow:0 2px 0 rgba(255,246,210,.9),0 3px 0 rgba(120,60,10,.2)}
+.top{background:linear-gradient(#8A5528,#5E3516);border-radius:16px;padding:8px 14px;box-shadow:0 0 0 3px #3b2010,0 8px 0 rgba(0,0,0,.14),inset 0 2px 0 rgba(255,255,255,.22);--ink:#FFF3CC;--ink-2:#E7D3A0;color:#FFF3CC}
+.top .logo{filter:drop-shadow(0 3px 0 rgba(0,0,0,.35))}
+.pill{background:rgba(255,243,204,.16);border:1px solid rgba(255,243,204,.35);color:#FFF3CC}
+.dot{background:#E7D3A0}.dot.on{background:#7CE7B0;box-shadow:0 0 6px #7CE7B0}
+.btn{border:2px solid #8A6A2C;background:linear-gradient(#F0E0AE,#D6BF7E);color:#5B3A14;font-weight:800;box-shadow:0 4px 0 #8A6A2C;transition:transform .08s,box-shadow .08s,filter .15s}
+.btn:hover:not(:disabled){filter:brightness(1.06)}
+.btn:active:not(:disabled){transform:translateY(3px);box-shadow:0 1px 0 #8A6A2C}
+.btn.sm{border-width:2px;border-color:#8A6A2C;box-shadow:0 3px 0 #8A6A2C}
+.btn.sm:active:not(:disabled){transform:translateY(2px);box-shadow:0 1px 0 #8A6A2C}
+.btn.primary{border-color:#B8430A;background:linear-gradient(#FF8A3D,#E8590C);color:#fff;text-shadow:0 2px 0 rgba(0,0,0,.25);box-shadow:0 4px 0 #8F330A,inset 0 2px 0 rgba(255,255,255,.3)}
+.btn.primary:active:not(:disabled){box-shadow:0 1px 0 #8F330A}
+.btn.on{background:linear-gradient(#A5CF45,#6E9F22);border-color:#4A7A12;color:#fff;box-shadow:0 3px 0 #3b6410}
+.panel,.chat,.rkp,.pfp:not(.auth){background:radial-gradient(ellipse at 50% 15%,#FFF7D6,#F3E0A0);border:4px solid #7A4A24;border-radius:18px;box-shadow:0 0 0 2px #3b2010,inset 0 0 0 2px #B88B45,inset 0 0 26px rgba(150,100,30,.3),0 10px 24px rgba(0,0,0,.28)}
+.notice{background:#FFF3CC;border:2px solid #C9A15A}
+.mode-b,.rcard{background:linear-gradient(#FFF8E1,#F6E6B0);border:3px solid #B88B45;box-shadow:0 4px 0 #8A6A2C}
+.mode-b.on{border-color:#E8590C;box-shadow:0 4px 0 #B8430A,0 0 0 3px rgba(255,138,61,.4)}
+.rcard:hover,.rcard:focus-visible{border-color:#E8590C;transform:translateY(-3px)}
+.rcard:active{transform:translateY(1px)}
+.lobby-form input,.chat-form input,#dm-in,#fr-nm{background:#FFF8E1;border:2px solid #B88B45;color:#4A2B10;box-shadow:inset 0 2px 4px rgba(120,80,20,.25)}
+.lobby-form input:focus,.chat-form input:focus{outline:0;border-color:#E8590C;box-shadow:0 0 0 3px rgba(232,89,12,.3)}
+.felt{box-shadow:0 0 0 10px var(--rim),0 0 0 13px #3b2010,0 6px 0 13px rgba(0,0,0,.18),0 18px 30px rgba(0,0,0,.3),inset 0 0 40px rgba(0,0,0,.18)}
+.felt::after{background:repeating-linear-gradient(45deg,rgba(255,255,255,.03) 0 6px,rgba(0,0,0,.03) 6px 12px)}
+.plate{background:linear-gradient(#5A3318,#3E2410);border:2px solid #241206;--line:#6B4524;--card:#52301A;box-shadow:0 3px 0 rgba(0,0,0,.35)}
+.bar{background:linear-gradient(#8A5528,#5E3516)!important;border-top:4px solid #3b2010!important;box-shadow:0 -6px 18px rgba(0,0,0,.28);--ink:#FFF3CC;--ink-2:#E7D3A0;color:#FFF3CC}
+.rkov{background:rgba(30,60,80,.62)}
+.pause{background:rgba(30,60,80,.7)}
+.profov:not(:has(.au-wrap)){background:linear-gradient(#5CC3E6,#A5E1F0 55%,#D8F4EE)}
+.tag:not(.adm){color:#7A5224}
+.fxban{background:rgba(74,43,16,.94)}
+/* ===== fin thème ===== */
 </style>
 
 <div class="boot" id="boot" role="status" aria-live="polite"><div class="fan" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div><div class="bt">ATELIER<small>SDM GAMING</small></div><div class="bar" aria-hidden="true"></div><div class="bl">Chargement<b>.</b><b>.</b><b>.</b></div></div>
@@ -1931,7 +1969,7 @@ function syncTimer(){
 function svgEl(tag,at){const e=document.createElementNS('http://www.w3.org/2000/svg',tag);for(const k in at)e.setAttribute(k,at[k]);return e;}
 
 /* ---------- thèmes de table ---------- */
-const TABLES=[{"id": "indigo", "n": "Nuit indigo", "f": "#2A2D66", "h": "#4046A0", "r": "#15112E", "e": ""}, {"id": "casino", "n": "Casino vert", "f": "#14573A", "h": "#1F8A5B", "r": "#2A1A0E", "e": ""}, {"id": "rouge", "n": "Rouge velours", "f": "#7A1A2A", "h": "#B5303F", "r": "#2A0A10", "e": ""}, {"id": "violet", "n": "Violet royal", "f": "#4B2A7A", "h": "#7B4FC0", "r": "#1D0F33", "e": ""}, {"id": "ocean", "n": "Océan", "f": "#123E6B", "h": "#2A78B8", "r": "#0A1F38", "e": ""}, {"id": "rose", "n": "Rose bonbon", "f": "#B0316F", "h": "#F06AA6", "r": "#4A1030", "e": ""}, {"id": "neon", "n": "Noir néon", "f": "#15161C", "h": "#2A2C38", "r": "#050507", "e": "✨"}, {"id": "halloween", "n": "Halloween", "f": "#1E1030", "h": "#47225F", "r": "#120A1C", "e": "🎃"}, {"id": "pool", "n": "Pool party", "f": "#0A9DBF", "h": "#5FE0F0", "r": "#0B6E8A", "e": "🏖️"}];
+const TABLES=[{"id": "indigo", "n": "Prairie", "f": "#2F8240", "h": "#5DB85A", "r": "#6B3F1A", "e": "🌿"}, {"id": "casino", "n": "Casino vert", "f": "#14573A", "h": "#1F8A5B", "r": "#2A1A0E", "e": ""}, {"id": "rouge", "n": "Rouge velours", "f": "#7A1A2A", "h": "#B5303F", "r": "#2A0A10", "e": ""}, {"id": "violet", "n": "Violet royal", "f": "#4B2A7A", "h": "#7B4FC0", "r": "#1D0F33", "e": ""}, {"id": "ocean", "n": "Océan", "f": "#123E6B", "h": "#2A78B8", "r": "#0A1F38", "e": ""}, {"id": "rose", "n": "Rose bonbon", "f": "#B0316F", "h": "#F06AA6", "r": "#4A1030", "e": ""}, {"id": "neon", "n": "Noir néon", "f": "#15161C", "h": "#2A2C38", "r": "#050507", "e": "✨"}, {"id": "halloween", "n": "Halloween", "f": "#1E1030", "h": "#47225F", "r": "#120A1C", "e": "🎃"}, {"id": "pool", "n": "Pool party", "f": "#0A9DBF", "h": "#5FE0F0", "r": "#0B6E8A", "e": "🏖️"}];
 let curTb='indigo';
 const PLATES=[['badge','Badge avatar','🙂'],['classic','Classique','▭'],['compact','Compact','•']];
 function renderTbPop(){
