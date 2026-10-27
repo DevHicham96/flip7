@@ -780,27 +780,27 @@ body[data-tb="pool"] .felt::after{opacity:.8;background:url("data:image/svg+xml,
 .bar-btns .btn{flex:1 1 120px}
 @media (max-height:560px){.felt.wide{--ov:200px}.felt{margin:6px auto}body{padding-block:8px 110px}.bar{padding-top:8px;padding-bottom:8px}.bar .btn{min-height:40px}}
 
-/* écran de chargement */
-.boot{position:fixed;inset:0;z-index:200;display:grid;place-items:center;align-content:center;gap:22px;background:radial-gradient(ellipse at 50% 35%,#2B1466 0%,#120A2E 60%,#0A0618 100%);color:#fff;font-family:'Fredoka','Figtree',system-ui,sans-serif;transition:opacity .55s ease,visibility .55s;text-align:center;padding:20px}
-.boot.out{opacity:0;visibility:hidden}
-.boot .fan{position:relative;width:150px;height:130px}
-.boot .fan i{position:absolute;left:50%;bottom:0;width:62px;height:88px;margin-left:-31px;border-radius:9px;border:3px solid #fff;transform-origin:50% 120%;box-shadow:0 8px 20px rgba(0,0,0,.45);animation:bfan 1.8s ease-in-out infinite}
-.boot .fan i:nth-child(1){background:#E21B3C;--r:-34deg;animation-delay:0s}
-.boot .fan i:nth-child(2){background:#F2B632;--r:-17deg;animation-delay:.12s}
-.boot .fan i:nth-child(3){background:#26B5E8;--r:0deg;animation-delay:.24s}
-.boot .fan i:nth-child(4){background:#7BC043;--r:17deg;animation-delay:.36s}
-.boot .fan i:nth-child(5){background:#B48CFF;--r:34deg;animation-delay:.48s}
-@keyframes bfan{0%,100%{transform:rotate(calc(var(--r)*.35)) translateY(0)}50%{transform:rotate(var(--r)) translateY(-10px)}}
-.boot .bt{font-weight:800;font-size:clamp(26px,7vw,46px);letter-spacing:.14em;line-height:1.1;text-shadow:0 4px 0 rgba(0,0,0,.35),0 0 30px rgba(180,140,255,.55)}
-.boot .bt small{display:block;font-size:.42em;letter-spacing:.5em;color:#F2B632;margin-top:8px}
-.boot .bl{font-weight:600;font-size:16px;letter-spacing:.12em;opacity:.85}
-.boot .bl b{display:inline-block;animation:bdot 1.2s infinite}
-.boot .bl b:nth-of-type(2){animation-delay:.2s}.boot .bl b:nth-of-type(3){animation-delay:.4s}
-@keyframes bdot{0%,70%,100%{opacity:.2}35%{opacity:1}}
-.boot .bar{width:min(240px,60vw);height:6px;border-radius:99px;background:rgba(255,255,255,.14);overflow:hidden}
-.boot .bar::after{content:"";display:block;height:100%;width:40%;border-radius:99px;background:linear-gradient(90deg,#B48CFF,#F2B632);animation:bbar 1.2s ease-in-out infinite}
-@keyframes bbar{0%{transform:translateX(-110%)}100%{transform:translateX(280%)}}
-@media (prefers-reduced-motion:reduce){.boot .fan i,.boot .bar::after,.boot .bl b{animation:none}}
+/* écran de chargement (thème aventure) */
+.gload{position:fixed;inset:0;z-index:300;display:grid;place-items:center;align-content:center;gap:20px;background:linear-gradient(#5CC3E6 0%,#A5E1F0 45%,#D8F4EE 75%);overflow:hidden;transition:opacity .5s ease,visibility .5s;font-family:'Unbounded','Figtree',system-ui,sans-serif}
+.gload.out{opacity:0;visibility:hidden}
+.gload::before{content:'';position:absolute;left:0;right:0;bottom:0;height:30vh;min-height:140px;pointer-events:none;background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 300' preserveAspectRatio='none'><path d='M0 120 C200 40 380 60 560 120 S950 170 1200 80 V300 H0Z' fill='%237BC36B'/><path d='M0 190 C220 120 420 150 640 200 S1000 230 1200 160 V300 H0Z' fill='%234FA24A'/><path d='M0 250 C300 210 600 260 900 235 S1120 230 1200 245 V300 H0Z' fill='%232F8240'/></svg>") bottom/100% 100% no-repeat}
+.gload .lg-cloud{position:absolute;width:120px;height:40px;border-radius:99px;background:rgba(255,255,255,.85);box-shadow:30px -14px 0 8px rgba(255,255,255,.85),-26px -8px 0 2px rgba(255,255,255,.85);animation:lgcl 22s linear infinite}
+.gload .lg-cloud.c1{top:14%;left:-160px}.gload .lg-cloud.c2{top:30%;left:-160px;transform:scale(.7);animation-duration:30s;animation-delay:-12s}
+@keyframes lgcl{to{left:110%}}
+.gload .lg-fan{position:relative;width:170px;height:140px;z-index:1}
+.gload .lg-fan i{position:absolute;left:50%;bottom:0;width:66px;height:100px;margin-left:-33px;border-radius:10px;border:3px solid #fff;transform-origin:50% 125%;box-shadow:0 8px 0 rgba(0,0,0,.18);display:grid;place-items:center;font:800 30px 'Unbounded',system-ui,sans-serif;font-style:normal;animation:lgfan 1.7s ease-in-out infinite}
+.gload .lg-fan i:nth-child(1){--r:-36deg;animation-delay:0s}.gload .lg-fan i:nth-child(2){--r:-18deg;animation-delay:.12s}.gload .lg-fan i:nth-child(3){--r:0deg;animation-delay:.24s}.gload .lg-fan i:nth-child(4){--r:18deg;animation-delay:.36s}.gload .lg-fan i:nth-child(5){--r:36deg;animation-delay:.48s}
+@keyframes lgfan{0%,100%{transform:rotate(calc(var(--r)*.3)) translateY(0)}50%{transform:rotate(var(--r)) translateY(-14px)}}
+.gload.f7 .lg-fan i{color:#fff;text-shadow:0 2px 0 rgba(0,0,0,.3)}
+.gload.f7 .lg-fan i:nth-child(1){background:#E5484D}.gload.f7 .lg-fan i:nth-child(2){background:#F2B632}.gload.f7 .lg-fan i:nth-child(3){background:#3B82F6}.gload.f7 .lg-fan i:nth-child(4){background:#2FB67C}.gload.f7 .lg-fan i:nth-child(5){background:#9B6BFF}
+.gload.rd .lg-fan i{background:#FBF1D2;border-color:#fff;font-size:28px}
+.gload .lg-sign{position:relative;z-index:1;padding:12px 34px;border-radius:16px;background:linear-gradient(#8A5528,#5E3516);box-shadow:0 0 0 3px #3b2010,0 8px 0 rgba(0,0,0,.18),inset 0 2px 0 rgba(255,255,255,.25);color:#FFE066;font:800 clamp(22px,6vw,34px) 'Unbounded',system-ui,sans-serif;letter-spacing:.06em;text-shadow:0 3px 0 rgba(0,0,0,.4)}
+.gload .lg-sign b{display:inline-block;animation:lgdot 1.2s infinite}.gload .lg-sign b:nth-of-type(2){animation-delay:.2s}.gload .lg-sign b:nth-of-type(3){animation-delay:.4s}
+@keyframes lgdot{0%,70%,100%{opacity:.25;transform:translateY(0)}35%{opacity:1;transform:translateY(-4px)}}
+.gload .lg-bar{position:relative;z-index:1;width:min(260px,64vw);height:12px;border-radius:99px;background:rgba(74,43,16,.25);border:2px solid #5E3516;overflow:hidden}
+.gload .lg-bar::after{content:'';display:block;height:100%;width:42%;border-radius:99px;background:linear-gradient(90deg,#FF8A3D,#FFE066);animation:lgbar 1.2s ease-in-out infinite}
+@keyframes lgbar{0%{transform:translateX(-110%)}100%{transform:translateX(260%)}}
+@media (prefers-reduced-motion:reduce){.gload .lg-fan i,.gload .lg-bar::after,.gload .lg-sign b,.gload .lg-cloud{animation:none}}
 /* ton tour */
 .bar.myturn{box-shadow:0 -6px 24px rgba(247,201,59,.45);animation:myturn 1.4s ease-in-out infinite}
 @keyframes myturn{50%{box-shadow:0 -6px 34px rgba(247,201,59,.9)}}
@@ -878,7 +878,7 @@ h2{color:#E8632B;text-shadow:0 2px 0 rgba(255,246,210,.9),0 3px 0 rgba(120,60,10
 /* ===== fin thème ===== */
 </style>
 
-<div class="boot" id="boot" role="status" aria-live="polite"><div class="fan" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div><div class="bt">ATELIER<small>SDM GAMING</small></div><div class="bar" aria-hidden="true"></div><div class="bl">Chargement<b>.</b><b>.</b><b>.</b></div></div>
+<div class="gload f7" id="boot" role="status" aria-live="polite"><div class="lg-cloud c1"></div><div class="lg-cloud c2"></div><div class="lg-fan" aria-hidden="true"><i>7</i><i>7</i><i>7</i><i>7</i><i>7</i></div><div class="lg-sign">Loading<b>.</b><b>.</b><b>.</b></div><div class="lg-bar" aria-hidden="true"></div></div>
 
 <div class="wrap">
   <div class="top">
@@ -3217,6 +3217,9 @@ let hubWanted=true;
 function ssGet(k){try{return sessionStorage.getItem(k);}catch(e){return null;}}
 function ssSet(k,v){try{sessionStorage.setItem(k,v);}catch(e){}}
 function hideHub(){const o=$('hub');if(o)o.remove();}
+const LD_INNER={f7:'<div class="lg-cloud c1"></div><div class="lg-cloud c2"></div><div class="lg-fan" aria-hidden="true"><i>7</i><i>7</i><i>7</i><i>7</i><i>7</i></div><div class="lg-sign">Loading<b>.</b><b>.</b><b>.</b></div><div class="lg-bar" aria-hidden="true"></div>',rd:'<div class="lg-cloud c1"></div><div class="lg-cloud c2"></div><div class="lg-fan" aria-hidden="true"><i>🪙</i><i>🗡️</i><i>🪵</i><i>🍵</i><i>🪙</i></div><div class="lg-sign">Loading<b>.</b><b>.</b><b>.</b></div><div class="lg-bar" aria-hidden="true"></div>'};
+function showLoader(k){let l=$('gload');if(!l){l=document.createElement('div');l.id='gload';document.body.append(l);}l.className='gload '+k;l.innerHTML=LD_INNER[k]||LD_INNER.f7;}
+function endLoader(){const l=$('gload');if(!l)return;l.classList.add('out');setTimeout(()=>l.remove(),600);}
 function tryHub(){
   if(!hubWanted||$('hub'))return;
   if(!$('profov').hidden)return;
@@ -3228,14 +3231,14 @@ function showHub(){
   if($('hub'))return;
   const nm=(prof&&prof.name)||lsGet('f7name')||'';
   const logo=(document.querySelector('.logo')||{outerHTML:'<b>FLIP 7</b>'}).outerHTML;
-  const choose=g=>{hubWanted=false;hideHub();if(g==='flip7'){ssSet('f7game','flip7');try{history.replaceState(null,'',location.pathname);}catch(e){}}else location.href='ronda.html';};
+  const choose=g=>{hubWanted=false;showLoader(g==='flip7'?'f7':'rd');if(g==='flip7'){ssSet('f7game','flip7');try{history.replaceState(null,'',location.pathname);}catch(e){}setTimeout(()=>{hideHub();endLoader();},700);}else setTimeout(()=>{location.href='ronda.html';},700);};
   const card=(cls,art,title,sub,go)=>h('button',{class:'hub-c '+cls,type:'button',onclick:go},h('div',{class:'hub-art',html:art}),h('b',null,title),h('small',null,sub),h('span',{class:'hub-go'},'Jouer ›'));
   const ov=h('div',{id:'hub',role:'dialog','aria-label':'Choix du jeu'},
     h('div',{class:'hub-in'},
       h('h2',null,nm?'Salut '+nm+' !':'Bienvenue !'),h('p',{class:'hub-s'},'À quel jeu veux-tu jouer ?'),
       h('div',{class:'hub-g'},
         card('f7',logo,'Flip 7','Pioche, tente ta chance, 2 à 8 joueurs',()=>choose('flip7')),
-        card('rd','<img src="'+HUB_IMG2+'" alt=""><img src="'+HUB_IMG+'" alt="">','Ronda','Cartes espagnoles : vide ta main avant les autres, 2 à 4 joueurs',()=>choose('ronda')))));
+        card('rd','<img src="'+HUB_IMG2+'" alt=""><img src="'+HUB_IMG+'" alt="">','Ronda','Jeu de cartes marocaines, 2 à 4 joueurs',()=>choose('ronda')))));
   document.body.append(ov);
 }
 
@@ -3739,7 +3742,7 @@ function attach(){
   },e=>{say('Liste des joueurs indisponible.');});
   sub(db.collection('chat').orderBy('t','desc').limit(300),snap=>{
     try{FR.lastDocs=snap.docs;onPmDocs(snap.docs);}catch(e){}
-    chatAll=snap.docs.map(x=>{const v=x.data()||{};return{did:x.id,room:typeof v.room==='number'?v.room:0,t:typeof v.t==='number'?v.t:0,id:String(v.id||''),name:String(v.name||'?').slice(0,16),text:String(v.text||'').slice(0,200),react:typeof v.react==='string'?v.react:'',to:typeof v.to==='string'?v.to.slice(0,40):'',em:typeof v.em==='string'&&EMOS.includes(v.em)?v.em:''};}).filter(m=>m.room===ROOM);
+    chatAll=snap.docs.map(x=>{const v=x.data()||{};return{did:x.id,room:typeof v.room==='number'?v.room:0,t:typeof v.t==='number'?v.t:0,id:String(v.id||''),name:String(v.name||'?').slice(0,16),text:String(v.text||'').slice(0,200),react:typeof v.react==='string'?v.react:'',to:typeof v.to==='string'?v.to.slice(0,40):'',em:typeof v.em==='string'&&EMOS.includes(v.em)?v.em:''};}).filter(m=>m.room===ROOM||m.room===0);
     applyChatFilter();
     if(!chatInit){chatInit=true;snap.docs.forEach(x=>{reactSeen.add(x.id);FR.chatSeen.add(x.id);});}else{onReactMsgs(chat);notifyRoom(chat);}
     renderChat();
