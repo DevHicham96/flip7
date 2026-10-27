@@ -1238,7 +1238,7 @@ function openingDraw(s){
   let cand=ids.slice(),rounds=[],g=0;
   while(cand.length>1&&g++<6){
     const cs=shuffle(pool.slice()),r=cand.map((id,i)=>({id,v:numVal(cs[i%cs.length])}));
-    rounds.push(r);
+    rounds.push({r});
     const mn=Math.min(...r.map(x=>x.v));cand=r.filter(x=>x.v===mn).map(x=>x.id);
   }
   const first=cand[Math.floor(Math.random()*cand.length)];
@@ -2589,8 +2589,8 @@ function openFx(s){
   if(!ts||Date.now()-ts>20000){openKey=s.gid;return;}
   openKey=s.gid;openHide();
   const O=s.open,STEP=650;let t=700;const bits=[];
-  const groups=O.rounds.map((r,gi)=>{
-    const tie=gi>0;
+  const groups=O.rounds.map((rr,gi)=>{
+    const r=rr.r,tie=gi>0;
     const cells=r.map(x=>{
       const back=h('div',{class:'op-flip'},h('div',{class:'op-f op-b'},'?'),h('div',{class:'op-f op-fr'},cardEl('n'+x.v)));
       const pl=s.players.find(p=>p.id===x.id)||{name:'?'};
