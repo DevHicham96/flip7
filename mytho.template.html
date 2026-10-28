@@ -162,6 +162,8 @@ input.t{min-height:44px;border-radius:12px;border:2px solid #B88B45;background:#
 .ov.rv{z-index:75}
 .gload.my .lg-fan i{background:#fffdf6;border-color:#fff;font-size:32px;color:#1b1b1b}
 @media (max-width:560px){.center .pc{--cw:clamp(46px,14vw,62px)}.hnd .pc{--cw:20px}}
+.btn.say{background:linear-gradient(#7CE7B0,#2FB67C);border-color:#1E7F54;color:#0d3b27;box-shadow:0 4px 0 #1E7F54;font-size:16px;animation:pulse2 .9s ease-in-out infinite}
+.need{background:rgba(0,0,0,.25);border:2px solid #FFE066;border-radius:99px;color:#FFE066;font:800 14px var(--f-body);padding:4px 14px}
 </style></head><body><div class="gload my" id="gload" role="status" aria-live="polite"><div class="lg-cloud c1"></div><div class="lg-cloud c2"></div><div class="lg-fan" aria-hidden="true"><i>🤥</i><i>♠</i><i>🫵</i><i>♥</i><i>🤥</i></div><div class="lg-sign">Loading<b>.</b><b>.</b><b>.</b></div><div class="lg-bar" aria-hidden="true"></div></div><div id="app"></div>
 <script>
 /*ENGINE_START*/
@@ -174,14 +176,14 @@ const rs=c=>c[0];
 const rLbl=v=>({1:'A',11:'V',12:'D',13:'R'}[v]||String(v));
 const RNAME={1:['As','As'],11:['Valet','Valets'],12:['Dame','Dames'],13:['Roi','Rois']};
 const rName=(v,n)=>{const r=RNAME[v];return r?r[n>1?1:0]:String(v);};
-const claimTxt=(n,v)=>n+' '+rName(v,n);
+const claimTxt=(n,v)=>RNAME[v]?n+' '+rName(v,n):n+' × '+v;
 function mkDeck(){const d=[];RS.forEach(su=>{for(let v=1;v<=13;v++)d.push(su+v);});return d;}
 function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));const t=a[i];a[i]=a[j];a[j]=t;}return a;}
 const nameOf=(s,id)=>(s.players.find(p=>p.id===id)||{name:'?'}).name;
 function logp(s,t){s.log.push(t);if(s.log.length>60)s.log.shift();}
 function mtNew(players){
   const s={v:1,rev:1,gid:Date.now().toString(36)+Math.random().toString(36).slice(2,6),phase:'play',
-    players:players.map(p=>({id:p.id,name:p.name,av:p.av||'',bot:!!p.bot})),hands:{},pile:[],turn:0,last:null,win:'',log:[],fx:[],fxc:0,res:{rev:0}};
+    players:players.map(p=>({id:p.id,name:p.name,av:p.av||'',bot:!!p.bot})),hands:{},pile:[],turn:0,last:null,need:0,owe:'',win:'',log:[],fx:[],fxc:0,res:{rev:0}};
   const d=shuffle(mkDeck()),n=s.players.length;
   s.players.forEach(p=>{s.hands[p.id]=[];});
   d.forEach((c,i)=>s.hands[s.players[i%n].id].push(c));
@@ -192,12 +194,28 @@ function mtNew(players){
 const mtTurnId=s=>s.players[s.turn].id;
 const mtCan=(s,pid)=>s.phase==='play'&&mtTurnId(s)===pid&&!(s.last&&s.hands[s.last.by].length===0);
 function bump(s,fx){s.fx=fx||[];s.fxc=(s.fxc||0)+1;s.rev++;}
+/* « il me reste une carte » : sinon on reprend 1 carte de la pile (hors dernière pose) */
+function mtPenalty(s){
+  if(!s.owe)return false;
+  const pid=s.owe;s.owe='';
+  const hid=s.last?s.last.cards:[];
+  const i=s.pile.findIndex(c=>!hid.includes(c));
+  if(i>=0&&s.hands[pid].length===1){const c=s.pile.splice(i,1)[0];s.hands[pid].push(c);logp(s,nameOf(s,pid)+' a oublié de dire « il me reste une carte » : +1 carte');bump(s,[{k:'oops',by:pid}]);}
+  return true;
+}
+function mtSay(s,pid){
+  if(s.owe!==pid)return false;
+  s.owe='';logp(s,nameOf(s,pid)+' : « Il me reste une carte ! »');bump(s,[{k:'say',by:pid}]);return true;
+}
 function mtPlay(s,pid,cards,rank){
   if(!mtCan(s,pid))return false;
   if(!cards||cards.length<1||cards.length>3||!(rank>=1&&rank<=13))return false;
+  if(s.need&&rank!==s.need)return false;
   const hd=s.hands[pid].slice();
   for(const c of cards){const i=hd.indexOf(c);if(i<0)return false;hd.splice(i,1);}
+  if(s.owe)mtPenalty(s);
   s.hands[pid]=hd;cards.forEach(c=>s.pile.push(c));
+  s.need=rank;if(hd.length===1)s.owe=pid;
   s.last={by:pid,n:cards.length,rank,cards:cards.slice()};
   logp(s,nameOf(s,pid)+' pose '+claimTxt(cards.length,rank));
   s.turn=(s.turn+1)%s.players.length;
@@ -206,13 +224,14 @@ function mtPlay(s,pid,cards,rank){
 }
 function mtAccuse(s,acc){
   if(s.phase!=='play'||!s.last||s.last.by===acc||!s.players.some(p=>p.id===acc))return false;
+  if(s.owe)mtPenalty(s);
   const L=s.last,liar=L.cards.some(c=>rk(c)!==L.rank),taker=liar?L.by:acc;
   const cnt=s.pile.length;
   s.hands[taker]=s.hands[taker].concat(s.pile);s.pile=[];
   s.res={rev:s.rev+1,by:L.by,acc,rank:L.rank,cards:L.cards.slice(),liar,taker,cnt};
   logp(s,nameOf(s,acc)+' crie MYTHO ! '+(liar?nameOf(s,L.by)+' mentait':nameOf(s,L.by)+' disait vrai')+' → '+nameOf(s,taker)+' prend '+cnt+' cartes');
   const emptied=s.hands[L.by].length===0;
-  s.last=null;
+  s.last=null;s.need=0;if(s.owe===taker||s.hands[s.owe]&&s.hands[s.owe].length!==1)s.owe='';
   if(!liar&&emptied){s.phase='gameEnd';s.win=L.by;logp(s,nameOf(s,L.by)+' gagne !');}
   bump(s,[{k:'mytho',by:acc,liar,taker}]);
   return true;
@@ -228,21 +247,19 @@ function mtBotPlay(s,pid){
   if(!mtCan(s,pid))return false;
   const hd=s.hands[pid],by={};hd.forEach(c=>{(by[rk(c)]=by[rk(c)]||[]).push(c);});
   const ranks=Object.keys(by).map(Number);
-  const empty3=hd.length<=3;
   let cards,rank;
-  const lieP=empty3?0.1:0.35;
-  if(Math.random()>lieP||hd.length<=1&&false){
-    // vérité : le rang le plus fourni (parfois le plus petit pour se vider)
-    ranks.sort((a,b)=>by[b].length-by[a].length||Math.random()-.5);
-    rank=ranks[0];cards=by[rank].slice(0,3);
-    if(cards.length>1&&Math.random()<.3)cards=cards.slice(0,1+Math.floor(Math.random()*cards.length));
+  if(s.need){
+    rank=s.need;const have=by[rank]||[];
+    if(have.length&&Math.random()>.12){cards=have.slice(0,1+Math.floor(Math.random()*Math.min(3,have.length)));if(hd.length<=3)cards=have.slice(0,3);}
+    else{
+      // mensonge : se débarrasser des cartes les plus isolées
+      const k=Math.min(hd.length,1+Math.floor(Math.random()*2));
+      cards=hd.filter(c=>rk(c)!==rank).sort((a,b)=>(by[rk(a)].length-by[rk(b)].length)||Math.random()-.5).slice(0,k);
+      if(!cards.length)cards=[hd[0]];
+    }
   }else{
-    const k=1+Math.floor(Math.random()*Math.min(3,hd.length));
-    cards=shuffle(hd).slice(0,k);
-    const alt=ranks.filter(r=>!cards.every(c=>rk(c)===r));
-    // annonce un rang qu'on possède déjà (plus crédible) ou aléatoire
-    rank=Math.random()<.6&&ranks.length?ranks[Math.floor(Math.random()*ranks.length)]:1+Math.floor(Math.random()*13);
-    if(cards.every(c=>rk(c)===rank)&&alt.length)rank=alt[Math.floor(Math.random()*alt.length)];
+    ranks.sort((a,b)=>by[b].length-by[a].length||Math.random()-.5);
+    rank=ranks[0];cards=by[rank].slice(0,1+Math.floor(Math.random()*Math.min(3,by[rank].length)));
   }
   return mtPlay(s,pid,cards,rank);
 }
@@ -257,7 +274,6 @@ function mtBotAccuses(s,pid){
   return Math.random()<p;
 }
 /*ENGINE_END*/
-
 
 /* avatars dessinés (SVG générés, originaux) */
 const AV_BG=['#E9B949','#8DBBD9','#C9A7C8','#4E9AA6','#E58B3A','#9F6AA8','#7FB77E','#D96C5F','#6C7FD1','#D4A5A5','#5DB7A6','#F2A65A','#2B2F3A','#F7F3E0','#E8537A','#3FA7E0'];
@@ -364,7 +380,7 @@ const JOKER_IMG='';
 /* ---- état ---- */
 const NAME_K='f7name';
 let db=null,uid=null,myName=lsGet(NAME_K)||'',mySlug=lsGet('f7prof')||'',ROOM=0,mode=null /* null|'online'|'solo' */;
-let S=null,roster=[],stateUnsub=null,lobUnsub=null,hb=null,setup={bots:3},myReady=false,chain=Promise.resolve(),lastFxc=-1,lastGid=null,botKey='',lastResRev=0,lockUntil=0,lockKey='',closeKey='',accTimers=[];
+let S=null,roster=[],stateUnsub=null,lobUnsub=null,hb=null,setup={bots:3},myReady=false,chain=Promise.resolve(),lastFxc=-1,lastGid=null,botKey='',lastResRev=0,lockUntil=0,lockKey='',oweKey='',closeKey='',accTimers=[];
 let sel=new Set(),claim=0;
 const WIN_MS=4000,END_MS=5000;
 const fresh=p=>Date.now()-(p.seen||0)<75000;
@@ -437,6 +453,12 @@ function onLocalChange(prev){
     if(mode==='solo')scheduleBotAcc(k);
     if(S.phase==='play'&&S.hands[S.last.by].length===0)accTimers.push(setTimeout(()=>closeWin(k),END_MS+200));
   }
+  if(S.owe&&k!==oweKey){
+    oweKey=k;
+    accTimers.push(setTimeout(()=>penaltyIfOwed(k),WIN_MS+300));
+    const ow=S.players.find(p=>p.id===S.owe);
+    if(mode==='solo'&&ow&&ow.bot&&Math.random()<.85)accTimers.push(setTimeout(()=>{if(S&&S.gid+':'+S.rev===k&&S.owe===ow.id){const s=CLONE(S);if(mtSay(s,ow.id)){S=s;onLocalChange(null);render();}}},700+Math.random()*2200));
+  }
   if(S.phase==='play'&&mtTurnId(S)===uid&&!isSpec()&&mode==='online'&&!S.last)setTimeout(()=>Snd.play('turn'),300);
 }
 function playFx(s){
@@ -444,7 +466,8 @@ function playFx(s){
     const nm=f.by?nameOf(s,f.by):'';
     if(f.k==='play'){if(f.by!==uid)Snd.play('place');}
     else if(f.k==='mytho'){Snd.play('tringla');}
-    else if(f.k==='win'){}
+    else if(f.k==='say'){banner('☝️ '+nm+' : il me reste une carte !','#7CE7B0');}
+    else if(f.k==='oops'){Snd.play('taper');banner('😬 '+nm+' a oublié de le dire : +1 carte','#E5484D');}
   });
 }
 function closeWin(k){
@@ -458,15 +481,23 @@ const winOpen=()=>Date.now()<lockUntil;
 function toggleSel(c){
   if(!myTurn())return;
   if(sel.has(c))sel.delete(c);else{if(sel.size>=3){banner('3 cartes maximum','#FF8A3D');return;}sel.add(c);}
-  const rs0=[...sel].map(rk);if(rs0.length&&!rs0.includes(claim))claim=rs0[0];
+  if(!S.need){const rs0=[...sel].map(rk);if(rs0.length&&!rs0.includes(claim))claim=rs0[0];}
   render();
 }
 function setClaim(v){claim=v;render();}
 function playSel(){
   if(!myTurn())return;
   if(winOpen()&&S.last){banner('Laisse les autres accuser…','#FF8A3D');return;}
-  const cards=[...sel];if(!cards.length||!(claim>=1&&claim<=13)){banner('Choisis 1 à 3 cartes et une valeur','#E5484D');return;}
+  const cards=[...sel];if(S.need)claim=S.need;if(!cards.length||!(claim>=1&&claim<=13)){banner('Choisis 1 à 3 cartes et une valeur','#E5484D');return;}
   const s=CLONE(S);if(mtPlay(s,uid,cards,claim)){sel.clear();Snd.play('place');commit(s);}
+}
+function sayOne(){
+  if(!S||S.owe!==uid)return;
+  const s=CLONE(S);if(mtSay(s,uid)){Snd.play('take');commit(s);}
+}
+function penaltyIfOwed(k){
+  if(!S||S.gid+':'+S.rev!==k||!S.owe)return;
+  const s=CLONE(S);if(mtPenalty(s))commit(s);
 }
 function accuse(){
   if(!S||isSpec()||!S.last||S.last.by===uid)return;
@@ -533,10 +564,11 @@ function renderPicker(){
     h('div',{class:'panel'},h('h2',null,'Mytho · le jeu du bluff'),
       h('p',{class:'muted'},'Débarrasse-toi de toutes tes cartes en mentant au bon moment… et en repérant les menteurs. 3 à 8 joueurs, 52 cartes.'),
       h('div',{class:'rules'},
-        h('div',null,h('b',null,'Ton tour'),' : pose 1 à 3 cartes face cachée et annonce leur valeur (« 2 Rois »). Tu peux mentir !'),
+        h('div',null,h('b',null,'Ton tour'),' : le 1er choisit une valeur ; ensuite tout le monde doit annoncer la même valeur (ex. des 10). Pose 1 à 3 cartes face cachée : si tu n\'en as pas, tu dois mentir !'),
         h('div',null,h('b',null,'MYTHO !'),' : avant que le suivant joue, n\'importe qui peut t\'accuser. On retourne tes cartes.'),
         h('div',null,h('b',null,'Tu mentais'),' : tu ramasses toute la pile.'),
         h('div',null,h('b',null,'Tu disais vrai'),' : l\'accusateur ramasse la pile.'),
+        h('div',null,h('b',null,'Dernière carte'),' : il te reste 1 carte ? Clique « Il me reste une carte ! » sinon tu reprends 1 carte de la pile.'),
         h('div',null,h('b',null,'Victoire'),' : le premier sans carte (si on ne l\'accuse pas, ou à tort).')),
       mySlug?null:h('p',{class:'muted'},'Tu peux jouer sans profil : choisis un pseudo.'),
       mySlug?null:nm),
@@ -571,7 +603,7 @@ function renderGame(){
   };
   const L=s.last;
   const pileEl=h('div',{class:'pilewrap2'},h('div',{class:'pstack'},s.pile.length?[backEl(),s.pile.length>1?backEl():null,s.pile.length>4?backEl():null]:h('div',{class:'pc slot'}),h('span',{class:'cnt'},String(s.pile.length))),h('small',null,'Pile'));
-  const claimEl=L?h('div',{class:'claim'},h('span',{class:'cl-w'},nameOf(s,L.by)+' annonce'),h('b',null,claimTxt(L.n,L.rank)),h('div',{class:'cl-b'},L.cards.map(()=>backEl()))):h('div',{class:'claim none'},'Pile vide : annonce ce que tu veux');
+  const claimEl=L?h('div',{class:'claim'},h('span',{class:'cl-w'},nameOf(s,L.by)+' annonce'),h('b',null,claimTxt(L.n,L.rank)),h('div',{class:'cl-b'},L.cards.map(()=>backEl()))):h('div',{class:'claim none'},s.pile.length?'Valeur de la table : '+rName(s.need,2):'Pile vide : le suivant choisit la valeur');
   const canAcc=!spec&&!!L&&L.by!==uid&&s.phase==='play';
   const mid=h('div',{class:'center',id:'tbl'},pileEl,claimEl);
   const pendWin=L&&s.hands[L.by].length===0;
@@ -586,12 +618,14 @@ function renderGame(){
   let status='';
   if(spec)status='Tu regardes la partie';
   else if(pendWin)status=nameOf(s,L.by)+' a posé sa dernière carte… accuse-le vite !';
-  else if(mt)status=winOpen()&&L?'⏳ Les autres peuvent accuser… ('+Math.max(1,Math.ceil((lockUntil-Date.now())/1000))+'s)':'🎯 À toi : pose 1 à 3 cartes et annonce une valeur';
+  else if(mt)status=winOpen()&&L?'⏳ Les autres peuvent accuser… ('+Math.max(1,Math.ceil((lockUntil-Date.now())/1000))+'s)':(s.need?'🎯 À toi : pose 1 à 3 cartes et annonce des '+rName(s.need,2):'🎯 À toi : pose 1 à 3 cartes et choisis la valeur');
   else status='⏳ Au tour de '+nameOf(s,mtTurnId(s));
+  const needV=s.need||0;
   const ranks=h('div',{class:'ranks'},[...Array(13)].map((_,i)=>{const v=i+1;return h('button',{type:'button',class:'rk'+(claim===v?' on':''),onclick:()=>setClaim(v)},rLbl(v));}));
   const acts=h('div',{class:'acts'},
     canAcc?h('button',{class:'btn mytho',type:'button',onclick:accuse},'🫵 MYTHO !'):null,
-    mt?h('button',{class:'btn primary',type:'button',disabled:!sel.size||!claim||(winOpen()&&!!L),onclick:playSel},sel.size&&claim?'Poser '+sel.size+' carte'+(sel.size>1?'s':'')+' : « '+claimTxt(sel.size,claim)+' »':'Poser'):null);
+    !spec&&s.owe===uid?h('button',{class:'btn say',type:'button',onclick:sayOne},'☝️ Il me reste une carte !'):null,
+    mt?h('button',{class:'btn primary',type:'button',disabled:!sel.size||!(needV||claim)||(winOpen()&&!!L),onclick:playSel},sel.size&&(needV||claim)?'Poser '+sel.size+' carte'+(sel.size>1?'s':'')+' : « '+claimTxt(sel.size,needV||claim)+' »':'Poser'):null);
   const lastLog=s.log.slice(-2).reverse().join(' · ');
   const me=spec?null:s.players[meIdx];
   return[renderTop('Table '+(ROOM||'solo'),h('div',{class:'row'},mode==='online'&&isHost()?h('button',{class:'btn sm',type:'button',onclick:endGameHost},'■ Terminer'):null,h('button',{class:'btn sm',type:'button',onclick:leaveRoom},'↩ Quitter'))),
@@ -599,7 +633,8 @@ function renderGame(){
       h('div',{class:'opps'},opps.map(seat)),
       mid,
       h('div',{class:'status'},status),
-      mt?h('div',{class:'ctl'},h('div',{class:'ctl-l'},'Valeur annoncée'),ranks):null,
+      mt&&!needV?h('div',{class:'ctl'},h('div',{class:'ctl-l'},'Valeur annoncée'),ranks):null,
+      mt&&needV?h('div',{class:'ctl'},h('div',{class:'need'},'Valeur de la table : '+rName(needV,2))):null,
       acts,
       hand,
       me?h('div',{class:'opps'},seat(me)):null),
