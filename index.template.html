@@ -794,6 +794,7 @@ body[data-tb="pool"] .felt::after{opacity:.8;background:url("data:image/svg+xml,
 .gload.f7 .lg-fan i{color:#fff;text-shadow:0 2px 0 rgba(0,0,0,.3)}
 .gload.f7 .lg-fan i:nth-child(1){background:#E5484D}.gload.f7 .lg-fan i:nth-child(2){background:#F2B632}.gload.f7 .lg-fan i:nth-child(3){background:#3B82F6}.gload.f7 .lg-fan i:nth-child(4){background:#2FB67C}.gload.f7 .lg-fan i:nth-child(5){background:#9B6BFF}
 .gload.rd .lg-fan i{background:#FBF1D2;border-color:#fff;font-size:28px}
+.gload.rm .lg-fan i{background:#fffdf6;border-color:#fff;font-size:34px;color:#1b1b1b}.gload.rm .lg-fan i:nth-child(even){color:#c8232c}
 .gload .lg-sign{position:relative;z-index:1;padding:12px 34px;border-radius:16px;background:linear-gradient(#8A5528,#5E3516);box-shadow:0 0 0 3px #3b2010,0 8px 0 rgba(0,0,0,.18),inset 0 2px 0 rgba(255,255,255,.25);color:#FFE066;font:800 clamp(22px,6vw,34px) 'Unbounded',system-ui,sans-serif;letter-spacing:.06em;text-shadow:0 3px 0 rgba(0,0,0,.4)}
 .gload .lg-sign b{display:inline-block;animation:lgdot 1.2s infinite}.gload .lg-sign b:nth-of-type(2){animation-delay:.2s}.gload .lg-sign b:nth-of-type(3){animation-delay:.4s}
 @keyframes lgdot{0%,70%,100%{opacity:.25;transform:translateY(0)}35%{opacity:1;transform:translateY(-4px)}}
@@ -873,6 +874,8 @@ h2{color:#E8632B;text-shadow:0 2px 0 rgba(255,246,210,.9),0 3px 0 rgba(120,60,10
 .hub-c:hover{transform:translateY(-6px) rotate(-.6deg)}.hub-c:active{transform:translateY(2px)}
 .hub-art{min-height:130px;display:flex;align-items:center;justify-content:center;gap:0}.hub-art svg{height:100px;width:auto}
 .hub-c.rd .hub-art img{width:84px;height:auto;filter:drop-shadow(0 6px 4px rgba(0,0,0,.35))}.hub-c.rd .hub-art img:first-child{transform:rotate(-9deg) translateX(10px)}.hub-c.rd .hub-art img:last-child{transform:rotate(8deg) translateX(-10px)}
+.hub-c.rm .hub-art span{display:grid;place-items:center;width:62px;height:88px;border-radius:9px;background:#fffdf6;border:1px solid #b9a77c;box-shadow:0 6px 4px rgba(0,0,0,.3);font:800 30px var(--f-display);color:#1b1b1b;line-height:1}.hub-c.rm .hub-art span:first-child{transform:rotate(-10deg) translateX(10px);color:#c8232c}.hub-c.rm .hub-art span:last-child{transform:rotate(9deg) translateX(-10px)}
+@media (max-height:860px){.hub-in{gap:10px}.hub-g{gap:10px}.hub-c{padding:10px;gap:4px}.hub-art{min-height:84px}.hub-art svg{height:64px}.hub-c.rd .hub-art img{width:56px}.hub-c.rm .hub-art span{width:46px;height:64px;font-size:22px}.hub-c b{font-size:20px}.hub-go{padding:7px 22px}}
 .hub-c b{font:800 24px var(--f-display);color:#E8632B;text-shadow:0 2px 0 #fff6d2}.hub-c small{font-size:14px;color:#7A5224}
 .hub-go{margin-top:4px;padding:10px 26px;border-radius:14px;border:2px solid #b8430a;background:linear-gradient(#FF8A3D,#E8590C);color:#fff;font:800 16px var(--f-body);box-shadow:0 4px 0 #8f330a;text-shadow:0 2px 0 rgba(0,0,0,.25)}
 /* ===== fin thème ===== */
@@ -3217,7 +3220,7 @@ let hubWanted=true;
 function ssGet(k){try{return sessionStorage.getItem(k);}catch(e){return null;}}
 function ssSet(k,v){try{sessionStorage.setItem(k,v);}catch(e){}}
 function hideHub(){const o=$('hub');if(o)o.remove();}
-const LD_INNER={f7:'<div class="lg-cloud c1"></div><div class="lg-cloud c2"></div><div class="lg-fan" aria-hidden="true"><i>7</i><i>7</i><i>7</i><i>7</i><i>7</i></div><div class="lg-sign">Loading<b>.</b><b>.</b><b>.</b></div><div class="lg-bar" aria-hidden="true"></div>',rd:'<div class="lg-cloud c1"></div><div class="lg-cloud c2"></div><div class="lg-fan" aria-hidden="true"><i>🪙</i><i>🗡️</i><i>🪵</i><i>🍵</i><i>🪙</i></div><div class="lg-sign">Loading<b>.</b><b>.</b><b>.</b></div><div class="lg-bar" aria-hidden="true"></div>'};
+const LD_INNER={f7:'<div class="lg-cloud c1"></div><div class="lg-cloud c2"></div><div class="lg-fan" aria-hidden="true"><i>7</i><i>7</i><i>7</i><i>7</i><i>7</i></div><div class="lg-sign">Loading<b>.</b><b>.</b><b>.</b></div><div class="lg-bar" aria-hidden="true"></div>',rm:'<div class="lg-cloud c1"></div><div class="lg-cloud c2"></div><div class="lg-fan" aria-hidden="true"><i>♠</i><i>♥</i><i>🃏</i><i>♦</i><i>♣</i></div><div class="lg-sign">Loading<b>.</b><b>.</b><b>.</b></div><div class="lg-bar" aria-hidden="true"></div>',rd:'<div class="lg-cloud c1"></div><div class="lg-cloud c2"></div><div class="lg-fan" aria-hidden="true"><i>🪙</i><i>🗡️</i><i>🪵</i><i>🍵</i><i>🪙</i></div><div class="lg-sign">Loading<b>.</b><b>.</b><b>.</b></div><div class="lg-bar" aria-hidden="true"></div>'};
 function showLoader(k){let l=$('gload');if(!l){l=document.createElement('div');l.id='gload';document.body.append(l);}l.className='gload '+k;l.innerHTML=LD_INNER[k]||LD_INNER.f7;}
 function endLoader(){const l=$('gload');if(!l)return;l.classList.add('out');setTimeout(()=>l.remove(),600);}
 function tryHub(){
@@ -3231,14 +3234,15 @@ function showHub(){
   if($('hub'))return;
   const nm=(prof&&prof.name)||lsGet('f7name')||'';
   const logo=(document.querySelector('.logo')||{outerHTML:'<b>FLIP 7</b>'}).outerHTML;
-  const choose=g=>{hubWanted=false;showLoader(g==='flip7'?'f7':'rd');if(g==='flip7'){ssSet('f7game','flip7');try{history.replaceState(null,'',location.pathname);}catch(e){}setTimeout(()=>{hideHub();endLoader();},700);}else setTimeout(()=>{location.href='ronda.html';},700);};
+  const choose=g=>{hubWanted=false;showLoader(g==='flip7'?'f7':g==='rami'?'rm':'rd');if(g==='flip7'){ssSet('f7game','flip7');try{history.replaceState(null,'',location.pathname);}catch(e){}setTimeout(()=>{hideHub();endLoader();},700);}else setTimeout(()=>{location.href=g==='rami'?'rami.html':'ronda.html';},700);};
   const card=(cls,art,title,sub,go)=>h('button',{class:'hub-c '+cls,type:'button',onclick:go},h('div',{class:'hub-art',html:art}),h('b',null,title),h('small',null,sub),h('span',{class:'hub-go'},'Jouer ›'));
   const ov=h('div',{id:'hub',role:'dialog','aria-label':'Choix du jeu'},
     h('div',{class:'hub-in'},
       h('h2',null,nm?'Salut '+nm+' !':'Bienvenue !'),h('p',{class:'hub-s'},'À quel jeu veux-tu jouer ?'),
       h('div',{class:'hub-g'},
         card('f7',logo,'Flip 7','Pioche, tente ta chance, 2 à 8 joueurs',()=>choose('flip7')),
-        card('rd','<img src="'+HUB_IMG2+'" alt=""><img src="'+HUB_IMG+'" alt="">','Ronda','Jeu de cartes marocaines, 2 à 4 joueurs',()=>choose('ronda')))));
+        card('rd','<img src="'+HUB_IMG2+'" alt=""><img src="'+HUB_IMG+'" alt="">','Ronda','Jeu de cartes marocaines, 2 à 4 joueurs',()=>choose('ronda')),
+        card('rm','<span>A♥</span><span>K♠</span>','Rami','Rami traditionnel, 2 à 5 joueurs',()=>choose('rami')))));
   document.body.append(ov);
 }
 
