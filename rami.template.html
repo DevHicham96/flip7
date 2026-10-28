@@ -518,9 +518,16 @@ function banner(text,color){const d=h('div',{class:'fxban',style:'--g:'+(color||
 function makeDbFromSdk(F,fs){
   const ws=x=>({exists:x.exists(),data:()=>x.data()});
   const wq=x=>({docs:x.docs.map(d=>({id:d.id,data:()=>d.data()}))});
+  const mk=(c,q)=>({
+    onSnapshot:(cb,eb)=>F.onSnapshot(q,x=>cb(wq(x)),eb),
+    orderBy:(f,d)=>mk(c,F.query(q,F.orderBy(f,d||'asc'))),
+    limit:n=>mk(c,F.query(q,F.limit(n))),
+    add:v=>F.addDoc(c,v),
+    get:async()=>wq(await F.getDocs(q))
+  });
   return{
     doc:path=>{const r=F.doc(fs,path);return{get:async()=>ws(await F.getDoc(r)),set:v=>F.setDoc(r,v),delete:()=>F.deleteDoc(r),onSnapshot:(cb,eb)=>F.onSnapshot(r,x=>cb(ws(x)),eb)};},
-    collection:path=>{const c=F.collection(fs,path);return{onSnapshot:(cb,eb)=>F.onSnapshot(c,x=>cb(wq(x)),eb),get:async()=>wq(await F.getDocs(c))};}
+    collection:path=>{const c=F.collection(fs,path);return mk(c,c);}
   };
 }
 async function loadFirebase(cfg){
