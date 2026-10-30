@@ -1,0 +1,3106 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Quiz · questions pour tous</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600;800&family=Figtree:wght@400;600;700;800&display=swap">
+<style>:root{--bg:#8FD6E8;--surface:#FBEFC4;--ink:#4A2B10;--ink-2:#7A5224;--line:#C9A15A;--accent:#E8590C;--f-display:'Unbounded',system-ui,sans-serif;--f-body:'Figtree',system-ui,-apple-system,'Segoe UI',sans-serif;--cwb:clamp(48px,min(12vw,10.5vh),84px);--cw:var(--cwb)}
+*{box-sizing:border-box}[hidden]{display:none!important}
+html{background:linear-gradient(#5CC3E6 0%,#A5E1F0 45%,#D8F4EE 75%) fixed #8FD6E8}
+html::after{content:'';position:fixed;left:0;right:0;bottom:0;height:24vh;min-height:120px;z-index:-1;pointer-events:none;background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 300' preserveAspectRatio='none'><path d='M0 120 C200 40 380 60 560 120 S950 170 1200 80 V300 H0Z' fill='%237BC36B'/><path d='M0 190 C220 120 420 150 640 200 S1000 230 1200 160 V300 H0Z' fill='%234FA24A'/><path d='M0 250 C300 210 600 260 900 235 S1120 230 1200 245 V300 H0Z' fill='%232F8240'/></svg>") bottom/100% 100% no-repeat}
+body{margin:0;color:var(--ink);font:16px/1.45 var(--f-body);padding:12px max(12px,env(safe-area-inset-right)) 24px max(12px,env(safe-area-inset-left));min-height:100vh}
+h1,h2,h3,p{margin:0}
+h2{font:800 20px var(--f-display);color:#E8632B;text-shadow:0 2px 0 rgba(255,246,210,.9)}
+.wrap{max-width:1100px;margin:0 auto;display:grid;gap:12px}
+.top{display:flex;align-items:center;gap:8px;flex-wrap:wrap;background:linear-gradient(#8A5528,#5E3516);border-radius:16px;padding:8px 12px;box-shadow:0 0 0 3px #3b2010,0 8px 0 rgba(0,0,0,.14),inset 0 2px 0 rgba(255,255,255,.22);color:#FFF3CC}
+.brand{font:800 20px var(--f-display);color:#FFE066;text-shadow:0 3px 0 rgba(0,0,0,.35);letter-spacing:.02em;margin-right:auto}
+.brand small{display:block;font:700 10px var(--f-body);letter-spacing:.3em;color:#E7D3A0;text-shadow:none}
+.btn{font:800 15px var(--f-body);min-height:44px;border-radius:12px;border:2px solid #8A6A2C;background:linear-gradient(#F0E0AE,#D6BF7E);color:#5B3A14;padding:0 16px;cursor:pointer;box-shadow:0 4px 0 #8A6A2C;transition:transform .08s,box-shadow .08s,filter .15s;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:6px}
+.btn:hover:not(:disabled){filter:brightness(1.06)}.btn:active:not(:disabled){transform:translateY(3px);box-shadow:0 1px 0 #8A6A2C}.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn.sm{min-height:36px;font-size:13px;padding:0 12px;box-shadow:0 3px 0 #8A6A2C}
+.btn.primary{border-color:#B8430A;background:linear-gradient(#FF8A3D,#E8590C);color:#fff;text-shadow:0 2px 0 rgba(0,0,0,.25);box-shadow:0 4px 0 #8F330A,inset 0 2px 0 rgba(255,255,255,.3)}
+.btn.primary:active:not(:disabled){box-shadow:0 1px 0 #8F330A}
+.panel{background:radial-gradient(ellipse at 50% 15%,#FFF7D6,#F3E0A0);border:4px solid #7A4A24;border-radius:18px;box-shadow:0 0 0 2px #3b2010,inset 0 0 0 2px #B88B45,inset 0 0 26px rgba(150,100,30,.3),0 10px 24px rgba(0,0,0,.28);padding:16px;display:grid;gap:12px;width:100%;max-width:720px;margin-inline:auto}
+.muted{color:var(--ink-2);font-size:14px}
+.rooms{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.rcard{display:grid;gap:6px;text-align:left;padding:14px;border-radius:16px;border:3px solid #B88B45;background:linear-gradient(#FFF8E1,#F6E6B0);color:var(--ink);cursor:pointer;font:inherit;box-shadow:0 4px 0 #8A6A2C;min-height:110px;align-content:start}
+.rcard:hover{border-color:#E8590C;transform:translateY(-3px)}.rcard b{font:800 18px var(--f-display)}
+.st{font:700 12px var(--f-body);padding:3px 10px;border-radius:99px;width:max-content;background:rgba(120,130,150,.2)}.st.free{background:rgba(47,182,124,.25);color:#1E7F54}.st.play{background:rgba(229,72,77,.22);color:#C2343A}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.seg{display:inline-flex;border:2px solid #B88B45;border-radius:12px;overflow:hidden}.seg button{border:0;background:#FFF8E1;color:var(--ink);font:800 14px var(--f-body);padding:8px 14px;cursor:pointer}.seg button.on{background:linear-gradient(#FF8A3D,#E8590C);color:#fff}
+.pl{display:flex;align-items:center;gap:10px;background:#FFF8E1;border:2px solid #C9A15A;border-radius:12px;padding:8px 10px}
+.av{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;font:800 16px var(--f-display);color:#fff;flex:none;border:3px solid #fff6d2;box-shadow:0 2px 0 rgba(0,0,0,.25)}
+.pl b{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.rdy{font-size:13px;font-weight:700}
+input.t{min-height:44px;border-radius:12px;border:2px solid #B88B45;background:#FFF8E1;color:var(--ink);font:700 16px var(--f-body);padding:0 12px;box-shadow:inset 0 2px 4px rgba(120,80,20,.25);width:100%}
+/* cartes */
+.rc{position:relative;width:var(--cw);height:calc(var(--cw)*1.5);border-radius:calc(var(--cw)*.12);background:#F6ECD2;border:1px solid #b99b62;box-shadow:0 2px 0 rgba(60,35,10,.45),0 6px 10px rgba(0,0,0,.25);flex:none;overflow:hidden;user-select:none;-webkit-user-select:none}
+.rc img,.rc svg{position:absolute;inset:0;width:100%;height:100%;display:block}
+.rc img{object-fit:fill}
+
+
+.rc.sm{--cw:calc(var(--cwb)*.62)}
+.rc.hl{outline:4px solid #FFE066;outline-offset:1px;transform:translateY(-6px);box-shadow:0 0 18px #FFE066,0 8px 12px rgba(0,0,0,.3)}
+.rc.drop{animation:rdrop .45s cubic-bezier(.2,1.2,.4,1) both}
+@keyframes rdrop{from{opacity:0;transform:translateY(-60px) scale(.8) rotate(-8deg)}to{opacity:1;transform:none}}
+.rc.mine{cursor:pointer;transition:transform .15s,box-shadow .15s}.rc.mine:hover,.rc.mine.sel{transform:translateY(-14px)}
+.rc.mine.dis{cursor:default;filter:saturate(.7) brightness(.92)}.rc.mine.dis:hover{transform:none}
+.rc.fly{position:fixed;z-index:80;margin:0;pointer-events:none;transition:transform .7s cubic-bezier(.5,0,.3,1),opacity .7s;will-change:transform}
+/* table */
+.felt{position:relative;border-radius:26px;background:radial-gradient(ellipse at 50% 45%,#5DB85A 0%,#2F8240 85%);box-shadow:0 0 0 10px #6B3F1A,0 0 0 13px #3b2010,0 18px 30px rgba(0,0,0,.3),inset 0 0 40px rgba(0,0,0,.18);padding:14px 10px 12px;display:grid;gap:10px}
+.felt::before{content:'';position:absolute;inset:8px;border-radius:18px;border:2px solid rgba(255,236,150,.5);pointer-events:none}
+.opps{display:flex;justify-content:space-evenly;gap:10px;flex-wrap:wrap;position:relative;z-index:1}
+.seat{display:grid;gap:5px;justify-items:center;min-width:120px}
+.plate{display:flex;align-items:center;gap:8px;background:linear-gradient(#5A3318,#3E2410);border:2px solid #241206;border-radius:12px;padding:5px 10px 5px 6px;color:#FFF3CC;box-shadow:0 3px 0 rgba(0,0,0,.35)}
+.plate .av{width:32px;height:32px;font-size:14px;border-width:2px}.plate .nm{font:700 14px var(--f-body);max-width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.plate .sc{font:800 18px var(--f-display);color:#FFE066}.plate small{display:block;font-size:11px;color:#E7D3A0}
+.seat.turn .plate{box-shadow:0 0 0 3px #FFE066,0 0 18px #FFE066;animation:pulse 1.2s ease-in-out infinite}
+@keyframes pulse{50%{box-shadow:0 0 0 3px #FFE066,0 0 30px #FFE066}}
+.hnd{display:flex;gap:4px;min-height:calc(var(--cw)*.62*1.5)}.hnd .rc{--cw:calc(var(--cwb)*.55)}
+.tbl{display:flex;flex-wrap:wrap;gap:calc(var(--cw)*.14);justify-content:center;align-content:center;min-height:calc(var(--cw)*1.5 + 24px);padding:6px;position:relative;z-index:1}
+.tbl .empty{color:rgba(255,246,210,.7);font:700 15px var(--f-body);align-self:center}
+.mehand{display:flex;justify-content:center;gap:calc(var(--cw)*.2);padding-top:10px;position:relative;z-index:1;min-height:calc(var(--cw)*1.5 + 20px)}
+.status{position:relative;z-index:1;text-align:center;font:800 15px var(--f-body);color:#FFF3CC;text-shadow:0 2px 0 rgba(0,0,0,.35);min-height:1.5em}
+.acts{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;position:relative;z-index:1}
+.logline{background:#FFF3CC;border:2px solid #C9A15A;border-radius:12px;padding:8px 12px;font-size:14px}
+.fxban{position:fixed;left:50%;top:max(96px,14vh);transform:translateX(-50%);padding:10px 22px;border-radius:999px;background:rgba(74,43,16,.94);border:2px solid var(--g,#FFE066);color:#fff;font:800 clamp(14px,3.4vw,20px) var(--f-display);box-shadow:0 0 24px var(--g,#FFE066),0 8px 24px rgba(0,0,0,.4);white-space:nowrap;max-width:94vw;overflow:hidden;text-overflow:ellipsis;animation:fxban 2.2s ease-out forwards;z-index:90}
+@keyframes fxban{0%{opacity:0;transform:translate(-50%,-20px) scale(.8)}12%{opacity:1;transform:translate(-50%,0) scale(1.05)}20%{transform:translate(-50%,0) scale(1)}80%{opacity:1}100%{opacity:0;transform:translate(-50%,-10px)}}
+.pop{position:fixed;z-index:85;pointer-events:none;font:800 40px var(--f-display);color:#FFE066;text-shadow:0 4px 0 rgba(0,0,0,.4);transform:translate(-50%,-50%);animation:popu 1.4s ease-out forwards}
+@keyframes popu{0%{opacity:0;transform:translate(-50%,-30%) scale(.5)}15%{opacity:1;transform:translate(-50%,-50%) scale(1.2)}100%{opacity:0;transform:translate(-50%,-140%) scale(1)}}
+.ov{position:fixed;inset:0;z-index:70;display:grid;place-items:center;padding:14px;background:rgba(30,60,80,.7);backdrop-filter:blur(4px);animation:fin .3s both}
+@keyframes fin{from{opacity:0}to{opacity:1}}
+.ovc{width:min(480px,100%);max-height:94vh;overflow:auto;background:linear-gradient(160deg,rgba(40,24,100,.96),rgba(12,8,36,.97));color:#fff;border:1px solid rgba(255,255,255,.2);border-radius:24px;padding:18px;display:grid;gap:10px;box-shadow:0 30px 80px rgba(0,0,0,.6)}
+.ovc h3{font:800 20px var(--f-display);text-align:center}
+.ovr{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;padding:8px 10px;border-radius:14px;background:rgba(255,255,255,.08)}.ovr.best{box-shadow:0 0 0 2px #FFE066;background:rgba(255,224,102,.18)}
+.ovr small{color:rgba(255,255,255,.7)}.ovr .p{font:800 22px var(--f-display);color:#7CE7B0}
+.prog{height:8px;border-radius:4px;background:rgba(255,255,255,.15);overflow:hidden}.prog i{display:block;height:100%;background:linear-gradient(90deg,#7C3AED,#E5484D,#FF8A3D);transform-origin:left}
+.err{color:#c0262d;font-weight:700}
+@media (max-width:560px){:root{--cwb:clamp(44px,13.5vw,70px)}.brand{font-size:17px}.felt{padding:12px 6px 10px}}
+@media (prefers-reduced-motion:reduce){.rc.drop,.seat.turn .plate{animation:none}}
+/* nouvelles règles */
+.rules{display:grid;gap:3px;font-size:14px;color:var(--ink-2);background:#FFF8E1;border:2px solid #C9A15A;border-radius:12px;padding:8px 12px}.rules b{color:#B8430A}
+.center{position:relative;z-index:1;display:flex;justify-content:center;align-items:center;gap:calc(var(--cw)*.5);padding:8px;min-height:calc(var(--cw)*1.5 + 24px)}
+.deck{position:relative;border:0;background:none;padding:0;cursor:default;border-radius:10px}
+.deck 
+.deck.can{cursor:pointer;animation:dpulse 1.1s ease-in-out infinite}.deck.can:hover{transform:translateY(-4px)}
+@keyframes dpulse{50%{filter:drop-shadow(0 0 12px #FFE066)}}
+.deck .cnt{position:absolute;right:-8px;bottom:-8px;background:#3E2410;color:#FFE066;font:800 13px var(--f-body);border-radius:99px;padding:2px 8px;border:2px solid #FFE066}
+.pilewrap{position:relative;display:grid;justify-items:center;gap:6px}
+.suitb{background:rgba(74,43,16,.92);color:#FFF3CC;border:2px solid #FFE066;border-radius:99px;font:800 13px var(--f-body);padding:3px 12px;white-space:nowrap}
+.pend{position:absolute;right:6%;top:-4px;background:#E5484D;color:#fff;font:800 22px var(--f-display);border-radius:99px;padding:4px 14px;border:3px solid #fff;box-shadow:0 4px 12px rgba(0,0,0,.4);animation:pulse2 .8s ease-in-out infinite}
+@keyframes pulse2{50%{transform:scale(1.12)}}
+.mehand{flex-wrap:wrap}
+.rc.mine.ok{outline:3px solid rgba(255,224,102,.9);outline-offset:1px}.rc.mine.ok:hover{transform:translateY(-14px);box-shadow:0 0 16px #FFE066,0 8px 12px rgba(0,0,0,.3)}
+.rc.mine.dis{opacity:.8;filter:saturate(.55) brightness(.82)}
+.seat.fin .plate{opacity:.75}
+.suits{display:grid;grid-template-columns:1fr 1fr;gap:10px}.suits .btn{min-height:64px;display:grid;gap:2px;justify-items:center;padding:6px 10px;font-size:15px}.suits .si{font-size:26px}
+.av.has{background:none!important;overflow:hidden;border-color:#fff6d2}.av svg{width:100%;height:100%;display:block}
+/* dos gris façon cartes marocaines */
+.rc.back{background-color:#8c8478;background-image:radial-gradient(circle at 50% 50%,#5f584e 0 2.2px,transparent 2.6px),radial-gradient(circle at 50% 50%,#a8a094 0 1.6px,transparent 2px);background-size:7px 7px,7px 7px;background-position:0 0,3.5px 3.5px;border:3px solid #d9d3c6;box-shadow:0 2px 0 rgba(60,35,10,.45),0 6px 10px rgba(0,0,0,.25),inset 0 0 0 1px #6b645a}
+.deck .rc.back{box-shadow:3px 3px 0 #6b645a,6px 6px 0 #4f493f,0 8px 12px rgba(0,0,0,.3)}
+
+/* profil, discussion */
+.pchip{display:inline-flex;align-items:center;gap:6px;background:linear-gradient(#F0E0AE,#D6BF7E);border:2px solid #8A6A2C;border-radius:12px;padding:3px 10px 3px 4px;color:#5B3A14;font:800 13px var(--f-body);box-shadow:0 3px 0 #8A6A2C;min-height:36px}
+.pchip .av{width:26px;height:26px;font-size:12px;border-width:2px}.pchip b{max-width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.pchip .shd{filter:saturate(1.3)}
+.ubadge{display:inline-grid;place-items:center;min-width:20px;height:20px;border-radius:99px;background:#E5484D;color:#fff;font:800 11px var(--f-body);margin-left:6px;padding:0 5px}
+.rchat{position:fixed;z-index:90;right:12px;bottom:12px;width:min(360px,calc(100vw - 24px));height:min(420px,70vh);display:grid;grid-template-rows:auto minmax(0,1fr) auto;gap:8px;padding:12px;background:radial-gradient(ellipse at 50% 15%,#FFF7D6,#F3E0A0);border:4px solid #7A4A24;border-radius:18px;box-shadow:0 0 0 2px #3b2010,0 14px 30px rgba(0,0,0,.35)}
+.rchat[hidden]{display:none}
+.rchat .ch-h{display:flex;justify-content:space-between;align-items:center;font:800 16px var(--f-display);color:#E8632B}
+#ch-list{list-style:none;margin:0;padding:0;overflow-y:auto;display:flex;flex-direction:column;gap:6px;min-height:0}
+#ch-list li{font-size:14px;overflow-wrap:anywhere;background:#FFF8E1;border:1px solid #D9BE80;border-radius:10px;padding:5px 9px}
+#ch-list li.me{border-color:#E8590C}#ch-list li.rx{font-style:italic;color:var(--ink-2)}
+#ch-form{display:flex;gap:6px}#ch-form input{flex:1;min-width:0;min-height:40px;border-radius:10px;border:2px solid #B88B45;background:#FFF8E1;color:var(--ink);font:500 15px var(--f-body);padding:0 10px}
+/* écran de chargement (thème aventure) */
+.gload{position:fixed;inset:0;z-index:300;display:grid;place-items:center;align-content:center;gap:20px;background:linear-gradient(#5CC3E6 0%,#A5E1F0 45%,#D8F4EE 75%);overflow:hidden;transition:opacity .5s ease,visibility .5s;font-family:'Unbounded','Figtree',system-ui,sans-serif}
+.gload.out{opacity:0;visibility:hidden}
+.gload::before{content:'';position:absolute;left:0;right:0;bottom:0;height:30vh;min-height:140px;pointer-events:none;background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 300' preserveAspectRatio='none'><path d='M0 120 C200 40 380 60 560 120 S950 170 1200 80 V300 H0Z' fill='%237BC36B'/><path d='M0 190 C220 120 420 150 640 200 S1000 230 1200 160 V300 H0Z' fill='%234FA24A'/><path d='M0 250 C300 210 600 260 900 235 S1120 230 1200 245 V300 H0Z' fill='%232F8240'/></svg>") bottom/100% 100% no-repeat}
+.gload .lg-cloud{position:absolute;width:120px;height:40px;border-radius:99px;background:rgba(255,255,255,.85);box-shadow:30px -14px 0 8px rgba(255,255,255,.85),-26px -8px 0 2px rgba(255,255,255,.85);animation:lgcl 22s linear infinite}
+.gload .lg-cloud.c1{top:14%;left:-160px}.gload .lg-cloud.c2{top:30%;left:-160px;transform:scale(.7);animation-duration:30s;animation-delay:-12s}
+@keyframes lgcl{to{left:110%}}
+.gload .lg-fan{position:relative;width:170px;height:140px;z-index:1}
+.gload .lg-fan i{position:absolute;left:50%;bottom:0;width:66px;height:100px;margin-left:-33px;border-radius:10px;border:3px solid #fff;transform-origin:50% 125%;box-shadow:0 8px 0 rgba(0,0,0,.18);display:grid;place-items:center;font:800 30px 'Unbounded',system-ui,sans-serif;font-style:normal;animation:lgfan 1.7s ease-in-out infinite}
+.gload .lg-fan i:nth-child(1){--r:-36deg;animation-delay:0s}.gload .lg-fan i:nth-child(2){--r:-18deg;animation-delay:.12s}.gload .lg-fan i:nth-child(3){--r:0deg;animation-delay:.24s}.gload .lg-fan i:nth-child(4){--r:18deg;animation-delay:.36s}.gload .lg-fan i:nth-child(5){--r:36deg;animation-delay:.48s}
+@keyframes lgfan{0%,100%{transform:rotate(calc(var(--r)*.3)) translateY(0)}50%{transform:rotate(var(--r)) translateY(-14px)}}
+.gload.f7 .lg-fan i{color:#fff;text-shadow:0 2px 0 rgba(0,0,0,.3)}
+.gload.f7 .lg-fan i:nth-child(1){background:#E5484D}.gload.f7 .lg-fan i:nth-child(2){background:#F2B632}.gload.f7 .lg-fan i:nth-child(3){background:#3B82F6}.gload.f7 .lg-fan i:nth-child(4){background:#2FB67C}.gload.f7 .lg-fan i:nth-child(5){background:#9B6BFF}
+.gload.rd .lg-fan i{background:#FBF1D2;border-color:#fff;font-size:28px}
+.gload .lg-sign{position:relative;z-index:1;padding:12px 34px;border-radius:16px;background:linear-gradient(#8A5528,#5E3516);box-shadow:0 0 0 3px #3b2010,0 8px 0 rgba(0,0,0,.18),inset 0 2px 0 rgba(255,255,255,.25);color:#FFE066;font:800 clamp(22px,6vw,34px) 'Unbounded',system-ui,sans-serif;letter-spacing:.06em;text-shadow:0 3px 0 rgba(0,0,0,.4)}
+.gload .lg-sign b{display:inline-block;animation:lgdot 1.2s infinite}.gload .lg-sign b:nth-of-type(2){animation-delay:.2s}.gload .lg-sign b:nth-of-type(3){animation-delay:.4s}
+@keyframes lgdot{0%,70%,100%{opacity:.25;transform:translateY(0)}35%{opacity:1;transform:translateY(-4px)}}
+.gload .lg-bar{position:relative;z-index:1;width:min(260px,64vw);height:12px;border-radius:99px;background:rgba(74,43,16,.25);border:2px solid #5E3516;overflow:hidden}
+.gload .lg-bar::after{content:'';display:block;height:100%;width:42%;border-radius:99px;background:linear-gradient(90deg,#FF8A3D,#FFE066);animation:lgbar 1.2s ease-in-out infinite}
+@keyframes lgbar{0%{transform:translateX(-110%)}100%{transform:translateX(260%)}}
+@media (prefers-reduced-motion:reduce){.gload .lg-fan i,.gload .lg-bar::after,.gload .lg-sign b,.gload .lg-cloud{animation:none}}
+.cf{position:fixed;top:-12px;width:9px;height:14px;z-index:130;pointer-events:none;border-radius:2px;animation:cf 3s linear forwards}
+@keyframes cf{to{top:105vh;rotate:720deg}}
+
+/* ---- discussion toujours présente ---- */
+.carre,.btn.carre{background:linear-gradient(#9be8bf,#35b57c);border-color:#1E7F54;color:#0b3a25;box-shadow:0 4px 0 #1E7F54}
+.outrow{position:relative;z-index:1;display:flex;gap:6px;justify-content:center;align-items:center;color:#FFF3CC;font:700 13px var(--f-body);flex-wrap:wrap}
+.rchat2{position:fixed;z-index:60;display:grid;background:radial-gradient(ellipse at 50% 0%,#FFF7D6,#F3E0A0);border:3px solid #7A4A24;box-shadow:0 0 0 2px #3b2010,0 10px 24px rgba(0,0,0,.32);color:var(--ink);overflow:hidden}
+.rchat2 .ch-top{display:flex;align-items:center;gap:8px;padding:8px 12px;background:linear-gradient(#8A5528,#5E3516);color:#FFE066;font:800 15px var(--f-display);cursor:pointer;min-height:44px}
+.rchat2 .ch-prev{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#F3E0B0;font:500 13px var(--f-body)}
+.rchat2 .ch-chev{transition:transform .2s;font-size:16px}.rchat2.open .ch-chev{transform:rotate(180deg)}
+.rchat2 .ch-body{display:grid;grid-template-rows:minmax(0,1fr) auto;min-height:0}
+#ch-list{list-style:none;margin:0;padding:10px;overflow-y:auto;display:flex;flex-direction:column;gap:6px;min-height:0;overscroll-behavior:contain}
+#ch-list li.msg{display:flex;gap:8px;align-items:flex-start;max-width:92%}
+#ch-list li.msg.me{align-self:flex-end;flex-direction:row-reverse}
+#ch-list li.msg.same{margin-top:-3px}#ch-list li.msg.same .mb{margin-left:36px}#ch-list li.msg.me.same .mb{margin-left:0;margin-right:36px}
+.mav{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;color:#fff;font:800 13px var(--f-display);flex:none;border:2px solid #fff6d2}
+.mb{min-width:0}.mh{display:flex;gap:6px;align-items:baseline;font-size:12px}.mh b{font-weight:800}.mh time{opacity:.55;font-size:11px}
+#ch-list li.me .mh{justify-content:flex-end}
+.mt{background:#fffaf0;border:1px solid #D9BE80;border-radius:4px 14px 14px 14px;padding:6px 10px;font-size:15px;overflow-wrap:anywhere;box-shadow:0 1px 0 rgba(120,80,20,.15)}
+#ch-list li.me .mt{background:linear-gradient(#ffe0b8,#ffc98a);border-color:#E8590C;border-radius:14px 4px 14px 14px}
+#ch-list li.big .mt{background:none;border:0;box-shadow:none;font-size:34px;line-height:1.1;padding:0 4px}
+#ch-list li.rx{align-self:center;font-style:italic;color:var(--ink-2);font-size:12px;background:none;border:0}
+.ch-quick{display:grid;gap:4px;padding:6px 8px;border-top:1px solid #D9BE80;background:rgba(255,248,225,.7)}
+.qe{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none}.qe::-webkit-scrollbar{display:none}
+.qb{border:0;background:none;font-size:23px;line-height:1;padding:3px 5px;cursor:pointer;border-radius:8px;transition:transform .1s}.qb:hover{background:rgba(232,89,12,.15);transform:scale(1.2)}.qb:active{transform:scale(.9)}
+.qt{display:flex;gap:5px;overflow-x:auto;scrollbar-width:none}.qt::-webkit-scrollbar{display:none}
+.qc{flex:none;border:2px solid #C9A15A;background:#FFF8E1;color:#5B3A14;border-radius:99px;font:700 12px var(--f-body);padding:4px 10px;cursor:pointer}.qc:hover{border-color:#E8590C}
+#ch-form{display:flex;gap:6px;padding:8px;background:#F3E0A0;border-top:2px solid #C9A15A}
+#ch-in{flex:1;min-width:0;min-height:44px;border-radius:22px;border:2px solid #B88B45;background:#FFF8E1;color:var(--ink);font:600 16px var(--f-body);padding:0 16px;box-shadow:inset 0 2px 4px rgba(120,80,20,.2)}
+#ch-in:focus{outline:0;border-color:#E8590C;box-shadow:0 0 0 3px rgba(232,89,12,.3)}
+.ch-send{width:46px;min-height:44px;border-radius:50%;border:2px solid #B8430A;background:linear-gradient(#FF8A3D,#E8590C);color:#fff;font-size:18px;cursor:pointer;box-shadow:0 3px 0 #8F330A}.ch-send:active{transform:translateY(2px)}
+#ch-toasts{position:fixed;left:12px;bottom:72px;z-index:61;display:grid;gap:6px;pointer-events:none;max-width:min(300px,80vw)}
+.ch-toast{background:rgba(74,43,16,.92);color:#fff;border:1px solid #FFE066;border-radius:14px;padding:6px 12px;font-size:14px;animation:tin .25s ease-out;box-shadow:0 4px 12px rgba(0,0,0,.3);overflow-wrap:anywhere}.ch-toast b{color:#FFE066}
+.ch-toast.out{opacity:0;transform:translateY(-6px);transition:.4s}
+@keyframes tin{from{opacity:0;transform:translateY(10px)}}
+/* mobile : barre en bas, qui s'ouvre */
+@media (max-width:899px){
+  body.chat-on{padding-bottom:78px}
+  .rchat2{left:8px;right:8px;bottom:8px;border-radius:18px;grid-template-rows:auto auto}
+  .rchat2 .ch-body{display:none}
+  .rchat2.open{top:auto;height:min(62vh,520px);grid-template-rows:auto minmax(0,1fr) auto;z-index:80}
+  .rchat2.open .ch-body{display:grid}
+  .rchat2.open .ch-prev{display:none}
+  #ch-badge{margin-left:2px}
+}
+/* grand écran : panneau toujours ouvert à droite */
+@media (min-width:900px){
+  body.chat-on{padding-right:356px}
+  .rchat2{right:12px;top:12px;bottom:12px;width:332px;border-radius:20px;grid-template-rows:auto minmax(0,1fr) auto}
+  .rchat2 .ch-chev{display:none}.rchat2 .ch-top{cursor:default}.rchat2 .ch-prev{display:none}
+  #ch-toasts{display:none}
+}
+@media (prefers-reduced-motion:reduce){.ch-toast{animation:none}}
+
+.ch-open{display:none;position:relative;width:46px;min-height:44px;border-radius:50%;border:2px solid #8A6A2C;background:linear-gradient(#F0E0AE,#D6BF7E);font-size:20px;cursor:pointer;box-shadow:0 3px 0 #8A6A2C;place-items:center}
+.ch-open .ubadge{position:absolute;right:-4px;top:-6px;margin:0}
+@media (max-width:899px){
+  .rchat2:not(.open) .ch-top{display:none}
+  .rchat2:not(.open){border-radius:26px}
+  .ch-open{display:grid}
+  body.chat-on{padding-bottom:70px}
+  .rchat2.open .ch-open{display:none}
+  .rchat2.open .ch-top{display:flex}
+}
+.rchat2{grid-template-columns:minmax(0,1fr)}.rchat2 *{min-width:0}.ch-open,.ch-send{flex:none}
+/* ---- quiz ---- */
+.stack{display:grid;gap:10px}.ctr{text-align:center;justify-content:center}
+.bigtxt{font:800 20px var(--f-display);color:#B8430A;text-align:center}
+.cats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px}
+.cat{display:grid;justify-items:center;gap:2px;padding:10px 6px;border-radius:14px;border:3px solid #B88B45;background:linear-gradient(#FFF8E1,#F6E6B0);color:var(--ink);cursor:pointer;font:inherit;box-shadow:0 3px 0 #8A6A2C;min-height:74px}
+.cat .ce{font-size:26px;line-height:1}.cat b{font:800 13px var(--f-body);text-align:center}
+.cat.on{border-color:#B8430A;background:linear-gradient(#FFB074,#FF8A3D);color:#fff;transform:translateY(-2px);box-shadow:0 5px 0 #8F330A}
+.lobgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px;align-items:start}
+.lobgrid .panel{max-width:none}
+.qr{width:min(260px,100%);margin:0 auto;background:#fff;border:6px solid #fff;border-radius:14px;box-shadow:0 0 0 3px #7A4A24,0 6px 16px rgba(0,0,0,.25)}
+.qr svg{display:block;width:100%;height:auto}
+.qhead{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;background:rgba(255,248,225,.92);border:3px solid #7A4A24;border-radius:14px;padding:6px 12px;font:800 14px var(--f-body)}
+.qhead .qs b{color:#B8430A;font:800 18px var(--f-display)}
+.tm{display:flex;align-items:center;gap:10px}
+.tbwrap{flex:1;height:16px;border-radius:99px;background:rgba(74,43,16,.3);border:2px solid #5E3516;overflow:hidden}
+.tbar{height:100%;transform-origin:left;background:linear-gradient(90deg,#FF8A3D,#FFE066);transition:transform .25s linear}
+.tnum{min-width:46px;text-align:center;font:800 22px var(--f-display);color:#fff;background:#5E3516;border-radius:12px;padding:4px 8px;box-shadow:0 3px 0 #3b2010}
+.qcard{background:radial-gradient(ellipse at 50% 15%,#FFF7D6,#F3E0A0);border:4px solid #7A4A24;border-radius:18px;box-shadow:0 0 0 2px #3b2010,0 8px 18px rgba(0,0,0,.25);padding:clamp(14px,3vw,26px);text-align:center;min-height:96px;display:grid;place-items:center}
+.qcard h2{font:800 clamp(18px,4.2vw,30px)/1.25 var(--f-display);color:#4A2B10;text-shadow:none}
+.ansg{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.ans{position:relative;display:flex;align-items:center;gap:10px;min-height:clamp(64px,13vh,110px);border-radius:16px;border:3px solid rgba(0,0,0,.25);color:#fff;font:800 clamp(14px,3.4vw,22px)/1.2 var(--f-body);text-align:left;padding:10px 14px;cursor:pointer;box-shadow:0 6px 0 rgba(0,0,0,.28),inset 0 2px 0 rgba(255,255,255,.3);text-shadow:0 2px 0 rgba(0,0,0,.25);transition:transform .08s,filter .2s,opacity .2s}
+.ans i{font-style:normal;font-size:1.3em;flex:none;width:1.4em;text-align:center}.ans span{flex:1;min-width:0;overflow-wrap:anywhere}
+.ans.a0{background:linear-gradient(#F0676B,#D2343A)}.ans.a1{background:linear-gradient(#5B9BF8,#2C63D6)}.ans.a2{background:linear-gradient(#F7C948,#D69A12)}.ans.a3{background:linear-gradient(#4BD39A,#1F9A68)}
+.ans:hover:not(:disabled){filter:brightness(1.08);transform:translateY(-2px)}.ans:active:not(:disabled){transform:translateY(4px);box-shadow:0 2px 0 rgba(0,0,0,.28)}
+.ans:disabled{cursor:default}.ans.chosen{outline:5px solid #fff;outline-offset:2px}
+.ans.dim{opacity:.38;filter:saturate(.5)}.ans.good{outline:5px solid #FFE066;outline-offset:2px;animation:okp .6s ease-out}
+.ans em{font:800 1.1em var(--f-display);font-style:normal;background:rgba(0,0,0,.3);border-radius:99px;padding:2px 10px}
+.ans u{text-decoration:none;font-size:1.5em}
+@keyframes okp{0%{transform:scale(.94)}60%{transform:scale(1.04)}100%{transform:none}}
+.qfoot{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;background:rgba(255,248,225,.92);border:3px solid #C9A15A;border-radius:14px;padding:8px 12px}
+.rmsg{text-align:center;font:800 clamp(16px,4vw,24px) var(--f-display);padding:10px 14px;border-radius:16px;border:3px solid #fff;box-shadow:0 6px 0 rgba(0,0,0,.2);animation:cpop2 .4s both}
+.rmsg.ok{background:linear-gradient(#4BD39A,#1F9A68);color:#fff}.rmsg.bad{background:linear-gradient(#F0676B,#C22A31);color:#fff}
+.rmsg b{color:#FFE066}
+.lbp{max-width:560px}.lbp h2{font-size:17px}
+.lb{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.lb li{display:flex;align-items:center;gap:8px;background:#FFF8E1;border:2px solid #C9A15A;border-radius:12px;padding:5px 10px}
+.lb li.me{border-color:#E8590C;background:#FFEBC7}
+.lb li i{font:800 16px var(--f-display);font-style:normal;width:26px;text-align:center;color:#B8430A}
+.lb li b{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lb .av{width:30px;height:30px;font-size:13px;border-width:2px}
+.lb em{font:800 14px var(--f-body);font-style:normal;color:#1E7F54}.lb .stk{font-size:13px;font-weight:800}
+.lb .pts{font:800 18px var(--f-display);color:#E8590C;min-width:58px;text-align:right}
+.endp .podium{display:flex;justify-content:center;align-items:flex-end;gap:10px;margin:6px 0 4px;min-height:200px}
+.pod{display:grid;justify-items:center;gap:4px;width:min(120px,28%);text-align:center}
+.pod b{font:800 14px var(--f-body);max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.pod span{font:800 17px var(--f-display);color:#E8590C}
+.pod .pm{font-size:34px}.pod .bar{width:100%;border-radius:10px 10px 0 0;background:linear-gradient(#FFD36A,#E0A21F);border:3px solid #8A6A2C;border-bottom:0;animation:grow .9s cubic-bezier(.2,1,.3,1) both;transform-origin:bottom}
+.pod.p1 .bar{height:120px}.pod.p2 .bar{height:84px;background:linear-gradient(#E6EAF0,#AEB6C4)}.pod.p3 .bar{height:56px;background:linear-gradient(#E7B08A,#B97A4A)}
+@keyframes grow{from{transform:scaleY(0)}}
+@media (max-width:560px){.ansg{gap:8px}.ans{padding:8px 10px}.lobgrid{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){.pod .bar,.ans.good,.rmsg{animation:none}}
+.gload.qz .lg-fan i{color:#fff;text-shadow:0 2px 0 rgba(0,0,0,.3)}
+.gload.qz .lg-fan i:nth-child(1){background:#E5484D}.gload.qz .lg-fan i:nth-child(2){background:#F2B632}.gload.qz .lg-fan i:nth-child(3){background:#3B82F6}.gload.qz .lg-fan i:nth-child(4){background:#2FB67C}.gload.qz .lg-fan i:nth-child(5){background:#9B6BFF}
+</style></head><body><div class="gload qz" id="gload" role="status" aria-live="polite"><div class="lg-cloud c1"></div><div class="lg-cloud c2"></div><div class="lg-fan" aria-hidden="true"><i>❓</i><i>💡</i><i>🏆</i><i>⚡</i><i>❓</i></div><div class="lg-sign">Loading<b>.</b><b>.</b><b>.</b></div><div class="lg-bar" aria-hidden="true"></div></div><div id="app"></div>
+<script>
+//---------------------------------------------------------------------
+//
+// QR Code Generator for JavaScript
+//
+// Copyright (c) 2009 Kazuhiko Arase
+//
+// URL: http://www.d-project.com/
+//
+// Licensed under the MIT license:
+//  http://www.opensource.org/licenses/mit-license.php
+//
+// The word 'QR Code' is registered trademark of
+// DENSO WAVE INCORPORATED
+//  http://www.denso-wave.com/qrcode/faqpatent-e.html
+//
+//---------------------------------------------------------------------
+
+var qrcode = function() {
+
+  //---------------------------------------------------------------------
+  // qrcode
+  //---------------------------------------------------------------------
+
+  /**
+   * qrcode
+   * @param typeNumber 1 to 40
+   * @param errorCorrectionLevel 'L','M','Q','H'
+   */
+  var qrcode = function(typeNumber, errorCorrectionLevel) {
+
+    var PAD0 = 0xEC;
+    var PAD1 = 0x11;
+
+    var _typeNumber = typeNumber;
+    var _errorCorrectionLevel = QRErrorCorrectionLevel[errorCorrectionLevel];
+    var _modules = null;
+    var _moduleCount = 0;
+    var _dataCache = null;
+    var _dataList = [];
+
+    var _this = {};
+
+    var makeImpl = function(test, maskPattern) {
+
+      _moduleCount = _typeNumber * 4 + 17;
+      _modules = function(moduleCount) {
+        var modules = new Array(moduleCount);
+        for (var row = 0; row < moduleCount; row += 1) {
+          modules[row] = new Array(moduleCount);
+          for (var col = 0; col < moduleCount; col += 1) {
+            modules[row][col] = null;
+          }
+        }
+        return modules;
+      }(_moduleCount);
+
+      setupPositionProbePattern(0, 0);
+      setupPositionProbePattern(_moduleCount - 7, 0);
+      setupPositionProbePattern(0, _moduleCount - 7);
+      setupPositionAdjustPattern();
+      setupTimingPattern();
+      setupTypeInfo(test, maskPattern);
+
+      if (_typeNumber >= 7) {
+        setupTypeNumber(test);
+      }
+
+      if (_dataCache == null) {
+        _dataCache = createData(_typeNumber, _errorCorrectionLevel, _dataList);
+      }
+
+      mapData(_dataCache, maskPattern);
+    };
+
+    var setupPositionProbePattern = function(row, col) {
+
+      for (var r = -1; r <= 7; r += 1) {
+
+        if (row + r <= -1 || _moduleCount <= row + r) continue;
+
+        for (var c = -1; c <= 7; c += 1) {
+
+          if (col + c <= -1 || _moduleCount <= col + c) continue;
+
+          if ( (0 <= r && r <= 6 && (c == 0 || c == 6) )
+              || (0 <= c && c <= 6 && (r == 0 || r == 6) )
+              || (2 <= r && r <= 4 && 2 <= c && c <= 4) ) {
+            _modules[row + r][col + c] = true;
+          } else {
+            _modules[row + r][col + c] = false;
+          }
+        }
+      }
+    };
+
+    var getBestMaskPattern = function() {
+
+      var minLostPoint = 0;
+      var pattern = 0;
+
+      for (var i = 0; i < 8; i += 1) {
+
+        makeImpl(true, i);
+
+        var lostPoint = QRUtil.getLostPoint(_this);
+
+        if (i == 0 || minLostPoint > lostPoint) {
+          minLostPoint = lostPoint;
+          pattern = i;
+        }
+      }
+
+      return pattern;
+    };
+
+    var setupTimingPattern = function() {
+
+      for (var r = 8; r < _moduleCount - 8; r += 1) {
+        if (_modules[r][6] != null) {
+          continue;
+        }
+        _modules[r][6] = (r % 2 == 0);
+      }
+
+      for (var c = 8; c < _moduleCount - 8; c += 1) {
+        if (_modules[6][c] != null) {
+          continue;
+        }
+        _modules[6][c] = (c % 2 == 0);
+      }
+    };
+
+    var setupPositionAdjustPattern = function() {
+
+      var pos = QRUtil.getPatternPosition(_typeNumber);
+
+      for (var i = 0; i < pos.length; i += 1) {
+
+        for (var j = 0; j < pos.length; j += 1) {
+
+          var row = pos[i];
+          var col = pos[j];
+
+          if (_modules[row][col] != null) {
+            continue;
+          }
+
+          for (var r = -2; r <= 2; r += 1) {
+
+            for (var c = -2; c <= 2; c += 1) {
+
+              if (r == -2 || r == 2 || c == -2 || c == 2
+                  || (r == 0 && c == 0) ) {
+                _modules[row + r][col + c] = true;
+              } else {
+                _modules[row + r][col + c] = false;
+              }
+            }
+          }
+        }
+      }
+    };
+
+    var setupTypeNumber = function(test) {
+
+      var bits = QRUtil.getBCHTypeNumber(_typeNumber);
+
+      for (var i = 0; i < 18; i += 1) {
+        var mod = (!test && ( (bits >> i) & 1) == 1);
+        _modules[Math.floor(i / 3)][i % 3 + _moduleCount - 8 - 3] = mod;
+      }
+
+      for (var i = 0; i < 18; i += 1) {
+        var mod = (!test && ( (bits >> i) & 1) == 1);
+        _modules[i % 3 + _moduleCount - 8 - 3][Math.floor(i / 3)] = mod;
+      }
+    };
+
+    var setupTypeInfo = function(test, maskPattern) {
+
+      var data = (_errorCorrectionLevel << 3) | maskPattern;
+      var bits = QRUtil.getBCHTypeInfo(data);
+
+      // vertical
+      for (var i = 0; i < 15; i += 1) {
+
+        var mod = (!test && ( (bits >> i) & 1) == 1);
+
+        if (i < 6) {
+          _modules[i][8] = mod;
+        } else if (i < 8) {
+          _modules[i + 1][8] = mod;
+        } else {
+          _modules[_moduleCount - 15 + i][8] = mod;
+        }
+      }
+
+      // horizontal
+      for (var i = 0; i < 15; i += 1) {
+
+        var mod = (!test && ( (bits >> i) & 1) == 1);
+
+        if (i < 8) {
+          _modules[8][_moduleCount - i - 1] = mod;
+        } else if (i < 9) {
+          _modules[8][15 - i - 1 + 1] = mod;
+        } else {
+          _modules[8][15 - i - 1] = mod;
+        }
+      }
+
+      // fixed module
+      _modules[_moduleCount - 8][8] = (!test);
+    };
+
+    var mapData = function(data, maskPattern) {
+
+      var inc = -1;
+      var row = _moduleCount - 1;
+      var bitIndex = 7;
+      var byteIndex = 0;
+      var maskFunc = QRUtil.getMaskFunction(maskPattern);
+
+      for (var col = _moduleCount - 1; col > 0; col -= 2) {
+
+        if (col == 6) col -= 1;
+
+        while (true) {
+
+          for (var c = 0; c < 2; c += 1) {
+
+            if (_modules[row][col - c] == null) {
+
+              var dark = false;
+
+              if (byteIndex < data.length) {
+                dark = ( ( (data[byteIndex] >>> bitIndex) & 1) == 1);
+              }
+
+              var mask = maskFunc(row, col - c);
+
+              if (mask) {
+                dark = !dark;
+              }
+
+              _modules[row][col - c] = dark;
+              bitIndex -= 1;
+
+              if (bitIndex == -1) {
+                byteIndex += 1;
+                bitIndex = 7;
+              }
+            }
+          }
+
+          row += inc;
+
+          if (row < 0 || _moduleCount <= row) {
+            row -= inc;
+            inc = -inc;
+            break;
+          }
+        }
+      }
+    };
+
+    var createBytes = function(buffer, rsBlocks) {
+
+      var offset = 0;
+
+      var maxDcCount = 0;
+      var maxEcCount = 0;
+
+      var dcdata = new Array(rsBlocks.length);
+      var ecdata = new Array(rsBlocks.length);
+
+      for (var r = 0; r < rsBlocks.length; r += 1) {
+
+        var dcCount = rsBlocks[r].dataCount;
+        var ecCount = rsBlocks[r].totalCount - dcCount;
+
+        maxDcCount = Math.max(maxDcCount, dcCount);
+        maxEcCount = Math.max(maxEcCount, ecCount);
+
+        dcdata[r] = new Array(dcCount);
+
+        for (var i = 0; i < dcdata[r].length; i += 1) {
+          dcdata[r][i] = 0xff & buffer.getBuffer()[i + offset];
+        }
+        offset += dcCount;
+
+        var rsPoly = QRUtil.getErrorCorrectPolynomial(ecCount);
+        var rawPoly = qrPolynomial(dcdata[r], rsPoly.getLength() - 1);
+
+        var modPoly = rawPoly.mod(rsPoly);
+        ecdata[r] = new Array(rsPoly.getLength() - 1);
+        for (var i = 0; i < ecdata[r].length; i += 1) {
+          var modIndex = i + modPoly.getLength() - ecdata[r].length;
+          ecdata[r][i] = (modIndex >= 0)? modPoly.getAt(modIndex) : 0;
+        }
+      }
+
+      var totalCodeCount = 0;
+      for (var i = 0; i < rsBlocks.length; i += 1) {
+        totalCodeCount += rsBlocks[i].totalCount;
+      }
+
+      var data = new Array(totalCodeCount);
+      var index = 0;
+
+      for (var i = 0; i < maxDcCount; i += 1) {
+        for (var r = 0; r < rsBlocks.length; r += 1) {
+          if (i < dcdata[r].length) {
+            data[index] = dcdata[r][i];
+            index += 1;
+          }
+        }
+      }
+
+      for (var i = 0; i < maxEcCount; i += 1) {
+        for (var r = 0; r < rsBlocks.length; r += 1) {
+          if (i < ecdata[r].length) {
+            data[index] = ecdata[r][i];
+            index += 1;
+          }
+        }
+      }
+
+      return data;
+    };
+
+    var createData = function(typeNumber, errorCorrectionLevel, dataList) {
+
+      var rsBlocks = QRRSBlock.getRSBlocks(typeNumber, errorCorrectionLevel);
+
+      var buffer = qrBitBuffer();
+
+      for (var i = 0; i < dataList.length; i += 1) {
+        var data = dataList[i];
+        buffer.put(data.getMode(), 4);
+        buffer.put(data.getLength(), QRUtil.getLengthInBits(data.getMode(), typeNumber) );
+        data.write(buffer);
+      }
+
+      // calc num max data.
+      var totalDataCount = 0;
+      for (var i = 0; i < rsBlocks.length; i += 1) {
+        totalDataCount += rsBlocks[i].dataCount;
+      }
+
+      if (buffer.getLengthInBits() > totalDataCount * 8) {
+        throw 'code length overflow. ('
+          + buffer.getLengthInBits()
+          + '>'
+          + totalDataCount * 8
+          + ')';
+      }
+
+      // end code
+      if (buffer.getLengthInBits() + 4 <= totalDataCount * 8) {
+        buffer.put(0, 4);
+      }
+
+      // padding
+      while (buffer.getLengthInBits() % 8 != 0) {
+        buffer.putBit(false);
+      }
+
+      // padding
+      while (true) {
+
+        if (buffer.getLengthInBits() >= totalDataCount * 8) {
+          break;
+        }
+        buffer.put(PAD0, 8);
+
+        if (buffer.getLengthInBits() >= totalDataCount * 8) {
+          break;
+        }
+        buffer.put(PAD1, 8);
+      }
+
+      return createBytes(buffer, rsBlocks);
+    };
+
+    _this.addData = function(data, mode) {
+
+      mode = mode || 'Byte';
+
+      var newData = null;
+
+      switch(mode) {
+      case 'Numeric' :
+        newData = qrNumber(data);
+        break;
+      case 'Alphanumeric' :
+        newData = qrAlphaNum(data);
+        break;
+      case 'Byte' :
+        newData = qr8BitByte(data);
+        break;
+      case 'Kanji' :
+        newData = qrKanji(data);
+        break;
+      default :
+        throw 'mode:' + mode;
+      }
+
+      _dataList.push(newData);
+      _dataCache = null;
+    };
+
+    _this.isDark = function(row, col) {
+      if (row < 0 || _moduleCount <= row || col < 0 || _moduleCount <= col) {
+        throw row + ',' + col;
+      }
+      return _modules[row][col];
+    };
+
+    _this.getModuleCount = function() {
+      return _moduleCount;
+    };
+
+    _this.make = function() {
+      if (_typeNumber < 1) {
+        var typeNumber = 1;
+
+        for (; typeNumber < 40; typeNumber++) {
+          var rsBlocks = QRRSBlock.getRSBlocks(typeNumber, _errorCorrectionLevel);
+          var buffer = qrBitBuffer();
+
+          for (var i = 0; i < _dataList.length; i++) {
+            var data = _dataList[i];
+            buffer.put(data.getMode(), 4);
+            buffer.put(data.getLength(), QRUtil.getLengthInBits(data.getMode(), typeNumber) );
+            data.write(buffer);
+          }
+
+          var totalDataCount = 0;
+          for (var i = 0; i < rsBlocks.length; i++) {
+            totalDataCount += rsBlocks[i].dataCount;
+          }
+
+          if (buffer.getLengthInBits() <= totalDataCount * 8) {
+            break;
+          }
+        }
+
+        _typeNumber = typeNumber;
+      }
+
+      makeImpl(false, getBestMaskPattern() );
+    };
+
+    _this.createTableTag = function(cellSize, margin) {
+
+      cellSize = cellSize || 2;
+      margin = (typeof margin == 'undefined')? cellSize * 4 : margin;
+
+      var qrHtml = '';
+
+      qrHtml += '<table style="';
+      qrHtml += ' border-width: 0px; border-style: none;';
+      qrHtml += ' border-collapse: collapse;';
+      qrHtml += ' padding: 0px; margin: ' + margin + 'px;';
+      qrHtml += '">';
+      qrHtml += '<tbody>';
+
+      for (var r = 0; r < _this.getModuleCount(); r += 1) {
+
+        qrHtml += '<tr>';
+
+        for (var c = 0; c < _this.getModuleCount(); c += 1) {
+          qrHtml += '<td style="';
+          qrHtml += ' border-width: 0px; border-style: none;';
+          qrHtml += ' border-collapse: collapse;';
+          qrHtml += ' padding: 0px; margin: 0px;';
+          qrHtml += ' width: ' + cellSize + 'px;';
+          qrHtml += ' height: ' + cellSize + 'px;';
+          qrHtml += ' background-color: ';
+          qrHtml += _this.isDark(r, c)? '#000000' : '#ffffff';
+          qrHtml += ';';
+          qrHtml += '"/>';
+        }
+
+        qrHtml += '</tr>';
+      }
+
+      qrHtml += '</tbody>';
+      qrHtml += '</table>';
+
+      return qrHtml;
+    };
+
+    _this.createSvgTag = function(cellSize, margin, alt, title) {
+
+      var opts = {};
+      if (typeof arguments[0] == 'object') {
+        // Called by options.
+        opts = arguments[0];
+        // overwrite cellSize and margin.
+        cellSize = opts.cellSize;
+        margin = opts.margin;
+        alt = opts.alt;
+        title = opts.title;
+      }
+
+      cellSize = cellSize || 2;
+      margin = (typeof margin == 'undefined')? cellSize * 4 : margin;
+
+      // Compose alt property surrogate
+      alt = (typeof alt === 'string') ? {text: alt} : alt || {};
+      alt.text = alt.text || null;
+      alt.id = (alt.text) ? alt.id || 'qrcode-description' : null;
+
+      // Compose title property surrogate
+      title = (typeof title === 'string') ? {text: title} : title || {};
+      title.text = title.text || null;
+      title.id = (title.text) ? title.id || 'qrcode-title' : null;
+
+      var size = _this.getModuleCount() * cellSize + margin * 2;
+      var c, mc, r, mr, qrSvg='', rect;
+
+      rect = 'l' + cellSize + ',0 0,' + cellSize +
+        ' -' + cellSize + ',0 0,-' + cellSize + 'z ';
+
+      qrSvg += '<svg version="1.1" xmlns="http://www.w3.org/2000/svg"';
+      qrSvg += !opts.scalable ? ' width="' + size + 'px" height="' + size + 'px"' : '';
+      qrSvg += ' viewBox="0 0 ' + size + ' ' + size + '" ';
+      qrSvg += ' preserveAspectRatio="xMinYMin meet"';
+      qrSvg += (title.text || alt.text) ? ' role="img" aria-labelledby="' +
+          escapeXml([title.id, alt.id].join(' ').trim() ) + '"' : '';
+      qrSvg += '>';
+      qrSvg += (title.text) ? '<title id="' + escapeXml(title.id) + '">' +
+          escapeXml(title.text) + '</title>' : '';
+      qrSvg += (alt.text) ? '<description id="' + escapeXml(alt.id) + '">' +
+          escapeXml(alt.text) + '</description>' : '';
+      qrSvg += '<rect width="100%" height="100%" fill="white" cx="0" cy="0"/>';
+      qrSvg += '<path d="';
+
+      for (r = 0; r < _this.getModuleCount(); r += 1) {
+        mr = r * cellSize + margin;
+        for (c = 0; c < _this.getModuleCount(); c += 1) {
+          if (_this.isDark(r, c) ) {
+            mc = c*cellSize+margin;
+            qrSvg += 'M' + mc + ',' + mr + rect;
+          }
+        }
+      }
+
+      qrSvg += '" stroke="transparent" fill="black"/>';
+      qrSvg += '</svg>';
+
+      return qrSvg;
+    };
+
+    _this.createDataURL = function(cellSize, margin) {
+
+      cellSize = cellSize || 2;
+      margin = (typeof margin == 'undefined')? cellSize * 4 : margin;
+
+      var size = _this.getModuleCount() * cellSize + margin * 2;
+      var min = margin;
+      var max = size - margin;
+
+      return createDataURL(size, size, function(x, y) {
+        if (min <= x && x < max && min <= y && y < max) {
+          var c = Math.floor( (x - min) / cellSize);
+          var r = Math.floor( (y - min) / cellSize);
+          return _this.isDark(r, c)? 0 : 1;
+        } else {
+          return 1;
+        }
+      } );
+    };
+
+    _this.createImgTag = function(cellSize, margin, alt) {
+
+      cellSize = cellSize || 2;
+      margin = (typeof margin == 'undefined')? cellSize * 4 : margin;
+
+      var size = _this.getModuleCount() * cellSize + margin * 2;
+
+      var img = '';
+      img += '<img';
+      img += '\u0020src="';
+      img += _this.createDataURL(cellSize, margin);
+      img += '"';
+      img += '\u0020width="';
+      img += size;
+      img += '"';
+      img += '\u0020height="';
+      img += size;
+      img += '"';
+      if (alt) {
+        img += '\u0020alt="';
+        img += escapeXml(alt);
+        img += '"';
+      }
+      img += '/>';
+
+      return img;
+    };
+
+    var escapeXml = function(s) {
+      var escaped = '';
+      for (var i = 0; i < s.length; i += 1) {
+        var c = s.charAt(i);
+        switch(c) {
+        case '<': escaped += '&lt;'; break;
+        case '>': escaped += '&gt;'; break;
+        case '&': escaped += '&amp;'; break;
+        case '"': escaped += '&quot;'; break;
+        default : escaped += c; break;
+        }
+      }
+      return escaped;
+    };
+
+    var _createHalfASCII = function(margin) {
+      var cellSize = 1;
+      margin = (typeof margin == 'undefined')? cellSize * 2 : margin;
+
+      var size = _this.getModuleCount() * cellSize + margin * 2;
+      var min = margin;
+      var max = size - margin;
+
+      var y, x, r1, r2, p;
+
+      var blocks = {
+        '██': '█',
+        '█ ': '▀',
+        ' █': '▄',
+        '  ': ' '
+      };
+
+      var blocksLastLineNoMargin = {
+        '██': '▀',
+        '█ ': '▀',
+        ' █': ' ',
+        '  ': ' '
+      };
+
+      var ascii = '';
+      for (y = 0; y < size; y += 2) {
+        r1 = Math.floor((y - min) / cellSize);
+        r2 = Math.floor((y + 1 - min) / cellSize);
+        for (x = 0; x < size; x += 1) {
+          p = '█';
+
+          if (min <= x && x < max && min <= y && y < max && _this.isDark(r1, Math.floor((x - min) / cellSize))) {
+            p = ' ';
+          }
+
+          if (min <= x && x < max && min <= y+1 && y+1 < max && _this.isDark(r2, Math.floor((x - min) / cellSize))) {
+            p += ' ';
+          }
+          else {
+            p += '█';
+          }
+
+          // Output 2 characters per pixel, to create full square. 1 character per pixels gives only half width of square.
+          ascii += (margin < 1 && y+1 >= max) ? blocksLastLineNoMargin[p] : blocks[p];
+        }
+
+        ascii += '\n';
+      }
+
+      if (size % 2 && margin > 0) {
+        return ascii.substring(0, ascii.length - size - 1) + Array(size+1).join('▀');
+      }
+
+      return ascii.substring(0, ascii.length-1);
+    };
+
+    _this.createASCII = function(cellSize, margin) {
+      cellSize = cellSize || 1;
+
+      if (cellSize < 2) {
+        return _createHalfASCII(margin);
+      }
+
+      cellSize -= 1;
+      margin = (typeof margin == 'undefined')? cellSize * 2 : margin;
+
+      var size = _this.getModuleCount() * cellSize + margin * 2;
+      var min = margin;
+      var max = size - margin;
+
+      var y, x, r, p;
+
+      var white = Array(cellSize+1).join('██');
+      var black = Array(cellSize+1).join('  ');
+
+      var ascii = '';
+      var line = '';
+      for (y = 0; y < size; y += 1) {
+        r = Math.floor( (y - min) / cellSize);
+        line = '';
+        for (x = 0; x < size; x += 1) {
+          p = 1;
+
+          if (min <= x && x < max && min <= y && y < max && _this.isDark(r, Math.floor((x - min) / cellSize))) {
+            p = 0;
+          }
+
+          // Output 2 characters per pixel, to create full square. 1 character per pixels gives only half width of square.
+          line += p ? white : black;
+        }
+
+        for (r = 0; r < cellSize; r += 1) {
+          ascii += line + '\n';
+        }
+      }
+
+      return ascii.substring(0, ascii.length-1);
+    };
+
+    _this.renderTo2dContext = function(context, cellSize) {
+      cellSize = cellSize || 2;
+      var length = _this.getModuleCount();
+      for (var row = 0; row < length; row++) {
+        for (var col = 0; col < length; col++) {
+          context.fillStyle = _this.isDark(row, col) ? 'black' : 'white';
+          context.fillRect(row * cellSize, col * cellSize, cellSize, cellSize);
+        }
+      }
+    }
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // qrcode.stringToBytes
+  //---------------------------------------------------------------------
+
+  qrcode.stringToBytesFuncs = {
+    'default' : function(s) {
+      var bytes = [];
+      for (var i = 0; i < s.length; i += 1) {
+        var c = s.charCodeAt(i);
+        bytes.push(c & 0xff);
+      }
+      return bytes;
+    }
+  };
+
+  qrcode.stringToBytes = qrcode.stringToBytesFuncs['default'];
+
+  //---------------------------------------------------------------------
+  // qrcode.createStringToBytes
+  //---------------------------------------------------------------------
+
+  /**
+   * @param unicodeData base64 string of byte array.
+   * [16bit Unicode],[16bit Bytes], ...
+   * @param numChars
+   */
+  qrcode.createStringToBytes = function(unicodeData, numChars) {
+
+    // create conversion map.
+
+    var unicodeMap = function() {
+
+      var bin = base64DecodeInputStream(unicodeData);
+      var read = function() {
+        var b = bin.read();
+        if (b == -1) throw 'eof';
+        return b;
+      };
+
+      var count = 0;
+      var unicodeMap = {};
+      while (true) {
+        var b0 = bin.read();
+        if (b0 == -1) break;
+        var b1 = read();
+        var b2 = read();
+        var b3 = read();
+        var k = String.fromCharCode( (b0 << 8) | b1);
+        var v = (b2 << 8) | b3;
+        unicodeMap[k] = v;
+        count += 1;
+      }
+      if (count != numChars) {
+        throw count + ' != ' + numChars;
+      }
+
+      return unicodeMap;
+    }();
+
+    var unknownChar = '?'.charCodeAt(0);
+
+    return function(s) {
+      var bytes = [];
+      for (var i = 0; i < s.length; i += 1) {
+        var c = s.charCodeAt(i);
+        if (c < 128) {
+          bytes.push(c);
+        } else {
+          var b = unicodeMap[s.charAt(i)];
+          if (typeof b == 'number') {
+            if ( (b & 0xff) == b) {
+              // 1byte
+              bytes.push(b);
+            } else {
+              // 2bytes
+              bytes.push(b >>> 8);
+              bytes.push(b & 0xff);
+            }
+          } else {
+            bytes.push(unknownChar);
+          }
+        }
+      }
+      return bytes;
+    };
+  };
+
+  //---------------------------------------------------------------------
+  // QRMode
+  //---------------------------------------------------------------------
+
+  var QRMode = {
+    MODE_NUMBER :    1 << 0,
+    MODE_ALPHA_NUM : 1 << 1,
+    MODE_8BIT_BYTE : 1 << 2,
+    MODE_KANJI :     1 << 3
+  };
+
+  //---------------------------------------------------------------------
+  // QRErrorCorrectionLevel
+  //---------------------------------------------------------------------
+
+  var QRErrorCorrectionLevel = {
+    L : 1,
+    M : 0,
+    Q : 3,
+    H : 2
+  };
+
+  //---------------------------------------------------------------------
+  // QRMaskPattern
+  //---------------------------------------------------------------------
+
+  var QRMaskPattern = {
+    PATTERN000 : 0,
+    PATTERN001 : 1,
+    PATTERN010 : 2,
+    PATTERN011 : 3,
+    PATTERN100 : 4,
+    PATTERN101 : 5,
+    PATTERN110 : 6,
+    PATTERN111 : 7
+  };
+
+  //---------------------------------------------------------------------
+  // QRUtil
+  //---------------------------------------------------------------------
+
+  var QRUtil = function() {
+
+    var PATTERN_POSITION_TABLE = [
+      [],
+      [6, 18],
+      [6, 22],
+      [6, 26],
+      [6, 30],
+      [6, 34],
+      [6, 22, 38],
+      [6, 24, 42],
+      [6, 26, 46],
+      [6, 28, 50],
+      [6, 30, 54],
+      [6, 32, 58],
+      [6, 34, 62],
+      [6, 26, 46, 66],
+      [6, 26, 48, 70],
+      [6, 26, 50, 74],
+      [6, 30, 54, 78],
+      [6, 30, 56, 82],
+      [6, 30, 58, 86],
+      [6, 34, 62, 90],
+      [6, 28, 50, 72, 94],
+      [6, 26, 50, 74, 98],
+      [6, 30, 54, 78, 102],
+      [6, 28, 54, 80, 106],
+      [6, 32, 58, 84, 110],
+      [6, 30, 58, 86, 114],
+      [6, 34, 62, 90, 118],
+      [6, 26, 50, 74, 98, 122],
+      [6, 30, 54, 78, 102, 126],
+      [6, 26, 52, 78, 104, 130],
+      [6, 30, 56, 82, 108, 134],
+      [6, 34, 60, 86, 112, 138],
+      [6, 30, 58, 86, 114, 142],
+      [6, 34, 62, 90, 118, 146],
+      [6, 30, 54, 78, 102, 126, 150],
+      [6, 24, 50, 76, 102, 128, 154],
+      [6, 28, 54, 80, 106, 132, 158],
+      [6, 32, 58, 84, 110, 136, 162],
+      [6, 26, 54, 82, 110, 138, 166],
+      [6, 30, 58, 86, 114, 142, 170]
+    ];
+    var G15 = (1 << 10) | (1 << 8) | (1 << 5) | (1 << 4) | (1 << 2) | (1 << 1) | (1 << 0);
+    var G18 = (1 << 12) | (1 << 11) | (1 << 10) | (1 << 9) | (1 << 8) | (1 << 5) | (1 << 2) | (1 << 0);
+    var G15_MASK = (1 << 14) | (1 << 12) | (1 << 10) | (1 << 4) | (1 << 1);
+
+    var _this = {};
+
+    var getBCHDigit = function(data) {
+      var digit = 0;
+      while (data != 0) {
+        digit += 1;
+        data >>>= 1;
+      }
+      return digit;
+    };
+
+    _this.getBCHTypeInfo = function(data) {
+      var d = data << 10;
+      while (getBCHDigit(d) - getBCHDigit(G15) >= 0) {
+        d ^= (G15 << (getBCHDigit(d) - getBCHDigit(G15) ) );
+      }
+      return ( (data << 10) | d) ^ G15_MASK;
+    };
+
+    _this.getBCHTypeNumber = function(data) {
+      var d = data << 12;
+      while (getBCHDigit(d) - getBCHDigit(G18) >= 0) {
+        d ^= (G18 << (getBCHDigit(d) - getBCHDigit(G18) ) );
+      }
+      return (data << 12) | d;
+    };
+
+    _this.getPatternPosition = function(typeNumber) {
+      return PATTERN_POSITION_TABLE[typeNumber - 1];
+    };
+
+    _this.getMaskFunction = function(maskPattern) {
+
+      switch (maskPattern) {
+
+      case QRMaskPattern.PATTERN000 :
+        return function(i, j) { return (i + j) % 2 == 0; };
+      case QRMaskPattern.PATTERN001 :
+        return function(i, j) { return i % 2 == 0; };
+      case QRMaskPattern.PATTERN010 :
+        return function(i, j) { return j % 3 == 0; };
+      case QRMaskPattern.PATTERN011 :
+        return function(i, j) { return (i + j) % 3 == 0; };
+      case QRMaskPattern.PATTERN100 :
+        return function(i, j) { return (Math.floor(i / 2) + Math.floor(j / 3) ) % 2 == 0; };
+      case QRMaskPattern.PATTERN101 :
+        return function(i, j) { return (i * j) % 2 + (i * j) % 3 == 0; };
+      case QRMaskPattern.PATTERN110 :
+        return function(i, j) { return ( (i * j) % 2 + (i * j) % 3) % 2 == 0; };
+      case QRMaskPattern.PATTERN111 :
+        return function(i, j) { return ( (i * j) % 3 + (i + j) % 2) % 2 == 0; };
+
+      default :
+        throw 'bad maskPattern:' + maskPattern;
+      }
+    };
+
+    _this.getErrorCorrectPolynomial = function(errorCorrectLength) {
+      var a = qrPolynomial([1], 0);
+      for (var i = 0; i < errorCorrectLength; i += 1) {
+        a = a.multiply(qrPolynomial([1, QRMath.gexp(i)], 0) );
+      }
+      return a;
+    };
+
+    _this.getLengthInBits = function(mode, type) {
+
+      if (1 <= type && type < 10) {
+
+        // 1 - 9
+
+        switch(mode) {
+        case QRMode.MODE_NUMBER    : return 10;
+        case QRMode.MODE_ALPHA_NUM : return 9;
+        case QRMode.MODE_8BIT_BYTE : return 8;
+        case QRMode.MODE_KANJI     : return 8;
+        default :
+          throw 'mode:' + mode;
+        }
+
+      } else if (type < 27) {
+
+        // 10 - 26
+
+        switch(mode) {
+        case QRMode.MODE_NUMBER    : return 12;
+        case QRMode.MODE_ALPHA_NUM : return 11;
+        case QRMode.MODE_8BIT_BYTE : return 16;
+        case QRMode.MODE_KANJI     : return 10;
+        default :
+          throw 'mode:' + mode;
+        }
+
+      } else if (type < 41) {
+
+        // 27 - 40
+
+        switch(mode) {
+        case QRMode.MODE_NUMBER    : return 14;
+        case QRMode.MODE_ALPHA_NUM : return 13;
+        case QRMode.MODE_8BIT_BYTE : return 16;
+        case QRMode.MODE_KANJI     : return 12;
+        default :
+          throw 'mode:' + mode;
+        }
+
+      } else {
+        throw 'type:' + type;
+      }
+    };
+
+    _this.getLostPoint = function(qrcode) {
+
+      var moduleCount = qrcode.getModuleCount();
+
+      var lostPoint = 0;
+
+      // LEVEL1
+
+      for (var row = 0; row < moduleCount; row += 1) {
+        for (var col = 0; col < moduleCount; col += 1) {
+
+          var sameCount = 0;
+          var dark = qrcode.isDark(row, col);
+
+          for (var r = -1; r <= 1; r += 1) {
+
+            if (row + r < 0 || moduleCount <= row + r) {
+              continue;
+            }
+
+            for (var c = -1; c <= 1; c += 1) {
+
+              if (col + c < 0 || moduleCount <= col + c) {
+                continue;
+              }
+
+              if (r == 0 && c == 0) {
+                continue;
+              }
+
+              if (dark == qrcode.isDark(row + r, col + c) ) {
+                sameCount += 1;
+              }
+            }
+          }
+
+          if (sameCount > 5) {
+            lostPoint += (3 + sameCount - 5);
+          }
+        }
+      };
+
+      // LEVEL2
+
+      for (var row = 0; row < moduleCount - 1; row += 1) {
+        for (var col = 0; col < moduleCount - 1; col += 1) {
+          var count = 0;
+          if (qrcode.isDark(row, col) ) count += 1;
+          if (qrcode.isDark(row + 1, col) ) count += 1;
+          if (qrcode.isDark(row, col + 1) ) count += 1;
+          if (qrcode.isDark(row + 1, col + 1) ) count += 1;
+          if (count == 0 || count == 4) {
+            lostPoint += 3;
+          }
+        }
+      }
+
+      // LEVEL3
+
+      for (var row = 0; row < moduleCount; row += 1) {
+        for (var col = 0; col < moduleCount - 6; col += 1) {
+          if (qrcode.isDark(row, col)
+              && !qrcode.isDark(row, col + 1)
+              &&  qrcode.isDark(row, col + 2)
+              &&  qrcode.isDark(row, col + 3)
+              &&  qrcode.isDark(row, col + 4)
+              && !qrcode.isDark(row, col + 5)
+              &&  qrcode.isDark(row, col + 6) ) {
+            lostPoint += 40;
+          }
+        }
+      }
+
+      for (var col = 0; col < moduleCount; col += 1) {
+        for (var row = 0; row < moduleCount - 6; row += 1) {
+          if (qrcode.isDark(row, col)
+              && !qrcode.isDark(row + 1, col)
+              &&  qrcode.isDark(row + 2, col)
+              &&  qrcode.isDark(row + 3, col)
+              &&  qrcode.isDark(row + 4, col)
+              && !qrcode.isDark(row + 5, col)
+              &&  qrcode.isDark(row + 6, col) ) {
+            lostPoint += 40;
+          }
+        }
+      }
+
+      // LEVEL4
+
+      var darkCount = 0;
+
+      for (var col = 0; col < moduleCount; col += 1) {
+        for (var row = 0; row < moduleCount; row += 1) {
+          if (qrcode.isDark(row, col) ) {
+            darkCount += 1;
+          }
+        }
+      }
+
+      var ratio = Math.abs(100 * darkCount / moduleCount / moduleCount - 50) / 5;
+      lostPoint += ratio * 10;
+
+      return lostPoint;
+    };
+
+    return _this;
+  }();
+
+  //---------------------------------------------------------------------
+  // QRMath
+  //---------------------------------------------------------------------
+
+  var QRMath = function() {
+
+    var EXP_TABLE = new Array(256);
+    var LOG_TABLE = new Array(256);
+
+    // initialize tables
+    for (var i = 0; i < 8; i += 1) {
+      EXP_TABLE[i] = 1 << i;
+    }
+    for (var i = 8; i < 256; i += 1) {
+      EXP_TABLE[i] = EXP_TABLE[i - 4]
+        ^ EXP_TABLE[i - 5]
+        ^ EXP_TABLE[i - 6]
+        ^ EXP_TABLE[i - 8];
+    }
+    for (var i = 0; i < 255; i += 1) {
+      LOG_TABLE[EXP_TABLE[i] ] = i;
+    }
+
+    var _this = {};
+
+    _this.glog = function(n) {
+
+      if (n < 1) {
+        throw 'glog(' + n + ')';
+      }
+
+      return LOG_TABLE[n];
+    };
+
+    _this.gexp = function(n) {
+
+      while (n < 0) {
+        n += 255;
+      }
+
+      while (n >= 256) {
+        n -= 255;
+      }
+
+      return EXP_TABLE[n];
+    };
+
+    return _this;
+  }();
+
+  //---------------------------------------------------------------------
+  // qrPolynomial
+  //---------------------------------------------------------------------
+
+  function qrPolynomial(num, shift) {
+
+    if (typeof num.length == 'undefined') {
+      throw num.length + '/' + shift;
+    }
+
+    var _num = function() {
+      var offset = 0;
+      while (offset < num.length && num[offset] == 0) {
+        offset += 1;
+      }
+      var _num = new Array(num.length - offset + shift);
+      for (var i = 0; i < num.length - offset; i += 1) {
+        _num[i] = num[i + offset];
+      }
+      return _num;
+    }();
+
+    var _this = {};
+
+    _this.getAt = function(index) {
+      return _num[index];
+    };
+
+    _this.getLength = function() {
+      return _num.length;
+    };
+
+    _this.multiply = function(e) {
+
+      var num = new Array(_this.getLength() + e.getLength() - 1);
+
+      for (var i = 0; i < _this.getLength(); i += 1) {
+        for (var j = 0; j < e.getLength(); j += 1) {
+          num[i + j] ^= QRMath.gexp(QRMath.glog(_this.getAt(i) ) + QRMath.glog(e.getAt(j) ) );
+        }
+      }
+
+      return qrPolynomial(num, 0);
+    };
+
+    _this.mod = function(e) {
+
+      if (_this.getLength() - e.getLength() < 0) {
+        return _this;
+      }
+
+      var ratio = QRMath.glog(_this.getAt(0) ) - QRMath.glog(e.getAt(0) );
+
+      var num = new Array(_this.getLength() );
+      for (var i = 0; i < _this.getLength(); i += 1) {
+        num[i] = _this.getAt(i);
+      }
+
+      for (var i = 0; i < e.getLength(); i += 1) {
+        num[i] ^= QRMath.gexp(QRMath.glog(e.getAt(i) ) + ratio);
+      }
+
+      // recursive call
+      return qrPolynomial(num, 0).mod(e);
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // QRRSBlock
+  //---------------------------------------------------------------------
+
+  var QRRSBlock = function() {
+
+    var RS_BLOCK_TABLE = [
+
+      // L
+      // M
+      // Q
+      // H
+
+      // 1
+      [1, 26, 19],
+      [1, 26, 16],
+      [1, 26, 13],
+      [1, 26, 9],
+
+      // 2
+      [1, 44, 34],
+      [1, 44, 28],
+      [1, 44, 22],
+      [1, 44, 16],
+
+      // 3
+      [1, 70, 55],
+      [1, 70, 44],
+      [2, 35, 17],
+      [2, 35, 13],
+
+      // 4
+      [1, 100, 80],
+      [2, 50, 32],
+      [2, 50, 24],
+      [4, 25, 9],
+
+      // 5
+      [1, 134, 108],
+      [2, 67, 43],
+      [2, 33, 15, 2, 34, 16],
+      [2, 33, 11, 2, 34, 12],
+
+      // 6
+      [2, 86, 68],
+      [4, 43, 27],
+      [4, 43, 19],
+      [4, 43, 15],
+
+      // 7
+      [2, 98, 78],
+      [4, 49, 31],
+      [2, 32, 14, 4, 33, 15],
+      [4, 39, 13, 1, 40, 14],
+
+      // 8
+      [2, 121, 97],
+      [2, 60, 38, 2, 61, 39],
+      [4, 40, 18, 2, 41, 19],
+      [4, 40, 14, 2, 41, 15],
+
+      // 9
+      [2, 146, 116],
+      [3, 58, 36, 2, 59, 37],
+      [4, 36, 16, 4, 37, 17],
+      [4, 36, 12, 4, 37, 13],
+
+      // 10
+      [2, 86, 68, 2, 87, 69],
+      [4, 69, 43, 1, 70, 44],
+      [6, 43, 19, 2, 44, 20],
+      [6, 43, 15, 2, 44, 16],
+
+      // 11
+      [4, 101, 81],
+      [1, 80, 50, 4, 81, 51],
+      [4, 50, 22, 4, 51, 23],
+      [3, 36, 12, 8, 37, 13],
+
+      // 12
+      [2, 116, 92, 2, 117, 93],
+      [6, 58, 36, 2, 59, 37],
+      [4, 46, 20, 6, 47, 21],
+      [7, 42, 14, 4, 43, 15],
+
+      // 13
+      [4, 133, 107],
+      [8, 59, 37, 1, 60, 38],
+      [8, 44, 20, 4, 45, 21],
+      [12, 33, 11, 4, 34, 12],
+
+      // 14
+      [3, 145, 115, 1, 146, 116],
+      [4, 64, 40, 5, 65, 41],
+      [11, 36, 16, 5, 37, 17],
+      [11, 36, 12, 5, 37, 13],
+
+      // 15
+      [5, 109, 87, 1, 110, 88],
+      [5, 65, 41, 5, 66, 42],
+      [5, 54, 24, 7, 55, 25],
+      [11, 36, 12, 7, 37, 13],
+
+      // 16
+      [5, 122, 98, 1, 123, 99],
+      [7, 73, 45, 3, 74, 46],
+      [15, 43, 19, 2, 44, 20],
+      [3, 45, 15, 13, 46, 16],
+
+      // 17
+      [1, 135, 107, 5, 136, 108],
+      [10, 74, 46, 1, 75, 47],
+      [1, 50, 22, 15, 51, 23],
+      [2, 42, 14, 17, 43, 15],
+
+      // 18
+      [5, 150, 120, 1, 151, 121],
+      [9, 69, 43, 4, 70, 44],
+      [17, 50, 22, 1, 51, 23],
+      [2, 42, 14, 19, 43, 15],
+
+      // 19
+      [3, 141, 113, 4, 142, 114],
+      [3, 70, 44, 11, 71, 45],
+      [17, 47, 21, 4, 48, 22],
+      [9, 39, 13, 16, 40, 14],
+
+      // 20
+      [3, 135, 107, 5, 136, 108],
+      [3, 67, 41, 13, 68, 42],
+      [15, 54, 24, 5, 55, 25],
+      [15, 43, 15, 10, 44, 16],
+
+      // 21
+      [4, 144, 116, 4, 145, 117],
+      [17, 68, 42],
+      [17, 50, 22, 6, 51, 23],
+      [19, 46, 16, 6, 47, 17],
+
+      // 22
+      [2, 139, 111, 7, 140, 112],
+      [17, 74, 46],
+      [7, 54, 24, 16, 55, 25],
+      [34, 37, 13],
+
+      // 23
+      [4, 151, 121, 5, 152, 122],
+      [4, 75, 47, 14, 76, 48],
+      [11, 54, 24, 14, 55, 25],
+      [16, 45, 15, 14, 46, 16],
+
+      // 24
+      [6, 147, 117, 4, 148, 118],
+      [6, 73, 45, 14, 74, 46],
+      [11, 54, 24, 16, 55, 25],
+      [30, 46, 16, 2, 47, 17],
+
+      // 25
+      [8, 132, 106, 4, 133, 107],
+      [8, 75, 47, 13, 76, 48],
+      [7, 54, 24, 22, 55, 25],
+      [22, 45, 15, 13, 46, 16],
+
+      // 26
+      [10, 142, 114, 2, 143, 115],
+      [19, 74, 46, 4, 75, 47],
+      [28, 50, 22, 6, 51, 23],
+      [33, 46, 16, 4, 47, 17],
+
+      // 27
+      [8, 152, 122, 4, 153, 123],
+      [22, 73, 45, 3, 74, 46],
+      [8, 53, 23, 26, 54, 24],
+      [12, 45, 15, 28, 46, 16],
+
+      // 28
+      [3, 147, 117, 10, 148, 118],
+      [3, 73, 45, 23, 74, 46],
+      [4, 54, 24, 31, 55, 25],
+      [11, 45, 15, 31, 46, 16],
+
+      // 29
+      [7, 146, 116, 7, 147, 117],
+      [21, 73, 45, 7, 74, 46],
+      [1, 53, 23, 37, 54, 24],
+      [19, 45, 15, 26, 46, 16],
+
+      // 30
+      [5, 145, 115, 10, 146, 116],
+      [19, 75, 47, 10, 76, 48],
+      [15, 54, 24, 25, 55, 25],
+      [23, 45, 15, 25, 46, 16],
+
+      // 31
+      [13, 145, 115, 3, 146, 116],
+      [2, 74, 46, 29, 75, 47],
+      [42, 54, 24, 1, 55, 25],
+      [23, 45, 15, 28, 46, 16],
+
+      // 32
+      [17, 145, 115],
+      [10, 74, 46, 23, 75, 47],
+      [10, 54, 24, 35, 55, 25],
+      [19, 45, 15, 35, 46, 16],
+
+      // 33
+      [17, 145, 115, 1, 146, 116],
+      [14, 74, 46, 21, 75, 47],
+      [29, 54, 24, 19, 55, 25],
+      [11, 45, 15, 46, 46, 16],
+
+      // 34
+      [13, 145, 115, 6, 146, 116],
+      [14, 74, 46, 23, 75, 47],
+      [44, 54, 24, 7, 55, 25],
+      [59, 46, 16, 1, 47, 17],
+
+      // 35
+      [12, 151, 121, 7, 152, 122],
+      [12, 75, 47, 26, 76, 48],
+      [39, 54, 24, 14, 55, 25],
+      [22, 45, 15, 41, 46, 16],
+
+      // 36
+      [6, 151, 121, 14, 152, 122],
+      [6, 75, 47, 34, 76, 48],
+      [46, 54, 24, 10, 55, 25],
+      [2, 45, 15, 64, 46, 16],
+
+      // 37
+      [17, 152, 122, 4, 153, 123],
+      [29, 74, 46, 14, 75, 47],
+      [49, 54, 24, 10, 55, 25],
+      [24, 45, 15, 46, 46, 16],
+
+      // 38
+      [4, 152, 122, 18, 153, 123],
+      [13, 74, 46, 32, 75, 47],
+      [48, 54, 24, 14, 55, 25],
+      [42, 45, 15, 32, 46, 16],
+
+      // 39
+      [20, 147, 117, 4, 148, 118],
+      [40, 75, 47, 7, 76, 48],
+      [43, 54, 24, 22, 55, 25],
+      [10, 45, 15, 67, 46, 16],
+
+      // 40
+      [19, 148, 118, 6, 149, 119],
+      [18, 75, 47, 31, 76, 48],
+      [34, 54, 24, 34, 55, 25],
+      [20, 45, 15, 61, 46, 16]
+    ];
+
+    var qrRSBlock = function(totalCount, dataCount) {
+      var _this = {};
+      _this.totalCount = totalCount;
+      _this.dataCount = dataCount;
+      return _this;
+    };
+
+    var _this = {};
+
+    var getRsBlockTable = function(typeNumber, errorCorrectionLevel) {
+
+      switch(errorCorrectionLevel) {
+      case QRErrorCorrectionLevel.L :
+        return RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 0];
+      case QRErrorCorrectionLevel.M :
+        return RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 1];
+      case QRErrorCorrectionLevel.Q :
+        return RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 2];
+      case QRErrorCorrectionLevel.H :
+        return RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 3];
+      default :
+        return undefined;
+      }
+    };
+
+    _this.getRSBlocks = function(typeNumber, errorCorrectionLevel) {
+
+      var rsBlock = getRsBlockTable(typeNumber, errorCorrectionLevel);
+
+      if (typeof rsBlock == 'undefined') {
+        throw 'bad rs block @ typeNumber:' + typeNumber +
+            '/errorCorrectionLevel:' + errorCorrectionLevel;
+      }
+
+      var length = rsBlock.length / 3;
+
+      var list = [];
+
+      for (var i = 0; i < length; i += 1) {
+
+        var count = rsBlock[i * 3 + 0];
+        var totalCount = rsBlock[i * 3 + 1];
+        var dataCount = rsBlock[i * 3 + 2];
+
+        for (var j = 0; j < count; j += 1) {
+          list.push(qrRSBlock(totalCount, dataCount) );
+        }
+      }
+
+      return list;
+    };
+
+    return _this;
+  }();
+
+  //---------------------------------------------------------------------
+  // qrBitBuffer
+  //---------------------------------------------------------------------
+
+  var qrBitBuffer = function() {
+
+    var _buffer = [];
+    var _length = 0;
+
+    var _this = {};
+
+    _this.getBuffer = function() {
+      return _buffer;
+    };
+
+    _this.getAt = function(index) {
+      var bufIndex = Math.floor(index / 8);
+      return ( (_buffer[bufIndex] >>> (7 - index % 8) ) & 1) == 1;
+    };
+
+    _this.put = function(num, length) {
+      for (var i = 0; i < length; i += 1) {
+        _this.putBit( ( (num >>> (length - i - 1) ) & 1) == 1);
+      }
+    };
+
+    _this.getLengthInBits = function() {
+      return _length;
+    };
+
+    _this.putBit = function(bit) {
+
+      var bufIndex = Math.floor(_length / 8);
+      if (_buffer.length <= bufIndex) {
+        _buffer.push(0);
+      }
+
+      if (bit) {
+        _buffer[bufIndex] |= (0x80 >>> (_length % 8) );
+      }
+
+      _length += 1;
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // qrNumber
+  //---------------------------------------------------------------------
+
+  var qrNumber = function(data) {
+
+    var _mode = QRMode.MODE_NUMBER;
+    var _data = data;
+
+    var _this = {};
+
+    _this.getMode = function() {
+      return _mode;
+    };
+
+    _this.getLength = function(buffer) {
+      return _data.length;
+    };
+
+    _this.write = function(buffer) {
+
+      var data = _data;
+
+      var i = 0;
+
+      while (i + 2 < data.length) {
+        buffer.put(strToNum(data.substring(i, i + 3) ), 10);
+        i += 3;
+      }
+
+      if (i < data.length) {
+        if (data.length - i == 1) {
+          buffer.put(strToNum(data.substring(i, i + 1) ), 4);
+        } else if (data.length - i == 2) {
+          buffer.put(strToNum(data.substring(i, i + 2) ), 7);
+        }
+      }
+    };
+
+    var strToNum = function(s) {
+      var num = 0;
+      for (var i = 0; i < s.length; i += 1) {
+        num = num * 10 + chatToNum(s.charAt(i) );
+      }
+      return num;
+    };
+
+    var chatToNum = function(c) {
+      if ('0' <= c && c <= '9') {
+        return c.charCodeAt(0) - '0'.charCodeAt(0);
+      }
+      throw 'illegal char :' + c;
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // qrAlphaNum
+  //---------------------------------------------------------------------
+
+  var qrAlphaNum = function(data) {
+
+    var _mode = QRMode.MODE_ALPHA_NUM;
+    var _data = data;
+
+    var _this = {};
+
+    _this.getMode = function() {
+      return _mode;
+    };
+
+    _this.getLength = function(buffer) {
+      return _data.length;
+    };
+
+    _this.write = function(buffer) {
+
+      var s = _data;
+
+      var i = 0;
+
+      while (i + 1 < s.length) {
+        buffer.put(
+          getCode(s.charAt(i) ) * 45 +
+          getCode(s.charAt(i + 1) ), 11);
+        i += 2;
+      }
+
+      if (i < s.length) {
+        buffer.put(getCode(s.charAt(i) ), 6);
+      }
+    };
+
+    var getCode = function(c) {
+
+      if ('0' <= c && c <= '9') {
+        return c.charCodeAt(0) - '0'.charCodeAt(0);
+      } else if ('A' <= c && c <= 'Z') {
+        return c.charCodeAt(0) - 'A'.charCodeAt(0) + 10;
+      } else {
+        switch (c) {
+        case ' ' : return 36;
+        case '$' : return 37;
+        case '%' : return 38;
+        case '*' : return 39;
+        case '+' : return 40;
+        case '-' : return 41;
+        case '.' : return 42;
+        case '/' : return 43;
+        case ':' : return 44;
+        default :
+          throw 'illegal char :' + c;
+        }
+      }
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // qr8BitByte
+  //---------------------------------------------------------------------
+
+  var qr8BitByte = function(data) {
+
+    var _mode = QRMode.MODE_8BIT_BYTE;
+    var _data = data;
+    var _bytes = qrcode.stringToBytes(data);
+
+    var _this = {};
+
+    _this.getMode = function() {
+      return _mode;
+    };
+
+    _this.getLength = function(buffer) {
+      return _bytes.length;
+    };
+
+    _this.write = function(buffer) {
+      for (var i = 0; i < _bytes.length; i += 1) {
+        buffer.put(_bytes[i], 8);
+      }
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // qrKanji
+  //---------------------------------------------------------------------
+
+  var qrKanji = function(data) {
+
+    var _mode = QRMode.MODE_KANJI;
+    var _data = data;
+
+    var stringToBytes = qrcode.stringToBytesFuncs['SJIS'];
+    if (!stringToBytes) {
+      throw 'sjis not supported.';
+    }
+    !function(c, code) {
+      // self test for sjis support.
+      var test = stringToBytes(c);
+      if (test.length != 2 || ( (test[0] << 8) | test[1]) != code) {
+        throw 'sjis not supported.';
+      }
+    }('\u53cb', 0x9746);
+
+    var _bytes = stringToBytes(data);
+
+    var _this = {};
+
+    _this.getMode = function() {
+      return _mode;
+    };
+
+    _this.getLength = function(buffer) {
+      return ~~(_bytes.length / 2);
+    };
+
+    _this.write = function(buffer) {
+
+      var data = _bytes;
+
+      var i = 0;
+
+      while (i + 1 < data.length) {
+
+        var c = ( (0xff & data[i]) << 8) | (0xff & data[i + 1]);
+
+        if (0x8140 <= c && c <= 0x9FFC) {
+          c -= 0x8140;
+        } else if (0xE040 <= c && c <= 0xEBBF) {
+          c -= 0xC140;
+        } else {
+          throw 'illegal char at ' + (i + 1) + '/' + c;
+        }
+
+        c = ( (c >>> 8) & 0xff) * 0xC0 + (c & 0xff);
+
+        buffer.put(c, 13);
+
+        i += 2;
+      }
+
+      if (i < data.length) {
+        throw 'illegal char at ' + (i + 1);
+      }
+    };
+
+    return _this;
+  };
+
+  //=====================================================================
+  // GIF Support etc.
+  //
+
+  //---------------------------------------------------------------------
+  // byteArrayOutputStream
+  //---------------------------------------------------------------------
+
+  var byteArrayOutputStream = function() {
+
+    var _bytes = [];
+
+    var _this = {};
+
+    _this.writeByte = function(b) {
+      _bytes.push(b & 0xff);
+    };
+
+    _this.writeShort = function(i) {
+      _this.writeByte(i);
+      _this.writeByte(i >>> 8);
+    };
+
+    _this.writeBytes = function(b, off, len) {
+      off = off || 0;
+      len = len || b.length;
+      for (var i = 0; i < len; i += 1) {
+        _this.writeByte(b[i + off]);
+      }
+    };
+
+    _this.writeString = function(s) {
+      for (var i = 0; i < s.length; i += 1) {
+        _this.writeByte(s.charCodeAt(i) );
+      }
+    };
+
+    _this.toByteArray = function() {
+      return _bytes;
+    };
+
+    _this.toString = function() {
+      var s = '';
+      s += '[';
+      for (var i = 0; i < _bytes.length; i += 1) {
+        if (i > 0) {
+          s += ',';
+        }
+        s += _bytes[i];
+      }
+      s += ']';
+      return s;
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // base64EncodeOutputStream
+  //---------------------------------------------------------------------
+
+  var base64EncodeOutputStream = function() {
+
+    var _buffer = 0;
+    var _buflen = 0;
+    var _length = 0;
+    var _base64 = '';
+
+    var _this = {};
+
+    var writeEncoded = function(b) {
+      _base64 += String.fromCharCode(encode(b & 0x3f) );
+    };
+
+    var encode = function(n) {
+      if (n < 0) {
+        // error.
+      } else if (n < 26) {
+        return 0x41 + n;
+      } else if (n < 52) {
+        return 0x61 + (n - 26);
+      } else if (n < 62) {
+        return 0x30 + (n - 52);
+      } else if (n == 62) {
+        return 0x2b;
+      } else if (n == 63) {
+        return 0x2f;
+      }
+      throw 'n:' + n;
+    };
+
+    _this.writeByte = function(n) {
+
+      _buffer = (_buffer << 8) | (n & 0xff);
+      _buflen += 8;
+      _length += 1;
+
+      while (_buflen >= 6) {
+        writeEncoded(_buffer >>> (_buflen - 6) );
+        _buflen -= 6;
+      }
+    };
+
+    _this.flush = function() {
+
+      if (_buflen > 0) {
+        writeEncoded(_buffer << (6 - _buflen) );
+        _buffer = 0;
+        _buflen = 0;
+      }
+
+      if (_length % 3 != 0) {
+        // padding
+        var padlen = 3 - _length % 3;
+        for (var i = 0; i < padlen; i += 1) {
+          _base64 += '=';
+        }
+      }
+    };
+
+    _this.toString = function() {
+      return _base64;
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // base64DecodeInputStream
+  //---------------------------------------------------------------------
+
+  var base64DecodeInputStream = function(str) {
+
+    var _str = str;
+    var _pos = 0;
+    var _buffer = 0;
+    var _buflen = 0;
+
+    var _this = {};
+
+    _this.read = function() {
+
+      while (_buflen < 8) {
+
+        if (_pos >= _str.length) {
+          if (_buflen == 0) {
+            return -1;
+          }
+          throw 'unexpected end of file./' + _buflen;
+        }
+
+        var c = _str.charAt(_pos);
+        _pos += 1;
+
+        if (c == '=') {
+          _buflen = 0;
+          return -1;
+        } else if (c.match(/^\s$/) ) {
+          // ignore if whitespace.
+          continue;
+        }
+
+        _buffer = (_buffer << 6) | decode(c.charCodeAt(0) );
+        _buflen += 6;
+      }
+
+      var n = (_buffer >>> (_buflen - 8) ) & 0xff;
+      _buflen -= 8;
+      return n;
+    };
+
+    var decode = function(c) {
+      if (0x41 <= c && c <= 0x5a) {
+        return c - 0x41;
+      } else if (0x61 <= c && c <= 0x7a) {
+        return c - 0x61 + 26;
+      } else if (0x30 <= c && c <= 0x39) {
+        return c - 0x30 + 52;
+      } else if (c == 0x2b) {
+        return 62;
+      } else if (c == 0x2f) {
+        return 63;
+      } else {
+        throw 'c:' + c;
+      }
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // gifImage (B/W)
+  //---------------------------------------------------------------------
+
+  var gifImage = function(width, height) {
+
+    var _width = width;
+    var _height = height;
+    var _data = new Array(width * height);
+
+    var _this = {};
+
+    _this.setPixel = function(x, y, pixel) {
+      _data[y * _width + x] = pixel;
+    };
+
+    _this.write = function(out) {
+
+      //---------------------------------
+      // GIF Signature
+
+      out.writeString('GIF87a');
+
+      //---------------------------------
+      // Screen Descriptor
+
+      out.writeShort(_width);
+      out.writeShort(_height);
+
+      out.writeByte(0x80); // 2bit
+      out.writeByte(0);
+      out.writeByte(0);
+
+      //---------------------------------
+      // Global Color Map
+
+      // black
+      out.writeByte(0x00);
+      out.writeByte(0x00);
+      out.writeByte(0x00);
+
+      // white
+      out.writeByte(0xff);
+      out.writeByte(0xff);
+      out.writeByte(0xff);
+
+      //---------------------------------
+      // Image Descriptor
+
+      out.writeString(',');
+      out.writeShort(0);
+      out.writeShort(0);
+      out.writeShort(_width);
+      out.writeShort(_height);
+      out.writeByte(0);
+
+      //---------------------------------
+      // Local Color Map
+
+      //---------------------------------
+      // Raster Data
+
+      var lzwMinCodeSize = 2;
+      var raster = getLZWRaster(lzwMinCodeSize);
+
+      out.writeByte(lzwMinCodeSize);
+
+      var offset = 0;
+
+      while (raster.length - offset > 255) {
+        out.writeByte(255);
+        out.writeBytes(raster, offset, 255);
+        offset += 255;
+      }
+
+      out.writeByte(raster.length - offset);
+      out.writeBytes(raster, offset, raster.length - offset);
+      out.writeByte(0x00);
+
+      //---------------------------------
+      // GIF Terminator
+      out.writeString(';');
+    };
+
+    var bitOutputStream = function(out) {
+
+      var _out = out;
+      var _bitLength = 0;
+      var _bitBuffer = 0;
+
+      var _this = {};
+
+      _this.write = function(data, length) {
+
+        if ( (data >>> length) != 0) {
+          throw 'length over';
+        }
+
+        while (_bitLength + length >= 8) {
+          _out.writeByte(0xff & ( (data << _bitLength) | _bitBuffer) );
+          length -= (8 - _bitLength);
+          data >>>= (8 - _bitLength);
+          _bitBuffer = 0;
+          _bitLength = 0;
+        }
+
+        _bitBuffer = (data << _bitLength) | _bitBuffer;
+        _bitLength = _bitLength + length;
+      };
+
+      _this.flush = function() {
+        if (_bitLength > 0) {
+          _out.writeByte(_bitBuffer);
+        }
+      };
+
+      return _this;
+    };
+
+    var getLZWRaster = function(lzwMinCodeSize) {
+
+      var clearCode = 1 << lzwMinCodeSize;
+      var endCode = (1 << lzwMinCodeSize) + 1;
+      var bitLength = lzwMinCodeSize + 1;
+
+      // Setup LZWTable
+      var table = lzwTable();
+
+      for (var i = 0; i < clearCode; i += 1) {
+        table.add(String.fromCharCode(i) );
+      }
+      table.add(String.fromCharCode(clearCode) );
+      table.add(String.fromCharCode(endCode) );
+
+      var byteOut = byteArrayOutputStream();
+      var bitOut = bitOutputStream(byteOut);
+
+      // clear code
+      bitOut.write(clearCode, bitLength);
+
+      var dataIndex = 0;
+
+      var s = String.fromCharCode(_data[dataIndex]);
+      dataIndex += 1;
+
+      while (dataIndex < _data.length) {
+
+        var c = String.fromCharCode(_data[dataIndex]);
+        dataIndex += 1;
+
+        if (table.contains(s + c) ) {
+
+          s = s + c;
+
+        } else {
+
+          bitOut.write(table.indexOf(s), bitLength);
+
+          if (table.size() < 0xfff) {
+
+            if (table.size() == (1 << bitLength) ) {
+              bitLength += 1;
+            }
+
+            table.add(s + c);
+          }
+
+          s = c;
+        }
+      }
+
+      bitOut.write(table.indexOf(s), bitLength);
+
+      // end code
+      bitOut.write(endCode, bitLength);
+
+      bitOut.flush();
+
+      return byteOut.toByteArray();
+    };
+
+    var lzwTable = function() {
+
+      var _map = {};
+      var _size = 0;
+
+      var _this = {};
+
+      _this.add = function(key) {
+        if (_this.contains(key) ) {
+          throw 'dup key:' + key;
+        }
+        _map[key] = _size;
+        _size += 1;
+      };
+
+      _this.size = function() {
+        return _size;
+      };
+
+      _this.indexOf = function(key) {
+        return _map[key];
+      };
+
+      _this.contains = function(key) {
+        return typeof _map[key] != 'undefined';
+      };
+
+      return _this;
+    };
+
+    return _this;
+  };
+
+  var createDataURL = function(width, height, getPixel) {
+    var gif = gifImage(width, height);
+    for (var y = 0; y < height; y += 1) {
+      for (var x = 0; x < width; x += 1) {
+        gif.setPixel(x, y, getPixel(x, y) );
+      }
+    }
+
+    var b = byteArrayOutputStream();
+    gif.write(b);
+
+    var base64 = base64EncodeOutputStream();
+    var bytes = b.toByteArray();
+    for (var i = 0; i < bytes.length; i += 1) {
+      base64.writeByte(bytes[i]);
+    }
+    base64.flush();
+
+    return 'data:image/gif;base64,' + base64;
+  };
+
+  //---------------------------------------------------------------------
+  // returns qrcode function.
+
+  return qrcode;
+}();
+
+// multibyte support
+!function() {
+
+  qrcode.stringToBytesFuncs['UTF-8'] = function(s) {
+    // http://stackoverflow.com/questions/18729405/how-to-convert-utf8-string-to-byte-array
+    function toUTF8Array(str) {
+      var utf8 = [];
+      for (var i=0; i < str.length; i++) {
+        var charcode = str.charCodeAt(i);
+        if (charcode < 0x80) utf8.push(charcode);
+        else if (charcode < 0x800) {
+          utf8.push(0xc0 | (charcode >> 6),
+              0x80 | (charcode & 0x3f));
+        }
+        else if (charcode < 0xd800 || charcode >= 0xe000) {
+          utf8.push(0xe0 | (charcode >> 12),
+              0x80 | ((charcode>>6) & 0x3f),
+              0x80 | (charcode & 0x3f));
+        }
+        // surrogate pair
+        else {
+          i++;
+          // UTF-16 encodes 0x10000-0x10FFFF by
+          // subtracting 0x10000 and splitting the
+          // 20 bits of 0x0-0xFFFFF into two halves
+          charcode = 0x10000 + (((charcode & 0x3ff)<<10)
+            | (str.charCodeAt(i) & 0x3ff));
+          utf8.push(0xf0 | (charcode >>18),
+              0x80 | ((charcode>>12) & 0x3f),
+              0x80 | ((charcode>>6) & 0x3f),
+              0x80 | (charcode & 0x3f));
+        }
+      }
+      return utf8;
+    }
+    return toUTF8Array(s);
+  };
+
+}();
+
+(function (factory) {
+  if (typeof define === 'function' && define.amd) {
+      define([], factory);
+  } else if (typeof exports === 'object') {
+      module.exports = factory();
+  }
+}(function () {
+    return qrcode;
+}));
+
+/*BANK_START*/const CATS=[['inf','💻','Informatique'],['cg','🌍','Culture générale'],['sci','🔬','Sciences'],['spo','⚽','Sport'],['his','🏛️','Histoire & Géo']];/* [catégorie, question, bonne réponse, 3 mauvaises réponses] */const QB_RAW=[['inf','Que signifie HTML ?','HyperText Markup Language','HighText Machine Language','Hyper Tool Multi Language','Home Tool Markup Language'],['inf','Quel langage sert surtout à mettre en forme une page web ?','CSS','SQL','Python','Bash'],['inf','Qui a créé le noyau Linux en 1991 ?','Linus Torvalds','Bill Gates','Steve Jobs','Dennis Ritchie'],['inf','Que signifie « CPU » ?','Central Processing Unit','Computer Personal Unit','Central Program Utility','Core Power Unit'],['inf','Quel protocole affiche un cadenas dans le navigateur ?','HTTPS','FTP','SMTP','DHCP'],['inf','Quelle commande Git envoie tes commits vers le dépôt distant ?','git push','git pull','git clone','git stash'],['inf','Quel langage a été créé par Guido van Rossum ?','Python','Java','Ruby','Go'],['inf','Combien de bits compose un octet ?','8','4','16','32'],['inf','Que signifie « SQL » ?','Structured Query Language','Simple Question Language','Standard Quick Link','Server Queue Logic'],['inf','Quel code HTTP signifie « page non trouvée » ?','404','200','500','301'],['inf','Que signifie « RAM » ?','Random Access Memory','Read Only Memory','Rapid Action Module','Remote Access Method'],['inf','Kubernetes sert principalement à…','Orchestrer des conteneurs','Compiler du code','Créer des bases de données','Éditer des images'],['inf','Quelle structure de données fonctionne en « LIFO » ?','La pile (stack)','La file (queue)','Le tableau trié','L\'arbre binaire'],['inf','Quel est le port par défaut du protocole HTTP ?','80','21','443','25'],['inf','Quel format de données utilise des paires clé/valeur entre accolades ?','JSON','CSV','XML','Markdown'],['inf','Que fait la commande « ls » sous Linux ?','Liste les fichiers','Supprime un fichier','Change de dossier','Affiche l\'heure'],['inf','Que signifie « API » ?','Application Programming Interface','Advanced Program Installer','Automatic Process Integration','Applied Python Interpreter'],['inf','Quel langage Apple a-t-il présenté en 2014 pour iOS ?','Swift','Kotlin','Dart','Rust'],['inf','Que signifie « DNS » ?','Domain Name System','Data Network Service','Digital Node Server','Direct Name Syntax'],['inf','Quelle couleur correspond au code #FF0000 ?','Rouge','Vert','Bleu','Noir'],['inf','Qui a inventé le World Wide Web ?','Tim Berners-Lee','Vint Cerf','Mark Zuckerberg','Alan Turing'],['inf','Quel fichier configure un pipeline GitLab CI ?','.gitlab-ci.yml','Jenkinsfile','pipeline.json','docker-compose.yml'],['inf','Que signifie « SSH » ?','Secure Shell','Simple Server Host','System Security Hub','Safe Socket Handler'],['inf','En JavaScript, que vaut 0.1 + 0.2 ?','0.30000000000000004','0.3','0.2','NaN'],['inf','En Java, quel mot-clé empêche l\'héritage d\'une classe ?','final','static','abstract','private'],['inf','Que signifie « IDE » ?','Integrated Development Environment','Internal Debug Engine','Interactive Data Exchange','Intelligent Design Editor'],['inf','Quel framework Java est très utilisé pour créer des microservices ?','Spring Boot','Django','Laravel','Rails'],['inf','Quel outil de gestion de versions a aussi été créé par Linus Torvalds ?','Git','SVN','Mercurial','CVS'],['inf','Que signifie « USB » ?','Universal Serial Bus','Unified System Board','Ultra Speed Buffer','Universal Storage Block'],['inf','Quelle balise HTML crée un lien hypertexte ?','<a>','<p>','<div>','<img>'],['cg','Quelle est la capitale de l\'Australie ?','Canberra','Sydney','Melbourne','Perth'],['cg','Qui a peint la Joconde ?','Léonard de Vinci','Michel-Ange','Raphaël','Botticelli'],['cg','Quel est le plus grand océan du monde ?','Le Pacifique','L\'Atlantique','L\'Indien','L\'Arctique'],['cg','Quel est le plus long fleuve de France ?','La Loire','La Seine','Le Rhône','La Garonne'],['cg','Qui a écrit « Les Misérables » ?','Victor Hugo','Émile Zola','Alexandre Dumas','Gustave Flaubert'],['cg','Quel est le plus petit pays du monde ?','Le Vatican','Monaco','Saint-Marin','Malte'],['cg','Quelle est la monnaie du Japon ?','Le yen','Le won','Le yuan','Le baht'],['cg','En quelle année la tour Eiffel a-t-elle été inaugurée ?','1889','1900','1850','1925'],['cg','Quelle est la capitale du Maroc ?','Rabat','Casablanca','Marrakech','Fès'],['cg','Qui a écrit « Le Petit Prince » ?','Antoine de Saint-Exupéry','Jules Verne','Albert Camus','Marcel Pagnol'],['cg','Quelle est la plus haute montagne du monde ?','L\'Everest','Le K2','Le Mont Blanc','Le Kilimandjaro'],['cg','Quelles sont les couleurs du drapeau italien ?','Vert, blanc, rouge','Bleu, blanc, rouge','Rouge, jaune, vert','Blanc, rouge, noir'],['cg','Dans quel pays se trouve le Machu Picchu ?','Le Pérou','Le Mexique','La Bolivie','Le Chili'],['cg','Qui a été le premier homme à marcher sur la Lune ?','Neil Armstrong','Buzz Aldrin','Youri Gagarine','John Glenn'],['cg','Quel est le plus grand désert chaud du monde ?','Le Sahara','Le Gobi','Le Kalahari','L\'Atacama'],['cg','Quelle mer sépare l\'Europe de l\'Afrique ?','La Méditerranée','La mer Rouge','La mer Noire','La mer Baltique'],['cg','Combien de pays compte l\'Union européenne en 2026 ?','27','25','28','30'],['cg','Quelle est la plus grande ville du Maroc ?','Casablanca','Rabat','Tanger','Agadir'],['cg','Qui a composé la 9e symphonie « Ode à la joie » ?','Beethoven','Mozart','Bach','Chopin'],['cg','De quel pays la pizza est-elle originaire ?','L\'Italie','L\'Espagne','La Grèce','La France'],['cg','Quelle est la capitale du Canada ?','Ottawa','Toronto','Montréal','Vancouver'],['cg','Qui a écrit « Roméo et Juliette » ?','William Shakespeare','Molière','Victor Hugo','Oscar Wilde'],['cg','Quel est le plus grand pays du monde par la superficie ?','La Russie','Le Canada','La Chine','Les États-Unis'],['cg','Combien y a-t-il de cases sur un échiquier ?','64','32','100','81'],['cg','Quel animal est le symbole de la Chine ?','Le panda','Le dragon rouge','Le tigre','La grue'],['cg','Quel peintre a réalisé « La Nuit étoilée » ?','Vincent van Gogh','Claude Monet','Pablo Picasso','Salvador Dalí'],['cg','Combien de touches compte un piano standard ?','88','76','92','64'],['sci','Quel est le symbole chimique de l\'or ?','Au','Or','Ag','Go'],['sci','Quelle planète est la plus proche du Soleil ?','Mercure','Vénus','Mars','La Terre'],['sci','Quelle est la formule chimique de l\'eau ?','H2O','CO2','O2','NaCl'],['sci','Quelle est la vitesse approximative de la lumière ?','300 000 km/s','150 000 km/s','30 000 km/s','3 000 000 km/s'],['sci','Quel est l\'os le plus long du corps humain ?','Le fémur','Le tibia','L\'humérus','Le radius'],['sci','Quel gaz est le plus abondant dans l\'atmosphère terrestre ?','L\'azote','L\'oxygène','Le dioxyde de carbone','L\'hydrogène'],['sci','Combien de planètes compte le système solaire ?','8','9','7','10'],['sci','Qui a formulé la théorie de la relativité ?','Albert Einstein','Isaac Newton','Galilée','Niels Bohr'],['sci','Quel est le plus grand organe du corps humain ?','La peau','Le foie','Le cœur','Les poumons'],['sci','À quelle température l\'eau bout-elle (pression normale) ?','100 °C','90 °C','80 °C','120 °C'],['sci','Quelle particule porte une charge électrique négative ?','L\'électron','Le proton','Le neutron','Le photon'],['sci','Quelle planète est surnommée « la planète rouge » ?','Mars','Jupiter','Vénus','Saturne'],['sci','Que signifie « ADN » ?','Acide désoxyribonucléique','Acide dynamique nucléaire','Analyse des noyaux','Atome double nucléaire'],['sci','Combien de dents compte un adulte (dents de sagesse comprises) ?','32','28','30','36'],['sci','Quelle unité mesure la force ?','Le newton','Le joule','Le watt','Le pascal'],['sci','Comment s\'appelle notre galaxie ?','La Voie lactée','Andromède','Le Triangle','Sombrero'],['sci','Quel est le plus grand animal vivant ?','La baleine bleue','L\'éléphant d\'Afrique','Le requin-baleine','La girafe'],['sci','Quel gaz les plantes rejettent-elles par la photosynthèse ?','L\'oxygène','L\'azote','Le méthane','L\'hélium'],['sci','Quel est le symbole chimique du sodium ?','Na','So','S','Sd'],['sci','Quel est le pH d\'une solution neutre ?','7','0','10','14'],['sci','Qui a découvert la pénicilline ?','Alexander Fleming','Louis Pasteur','Marie Curie','Robert Koch'],['sci','Combien de chromosomes compte l\'être humain ?','46','23','48','44'],['sci','Quel métal est liquide à température ambiante ?','Le mercure','Le plomb','L\'aluminium','Le cuivre'],['sci','Quelle est la plus grande planète du système solaire ?','Jupiter','Saturne','Neptune','La Terre'],['sci','Combien d\'os compte le squelette d\'un adulte ?','206','180','250','300'],['sci','Quelle est la plus petite unité du vivant ?','La cellule','L\'atome','L\'organe','Le tissu'],['sci','Quel scientifique est associé à la loi de la gravitation universelle ?','Isaac Newton','Nikola Tesla','Charles Darwin','Max Planck'],['spo','Combien de joueurs une équipe de football a-t-elle sur le terrain ?','11','10','9','12'],['spo','Quel pays a gagné la Coupe du monde de football 2018 ?','La France','La Croatie','La Belgique','L\'Allemagne'],['spo','Quel pays a gagné la Coupe du monde de football 2022 ?','L\'Argentine','La France','Le Brésil','Le Maroc'],['spo','Dans quel sport joue-t-on à Roland-Garros ?','Le tennis','Le golf','Le rugby','Le badminton'],['spo','Combien d\'anneaux compte le drapeau olympique ?','5','4','6','7'],['spo','Combien de points vaut un essai au rugby à XV ?','5','3','7','2'],['spo','Quel pays a accueilli les Jeux olympiques d\'été de 2024 ?','La France','Le Japon','Le Brésil','L\'Australie'],['spo','À quelle hauteur se trouve un panier de basket ?','3,05 m','2,80 m','3,50 m','2,40 m'],['spo','Quelle est la distance d\'un marathon ?','42,195 km','40 km','21,097 km','50 km'],['spo','Dans quel sport parle-t-on de « birdie » ?','Le golf','Le tennis','Le cricket','Le hockey'],['spo','Qui est surnommé « CR7 » ?','Cristiano Ronaldo','Karim Benzema','Kylian Mbappé','Neymar'],['spo','Quel sport utilise un volant ?','Le badminton','Le tennis','Le squash','Le ping-pong'],['spo','De quelle couleur est le maillot du leader du Tour de France ?','Jaune','Vert','À pois','Blanc'],['spo','Combien de joueurs par équipe sont sur le terrain au volley-ball ?','6','5','7','8'],['spo','Quel pays a inventé le judo ?','Le Japon','La Chine','La Corée','La Thaïlande'],['spo','Quel club joue ses matchs au Camp Nou ?','Le FC Barcelone','Le Real Madrid','L\'Atlético de Madrid','Valence'],['spo','Quelle carte signifie l\'expulsion d\'un joueur au football ?','La rouge','La jaune','La verte','La blanche'],['spo','Qui a remporté le Ballon d\'or 2023 ?','Lionel Messi','Erling Haaland','Karim Benzema','Kylian Mbappé'],['spo','Quel pays compte le plus de Coupes du monde de football ?','Le Brésil','L\'Allemagne','L\'Italie','L\'Argentine'],['spo','Dans quel sport marque-t-on un « ippon » ?','Le judo','Le karaté','Le sumo','Le kendo'],['spo','Quelle est la longueur d\'une piscine olympique ?','50 mètres','25 mètres','100 mètres','33 mètres'],['spo','Combien dure un quart-temps en NBA ?','12 minutes','10 minutes','15 minutes','8 minutes'],['spo','Quel club français a remporté sa première Ligue des champions en 2025 ?','Le Paris Saint-Germain','L\'Olympique de Marseille','Lyon','Monaco'],['spo','Au tennis, comment s\'appelle un score de zéro point ?','Zéro (« love »)','Rien','Nul','Vide'],['spo','Quel sport pratique Tony Parker ?','Le basket-ball','Le football','Le tennis','Le handball'],['his','Où Napoléon Ier est-il mort ?','Sainte-Hélène','L\'île d\'Elbe','Paris','Waterloo'],['his','En quelle année le mur de Berlin est-il tombé ?','1989','1961','1991','1975'],['his','Qui fut le premier président de la Ve République ?','Charles de Gaulle','Georges Pompidou','François Mitterrand','René Coty'],['his','En quelle année a débuté la Seconde Guerre mondiale ?','1939','1914','1945','1936'],['his','Dans quel pays se trouvent les pyramides de Gizeh ?','L\'Égypte','Le Mexique','Le Soudan','L\'Irak'],['his','Quelle est la capitale du Brésil ?','Brasilia','Rio de Janeiro','São Paulo','Salvador'],['his','Quel roi a fait construire le château de Versailles ?','Louis XIV','Louis XVI','François Ier','Henri IV'],['his','Quel fleuve traverse Paris ?','La Seine','La Loire','La Marne','Le Rhin'],['his','En quelle année l\'homme a-t-il marché sur la Lune ?','1969','1957','1975','1981'],['his','Quelle civilisation a construit le Machu Picchu ?','Les Incas','Les Mayas','Les Aztèques','Les Olmèques'],['his','Quel est le pays le plus peuplé du monde en 2026 ?','L\'Inde','La Chine','Les États-Unis','L\'Indonésie'],['his','Quel est le plus haut sommet d\'Europe occidentale ?','Le Mont Blanc','Le Cervin','L\'Etna','Le Mulhacén'],['his','La guerre de Cent Ans a opposé la France à…','L\'Angleterre','L\'Espagne','L\'Allemagne','L\'Italie'],['his','Quel détroit sépare l\'Espagne du Maroc ?','Gibraltar','Bosphore','Messine','Magellan'],['his','Quelle est la capitale de la Turquie ?','Ankara','Istanbul','Izmir','Antalya'],['his','Quel pays d\'Afrique est le plus peuplé ?','Le Nigeria','L\'Égypte','L\'Éthiopie','L\'Afrique du Sud'],['his','Quel roi de France a été guillotiné en 1793 ?','Louis XVI','Louis XIV','Charles X','Louis XV'],['his','Quel pays a offert la statue de la Liberté aux États-Unis ?','La France','L\'Angleterre','L\'Italie','L\'Espagne'],['his','En quelle année a débuté la Première Guerre mondiale ?','1914','1918','1905','1923'],['his','Quel océan borde la côte ouest du Maroc ?','L\'Atlantique','L\'Indien','Le Pacifique','L\'Arctique'],['his','Quelle est la capitale du Japon ?','Tokyo','Kyoto','Osaka','Séoul'],['his','Quel est le plus grand pays d\'Afrique par la superficie ?','L\'Algérie','La RD Congo','Le Soudan','La Libye'],['his','Quelle est la capitale de l\'Allemagne ?','Berlin','Munich','Hambourg','Francfort'],['his','Qui fut la dernière reine d\'Égypte ptolémaïque ?','Cléopâtre','Néfertiti','Hatshepsout','Isis'],['his','Quel continent est le plus peuplé ?','L\'Asie','L\'Afrique','L\'Europe','L\'Amérique du Nord']];const QB=QB_RAW.map((r,i)=>({id:i,cat:r[0],q:r[1],o:[r[2],r[3],r[4],r[5]]}));/*BANK_END*/
+/*ENGINE_START*/
+const QZ_LET='▲◆●■';
+function qzShuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));const t=a[i];a[i]=a[j];a[j]=t;}return a;}
+function qzPerm(){return qzShuffle([0,1,2,3]).join('');}
+/* cat : 'mix' ou id de catégorie ; n : nb de questions ; T : secondes */
+function qzPick(bank,cat,n){
+  const pool=bank.filter(q=>cat==='mix'||q.cat===cat);
+  return qzShuffle(pool).slice(0,Math.min(n,pool.length)).map(q=>({i:q.id,p:qzPerm()}));
+}
+function qzNew(players,bank,cat,n,T){
+  const qs=qzPick(bank,cat,n);
+  const s={v:1,rev:1,gid:Date.now().toString(36)+Math.random().toString(36).slice(2,6),phase:'q',cat:cat,T:T,
+    players:players.map(p=>({id:p.id,name:p.name,av:p.av||'',bot:!!p.bot})),
+    scores:{},streak:{},qs:qs,qi:0,t0:Date.now(),rt:0,res:null,rank:[]};
+  s.players.forEach(p=>{s.scores[p.id]=0;s.streak[p.id]=0;});
+  return s;
+}
+/* a = index affiché (0..3), perm[a] = index d'origine ; 0 = bonne réponse */
+const qzIsOk=(s,a)=>a>=0&&a<4&&s.qs[s.qi].p[a]==='0';
+const qzGoodIdx=s=>s.qs[s.qi].p.indexOf('0');
+function qzPoints(ms,T){const r=Math.min(1,Math.max(0,ms/(T*1000)));return 1000-Math.round(500*r);}
+/* answers : {id:{a,ms}} ; calcule les points, passe en phase reveal */
+function qzReveal(s,answers){
+  if(s.phase!=='q')return false;
+  const res={a:{},ok:{},gain:{},cnt:[0,0,0,0]};
+  s.players.forEach(p=>{
+    const r=answers[p.id];const a=r&&typeof r.a==='number'?r.a:-1;
+    res.a[p.id]=a;
+    if(a>=0&&a<4)res.cnt[a]++;
+    if(qzIsOk(s,a)){
+      const st=(s.streak[p.id]||0)+1;s.streak[p.id]=st;
+      const g=qzPoints(+r.ms||0,s.T)+Math.min(250,(st-1)*50);
+      res.ok[p.id]=1;res.gain[p.id]=g;s.scores[p.id]=(s.scores[p.id]||0)+g;
+    }else{s.streak[p.id]=0;res.ok[p.id]=0;res.gain[p.id]=0;}
+  });
+  s.res=res;s.phase='reveal';s.rt=Date.now();s.rev++;return true;
+}
+function qzRanking(s){
+  return s.players.slice().sort((a,b)=>(s.scores[b.id]||0)-(s.scores[a.id]||0)).map(p=>p.id);
+}
+function qzNext(s){
+  if(s.phase!=='reveal')return false;
+  if(s.qi+1>=s.qs.length){s.phase='end';s.rank=qzRanking(s);s.rev++;return true;}
+  s.qi++;s.phase='q';s.t0=Date.now();s.res=null;s.rev++;return true;
+}
+/* réponse d'un bot (solo) : {a,ms} */
+function qzBotAnswer(s,skill){
+  const good=qzGoodIdx(s);
+  const ok=Math.random()<skill;
+  let a=good;if(!ok){do{a=Math.floor(Math.random()*4);}while(a===good);}
+  const ms=Math.round(s.T*1000*(.18+Math.random()*.6));
+  return{a:a,ms:ms};
+}
+/*ENGINE_END*/
+
+/* avatars dessinés (SVG générés, originaux) */
+const AV_BG=['#E9B949','#8DBBD9','#C9A7C8','#4E9AA6','#E58B3A','#9F6AA8','#7FB77E','#D96C5F','#6C7FD1','#D4A5A5','#5DB7A6','#F2A65A','#2B2F3A','#F7F3E0','#E8537A','#3FA7E0'];
+const AV_SKIN=['#F6D3B5','#EAB68E','#C98B63','#9A6240','#6B3F27','#F2C9A0'];
+const AV_HAIR=['#2B1B12','#5A3A22','#B5541C','#D9B04A','#8E8E96','#1D1D26','#C23B5A','#E8E3D8','#3D7BE0','#2FB67C','#F26CC8','#8A4DE0'];
+const AV_SHIRT=['#3B5BA9','#D94F4F','#2E8B6F','#F2B632','#7A4BA6','#2B2F3A','#E87BA8','#4FB0C6','#FFFFFF','#FF8A3D'];
+const AV_STY=['short','long','curly','side','afro','bun','bob','spiky','cap','none'];
+const AV_STYL=['Courts','Longs','Bouclés','Mèche','Afro','Chignon','Carré','Pointus','Casquette','Chauve'];
+const AV_SPEC=[
+ [0,0,0,'short',0,0,0],[1,1,1,'long',1,0,0],[2,2,5,'curly',2,0,0],[3,3,0,'short',3,1,1],[4,4,0,'afro',4,0,0],[5,0,4,'none',5,0,1],
+ [6,5,6,'bob',6,1,0],[7,1,3,'side',7,0,0],[8,2,2,'bun',0,0,0],[9,3,1,'cap',1,0,1],[10,4,5,'afro',2,1,0],[11,0,7,'short',3,1,1],
+ [0,1,2,'curly',4,0,0],[1,2,0,'side',5,1,0],[2,5,3,'long',6,0,0],[3,0,5,'spiky',7,0,0],[4,3,1,'bob',0,0,0],[5,4,4,'none',1,1,1],
+ [6,1,6,'long',2,0,0],[7,2,0,'cap',3,0,0],[8,5,2,'curly',4,1,0],[9,3,7,'short',5,0,1],[10,0,3,'bun',6,1,0],[11,4,0,'spiky',7,0,0]
+];
+function avSVG(i){
+  const [bg,sk,hr,st,sh,gl,bd]=AV_SPEC[i%AV_SPEC.length];
+  return avDraw([bg,sk,hr,st,sh,gl?1:0,bd?1:0,(i%3===0)?0:1,0],'c'+i);
+}
+function avDraw(sp,cid){
+  const [bg,sk,hr,st,sh,gl,bd,mo,ey]=sp;
+  const B=AV_BG[bg%AV_BG.length],S=AV_SKIN[sk%AV_SKIN.length],H=AV_HAIR[hr%AV_HAIR.length],T=AV_SHIRT[sh%AV_SHIRT.length];
+  const i=cid;
+  let back='',front='';
+  if(st==='long')back=`<path d="M23 52C18 18 36 10 50 10S82 18 77 52L80 82H20Z" fill="${H}"/>`;
+  if(st==='afro')back=`<circle cx="50" cy="34" r="31" fill="${H}"/>`;
+  if(st==='bun')back=`<circle cx="50" cy="13" r="10" fill="${H}"/>`;
+  if(st==='bob')back=`<path d="M24 50C20 18 36 11 50 11S80 18 76 50L77 66C70 70 66 62 66 56L34 56C34 62 30 70 23 66Z" fill="${H}"/>`;
+  if(st==='short'||st==='bun'||st==='bob')front=`<path d="M28 44C25 22 38 13 50 13S75 22 72 44C68 33 60 27 50 27S32 33 28 44Z" fill="${H}"/>`;
+  if(st==='long')front=`<path d="M28 46C24 22 38 12 50 12S76 22 72 46C66 34 58 26 46 28C38 30 32 36 28 46Z" fill="${H}"/>`;
+  if(st==='side')front=`<path d="M27 43C26 20 44 11 57 14C69 17 75 28 73 43C66 34 54 29 40 30C34 31 30 35 27 43Z" fill="${H}"/>`;
+  if(st==='curly')front=[[30,28,9],[40,22,10],[51,20,10],[61,22,10],[70,28,9],[27,38,7],[73,38,7]].map(c=>`<circle cx="${c[0]}" cy="${c[1]}" r="${c[2]}" fill="${H}"/>`).join('');
+  if(st==='afro')front=`<path d="M29 42C28 28 38 22 50 22S72 28 71 42C66 34 58 30 50 30S34 34 29 42Z" fill="${H}"/>`;
+  if(st==='spiky')front=`<path d="M27 42L26 24L35 30L38 14L47 26L53 11L58 26L66 15L67 30L74 24L73 42C67 33 60 29 50 29S33 33 27 42Z" fill="${H}"/>`;
+  if(st==='cap')front=`<path d="M25 40C25 15 75 15 75 40Z" fill="${T}"/><path d="M22 40H82C84 43 78 45 70 44H25C21 44 20 42 22 40Z" fill="${T}" opacity=".85"/>`;
+  const beard=bd===1?`<path d="M29 54C30 76 70 76 71 54C66 63 58 64 50 64S34 63 29 54Z" fill="${H}"/>`:bd===2?`<path d="M38 57Q44 52 50 56Q56 52 62 57Q56 59 50 58Q44 59 38 57Z" fill="${H}"/>`:'';
+  const glasses=gl===1?`<g fill="none" stroke="#2B2B33" stroke-width="2"><circle cx="41" cy="46" r="7.5"/><circle cx="59" cy="46" r="7.5"/><path d="M48.5 46H51.5"/></g>`:gl===2?`<g><rect x="32" y="40" width="17" height="11" rx="4" fill="#15151C"/><rect x="51" y="40" width="17" height="11" rx="4" fill="#15151C"/><path d="M49 44H51" stroke="#15151C" stroke-width="2"/><path d="M35 43l5-1" stroke="#fff" stroke-opacity=".5" stroke-width="1.5"/></g>`:'';
+  const MO=[`<path d="M42 59Q50 65 58 59" fill="none" stroke="#7A3E2E" stroke-width="2" stroke-linecap="round"/>`,
+    `<path d="M40 57Q50 69 60 57Z" fill="#fff" stroke="#7A3E2E" stroke-width="1.8" stroke-linejoin="round"/>`,
+    `<path d="M43 60H57" fill="none" stroke="#7A3E2E" stroke-width="2.2" stroke-linecap="round"/>`,
+    `<ellipse cx="50" cy="61" rx="4" ry="5" fill="#7A3E2E"/>`,
+    `<path d="M40 57Q50 69 60 57Z" fill="#fff" stroke="#7A3E2E" stroke-width="1.8" stroke-linejoin="round"/><path d="M46 62Q50 71 54 62Q50 60 46 62Z" fill="#E8637A"/>`,
+    `<path d="M42 62Q50 56 58 62" fill="none" stroke="#7A3E2E" stroke-width="2" stroke-linecap="round"/>`];
+  const mouth=MO[mo%MO.length];
+  const EY=[`<circle cx="41" cy="46" r="2.8" fill="#2B2B33"/><circle cx="59" cy="46" r="2.8" fill="#2B2B33"/>`,
+    `<path d="M37.5 47Q41 42.5 44.5 47M55.5 47Q59 42.5 62.5 47" fill="none" stroke="#2B2B33" stroke-width="2.3" stroke-linecap="round"/>`,
+    `<circle cx="41" cy="46" r="2.8" fill="#2B2B33"/><path d="M55.5 46.5Q59 43 62.5 46.5" fill="none" stroke="#2B2B33" stroke-width="2.3" stroke-linecap="round"/>`,
+    `<circle cx="41" cy="46" r="4" fill="#fff" stroke="#2B2B33" stroke-width="1.2"/><circle cx="59" cy="46" r="4" fill="#fff" stroke="#2B2B33" stroke-width="1.2"/><circle cx="41" cy="46" r="2" fill="#2B2B33"/><circle cx="59" cy="46" r="2" fill="#2B2B33"/>`,
+    `<path d="M38 44L44 47M62 44L56 47" fill="none" stroke="#2B2B33" stroke-width="2.3" stroke-linecap="round"/><circle cx="41.5" cy="48" r="2.4" fill="#2B2B33"/><circle cx="58.5" cy="48" r="2.4" fill="#2B2B33"/>`];
+  const eyes=EY[ey%EY.length];
+  return `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs><clipPath id="c${i}"><circle cx="50" cy="50" r="50"/></clipPath></defs><g clip-path="url(#c${i})"><rect width="100" height="100" fill="${B}"/>${back}<path d="M12 100C14 80 32 73 50 73S86 80 88 100Z" fill="${T}"/><rect x="42" y="60" width="16" height="18" rx="6" fill="${S}"/><rect x="42" y="60" width="16" height="18" rx="6" fill="#000" opacity=".12"/><circle cx="29" cy="48" r="4.5" fill="${S}"/><circle cx="71" cy="48" r="4.5" fill="${S}"/><ellipse cx="50" cy="46" rx="21" ry="24" fill="${S}"/>${beard}<circle cx="35" cy="56" r="4" fill="#FF6B6B" opacity=".25"/><circle cx="65" cy="56" r="4" fill="#FF6B6B" opacity=".25"/><path d="M50 49q-2.5 6 1 7" fill="none" stroke="#000" stroke-opacity=".25" stroke-width="1.6" stroke-linecap="round"/>${mouth}${eyes}<path d="M35.5 39.5Q41 36.5 46.5 39.5M53.5 39.5Q59 36.5 64.5 39.5" fill="none" stroke="${H==='#E8E3D8'?'#9A9488':H}" stroke-width="2.3" stroke-linecap="round"/>${glasses}${front}</g></svg>`;
+}
+
+const AVATARS=Array.from({length:24},(_,i)=>'a'+i);
+const AV_RE=/^c\d{1,2}(-\d{1,2}){8}$/;
+const validAv=a=>typeof a==='string'&&(AVATARS.includes(a)||AV_RE.test(a));
+function avSVGa(a){
+  if(AV_RE.test(a)){const n=a.slice(1).split('-').map(Number);return avDraw([n[0],n[1],n[2],AV_STY[n[3]%AV_STY.length],n[4],n[5]%3,n[6]%3,n[7],n[8]],a);}
+  return avSVG(+a.slice(1));
+}
+
+const LOADER_INNER={"qz": "<div class=\"lg-cloud c1\"></div><div class=\"lg-cloud c2\"></div><div class=\"lg-fan\" aria-hidden=\"true\"><i>\u2753</i><i>\ud83d\udca1</i><i>\ud83c\udfc6</i><i>\u26a1</i><i>\u2753</i></div><div class=\"lg-sign\">Loading<b>.</b><b>.</b><b>.</b></div><div class=\"lg-bar\" aria-hidden=\"true\"></div>", "f7": "<div class=\"lg-cloud c1\"></div><div class=\"lg-cloud c2\"></div><div class=\"lg-fan\" aria-hidden=\"true\"><i>7</i><i>7</i><i>7</i><i>7</i><i>7</i></div><div class=\"lg-sign\">Loading<b>.</b><b>.</b><b>.</b></div><div class=\"lg-bar\" aria-hidden=\"true\"></div>"};
+const LOADER_HTML=k=>LOADER_INNER[k]||LOADER_INNER.qz;
+const $=id=>document.getElementById(id);
+function h(tag,attrs,...kids){
+  const e=document.createElement(tag);
+  if(attrs)for(const k in attrs){const v=attrs[k];if(v==null||v===false)continue;
+    if(k==='class')e.className=v;else if(k.slice(0,2)==='on')e.addEventListener(k.slice(2),v);else if(k==='style')e.style.cssText=v;else if(k==='html')e.innerHTML=v;else e.setAttribute(k,v===true?'':v);}
+  kids.flat().forEach(c=>{if(c==null||c===false)return;e.append(c.nodeType?c:document.createTextNode(String(c)));});
+  return e;
+}
+const lsGet=k=>{try{return localStorage.getItem(k);}catch(e){return null;}};
+const lsSet=(k,v)=>{try{localStorage.setItem(k,v);}catch(e){}};
+const hue=id=>{let x=0;for(let i=0;i<id.length;i++)x=(x*31+id.charCodeAt(i))%360;return x;};
+let myAv=lsGet('f7av');if(!validAv(myAv))myAv=AVATARS[Math.floor(Math.random()*AVATARS.length)];
+const CLONE=o=>JSON.parse(JSON.stringify(o));
+
+const Snd=(()=>{
+  let ctx=null,on=lsGet('qzsfx')!=='0';
+  const init=()=>{if(!ctx){try{const A=window.AudioContext||window.webkitAudioContext;ctx=A?new A():null;}catch(e){}}if(ctx&&ctx.state==='suspended')ctx.resume().catch(()=>{});return ctx;};
+  const tone=(f,t,d,o)=>{o=o||{};const c=ctx,os=c.createOscillator(),g=c.createGain();os.type=o.type||'sine';os.frequency.setValueAtTime(f,t);if(o.to)os.frequency.exponentialRampToValueAtTime(o.to,t+d);g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(o.v||.2,t+(o.a||.01));g.gain.exponentialRampToValueAtTime(.0001,t+d);os.connect(g);g.connect(c.destination);os.start(t);os.stop(t+d+.05);};
+  const noise=(t,d,o)=>{o=o||{};const c=ctx,n=Math.floor(c.sampleRate*d),b=c.createBuffer(1,n,c.sampleRate),a=b.getChannelData(0);for(let i=0;i<n;i++)a[i]=Math.random()*2-1;const s=c.createBufferSource();s.buffer=b;const f=c.createBiquadFilter();f.type='bandpass';f.frequency.value=o.f||1500;f.Q.value=.8;const g=c.createGain();g.gain.setValueAtTime(o.v||.2,t);g.gain.exponentialRampToValueAtTime(.0001,t+d);s.connect(f);f.connect(g);g.connect(c.destination);s.start(t);};
+  const S={
+    place:t=>{noise(t,.05,{f:1800,v:.25});tone(130,t,.07,{to:70,v:.25});},
+    take:t=>{noise(t,.06,{f:2200,v:.22});[523,659,784].forEach((f,i)=>tone(f,t+.04+i*.07,.2,{type:'triangle',v:.13}));},
+    ronda:t=>{[392,523,659].forEach((f,i)=>tone(f,t+i*.1,.3,{type:'triangle',v:.16}));},
+    tringla:t=>{[392,494,587,784,988].forEach((f,i)=>tone(f,t+i*.09,.4,{type:'triangle',v:.16}));tone(98,t,.5,{v:.3,to:60});},
+    missa:t=>{[1047,1319,1568,2093].forEach((f,i)=>tone(f,t+i*.07,.35,{v:.1}));},
+    taper:t=>{tone(880,t,.1,{type:'square',v:.1});tone(1320,t+.08,.25,{type:'square',v:.1});},
+    turn:t=>{tone(660,t,.2,{type:'triangle',v:.2});tone(880,t+.1,.25,{type:'triangle',v:.2});},
+    win:t=>{[523,659,784,1047,1319].forEach((f,i)=>tone(f,t+i*.12,.5,{type:'triangle',v:.18}));},
+    ok:t=>{[523,659,784,1047].forEach((f,i)=>tone(f,t+i*.07,.25,{type:'triangle',v:.17}));},
+    bad:t=>{[330,262].forEach((f,i)=>tone(f,t+i*.14,.3,{type:'sawtooth',v:.1}));},
+    tick:t=>{tone(1000,t,.05,{type:'square',v:.05});},
+    start:t=>{[392,523,659,784].forEach((f,i)=>tone(f,t+i*.08,.3,{type:'triangle',v:.16}));},
+    lose:t=>{[392,349,311,262].forEach((f,i)=>tone(f,t+i*.2,.5,{type:'sawtooth',v:.1,to:f*.9}));}
+  };
+  return{play(n){if(!on||!init())return;try{S[n](ctx.currentTime+.01);}catch(e){}},get on(){return on;},set(v){on=!!v;lsSet('qzsfx',v?'1':'0');if(v)init();}};
+})();
+function makeDbFromSdk(F,fs){
+  const ws=x=>({exists:x.exists(),data:()=>x.data()});
+  const wq=x=>({docs:x.docs.map(d=>({id:d.id,data:()=>d.data()}))});
+  const mk=(c,q)=>({
+    onSnapshot:(cb,eb)=>F.onSnapshot(q,x=>cb(wq(x)),eb),
+    orderBy:(f,d)=>mk(c,F.query(q,F.orderBy(f,d||'asc'))),
+    limit:n=>mk(c,F.query(q,F.limit(n))),
+    add:v=>F.addDoc(c,v),
+    get:async()=>wq(await F.getDocs(q))
+  });
+  return{
+    doc:path=>{const r=F.doc(fs,path);return{get:async()=>ws(await F.getDoc(r)),set:v=>F.setDoc(r,v),delete:()=>F.deleteDoc(r),onSnapshot:(cb,eb)=>F.onSnapshot(r,x=>cb(ws(x)),eb)};},
+    collection:path=>{const c=F.collection(fs,path);return mk(c,c);}
+  };
+}
+async function loadFirebase(cfg){
+  const V='10.14.1',B='https://www.gstatic.com/firebasejs/'+V+'/';
+  const [A,F]=await Promise.all([import(B+'firebase-app.js'),import(B+'firebase-firestore.js')]);
+  return makeDbFromSdk(F,F.getFirestore(A.initializeApp(cfg)));
+}
+const REACT_L={wizz:'📳 Wizz',toc:'🚪 Toc toc',congrats:'🎉 Congratz',merde:'💩 MERDE',haha:'🤣 Hahaha',go:'📣 GO GO GO',rage:'🤬 Fou de rage',tomato:'🍅 une tomate',clap:'👏 Applaudir',cry:'😭 Pleurer',fire:'🔥 En feu',boom:'🎆 Feu d\'artifice',point:'🫵 Pointer du doigt',emo:'💬 un emoji',sad:'🎺 Trombone triste',horn:'📯 Corne de brume',drum:'🥁 Roulement'};
+const BADW=['putain','connard','connasse','salope','pute','encule','enculer','fdp','ntm','nique','niquer','batard','pd','bite','couille','couilles','foutre','salaud','enfoire','petasse','tapette'];
+const cleanText=t=>String(t).replace(/[\p{L}\p{N}]+/gu,w=>{const n=w.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');return BADW.includes(n)?'*'.repeat(w.length):w;});
+const QUICK_E=['😂','🔥','🧠','😱','👏','🤯','😭','🙏'];
+const QUICK_T=['GG','Facile !','Trop dur','Bien joué','Noooon','Je le savais !'];
+let chatOpen=false,chatMsgs=[],unread=0,chatInit=false,chatUnsub=null,lastSeenT=0,lastSend=0,knownIds=new Set();
+const wideChat=()=>matchMedia('(min-width:900px)').matches;
+const hhmm=t=>{const d=new Date(t);return String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');};
+const onlyEmoji=t=>/^(?:\p{Extended_Pictographic}|‍|️|\s){1,8}$/u.test(t);
+function chatBox(){
+  let b=$('rdchat');if(b)return b;
+  document.body.classList.add('chat-on');
+  b=h('aside',{id:'rdchat',class:'rchat2','aria-label':'Discussion'},
+    h('div',{class:'ch-top',onclick:()=>{if(!wideChat())toggleChat();}},h('b',null,'💬 Discussion'),h('span',{class:'ch-prev',id:'ch-prev'}),h('span',{class:'ch-chev'},'⌃')),
+    h('div',{class:'ch-body'},
+      h('ul',{id:'ch-list','aria-live':'polite'}),
+      h('div',{class:'ch-quick'},h('div',{class:'qe'},QUICK_E.map(e=>h('button',{type:'button',class:'qb',onclick:()=>sendText(e)},e))),h('div',{class:'qt'},QUICK_T.map(t=>h('button',{type:'button',class:'qc',onclick:()=>sendText(t)},t))))),
+    h('form',{id:'ch-form',autocomplete:'off'},h('button',{type:'button',class:'ch-open','aria-label':'Ouvrir la discussion',onclick:toggleChat},'💬',h('span',{class:'ubadge',id:'ch-badge',hidden:true})),h('input',{id:'ch-in',maxlength:'200',placeholder:'Écris un message…','aria-label':'Message',enterkeyhint:'send'}),h('button',{class:'ch-send',type:'submit','aria-label':'Envoyer'},'➤')));
+  b.querySelector('form').addEventListener('submit',sendChat);
+  document.body.append(b);
+  const tb=document.createElement('div');tb.id='ch-toasts';document.body.append(tb);
+  return b;
+}
+
+function toggleChat(){
+  const b=chatBox();chatOpen=!chatOpen;b.classList.toggle('open',chatOpen);
+  if(chatOpen){unread=0;lastSeenT=Date.now();updBadge();renderChat();const l=$('ch-list');if(l)l.scrollTop=l.scrollHeight;}
+}
+function updBadge(){const e=$('ch-badge');if(!e)return;e.hidden=!unread||chatOpen||wideChat();e.textContent=String(unread);}
+function renderChat(){
+  chatBox();
+  const ul=$('ch-list');if(!ul)return;
+  const near=ul.scrollHeight-ul.scrollTop-ul.clientHeight<80;
+  const items=[];let prevId='';
+  chatMsgs.forEach(m=>{
+    if(m.react&&REACT_L[m.react]){items.push(h('li',{class:'rx'},m.name+' a envoyé '+REACT_L[m.react]));prevId='';return;}
+    const me=m.id===uid,big=onlyEmoji(m.text);
+    items.push(h('li',{class:'msg'+(me?' me':'')+(big?' big':'')+(prevId===m.id?' same':'')},
+      prevId===m.id?null:h('span',{class:'mav',style:'background:hsl('+hue(m.id||m.name)+' 45% 40%)'},(m.name||'?')[0].toUpperCase()),
+      h('div',{class:'mb'},prevId===m.id?null:h('div',{class:'mh'},h('b',{style:'color:hsl('+hue(m.id||m.name)+' 55% 32%)'},me?'Toi':m.name),h('time',null,hhmm(m.t))),h('div',{class:'mt'},cleanText(m.text)))));
+    prevId=m.id;
+  });
+  ul.replaceChildren(...items);
+  if(near||chatOpen||wideChat())ul.scrollTop=ul.scrollHeight;
+  const last=chatMsgs[chatMsgs.length-1],pv=$('ch-prev');
+  if(pv)pv.textContent=last?(last.react?last.name+' '+(REACT_L[last.react]||''):last.name+' : '+cleanText(last.text)):'Dis quelque chose…';
+  const inp=$('ch-in');if(inp){inp.disabled=!db||!myName;inp.placeholder=!db?'Discussion indisponible':(!myName?'Choisis un pseudo pour écrire':'Écris un message…');}
+}
+function toast(m){
+  if(wideChat()||chatOpen)return;
+  const box=$('ch-toasts');if(!box)return;
+  const t=h('div',{class:'ch-toast'},h('b',null,m.name+' '),cleanText(m.text));
+  box.append(t);while(box.children.length>3)box.firstChild.remove();
+  setTimeout(()=>t.classList.add('out'),4200);setTimeout(()=>t.remove(),4700);
+}
+async function sendText(text){
+  text=String(text||'').trim().slice(0,200);
+  if(!text||!db||!myName)return false;
+  if(Date.now()-lastSend<700){banner('Doucement…','#FF8A3D');return false;}
+  lastSend=Date.now();
+  try{await db.collection('chat').add({t:Date.now(),id:uid,name:myName.slice(0,16),text,room:0});return true;}
+  catch(e){banner('Message non envoyé.','#E5484D');return false;}
+}
+async function sendChat(ev){
+  ev.preventDefault();
+  const inp=$('ch-in'),text=inp.value;if(!text.trim())return;
+  inp.value='';
+  const ok=await sendText(text);if(!ok)inp.value=text;
+  if(!matchMedia('(hover:none)').matches)inp.focus();
+}
+function startChat(){
+  if(!db||chatUnsub)return;
+  chatUnsub=db.collection('chat').orderBy('t','desc').limit(120).onSnapshot(sn=>{
+    const all=sn.docs.map(x=>{const v=x.data()||{};return{k:x.id,t:typeof v.t==='number'?v.t:0,id:String(v.id||''),name:String(v.name||'?').slice(0,16),text:String(v.text||'').slice(0,200),react:typeof v.react==='string'?v.react:'',room:typeof v.room==='number'?v.room:0,pm:v.pm===1};}).filter(m=>!m.pm&&m.room>=0);
+    chatMsgs=all.slice(0,80).sort((a,b)=>a.t-b.t);
+    if(!chatInit){chatInit=true;lastSeenT=Date.now();chatMsgs.forEach(m=>knownIds.add(m.k));}
+    else{
+      const fresh=chatMsgs.filter(m=>!knownIds.has(m.k));fresh.forEach(m=>knownIds.add(m.k));
+      const others=fresh.filter(m=>m.id!==uid&&!m.react);
+      if(!chatOpen&&!wideChat()){unread+=others.length;others.forEach(toast);updBadge();}
+      if(others.length&&!document.hidden)Snd.play('place');
+    }
+    renderChat();
+  },()=>{});
+}
+/* ---- écran de chargement ---- */
+const LD_T0=performance.now();
+function showLoader(kind){
+  let l=$('gload');
+  if(!l){l=document.createElement('div');l.id='gload';l.className='gload';document.body.append(l);}
+  l.className='gload '+(kind||'qz');l.innerHTML=LOADER_HTML(kind||'qz');
+}
+function hideLoader(){
+  const l=$('gload');if(!l)return;
+  setTimeout(()=>{l.classList.add('out');setTimeout(()=>l.remove(),600);},Math.max(0,900-(performance.now()-LD_T0)));
+}
+/* ---- état ---- */
+const NAME_K='f7name',BASE=400;
+let db=null,uid=null,myName=lsGet(NAME_K)||'',mySlug=lsGet('f7prof')||'',ROOM=0,mode=null;
+let S=null,roster=[],stateUnsub=null,lobUnsub=null,hb=null,chain=Promise.resolve(),myAns=null,qT0=0,qKey='',soloBots={},lastKey='',pendingJoin=0,celebrated='';
+let cfg={cat:'mix',n:10,T:20,bots:2};
+const REDUCE=matchMedia('(prefers-reduced-motion:reduce)').matches;
+const REV_MS=6500,GRACE=1800,MAXP=30;
+const fresh=p=>Date.now()-(p.seen||0)<75000;
+const roomPlayers=n=>roster.filter(p=>p.room===BASE+n&&fresh(p)).sort((a,b)=>a.t-b.t);
+const gp=n=>'game/qz_state_'+n;
+const isSpec=()=>!S||!S.players.some(p=>p.id===uid);
+const hostId=()=>{if(mode==='solo')return uid;if(!S)return (roomPlayers(ROOM)[0]||{}).id;const on=new Set(roomPlayers(ROOM).map(p=>p.id));return(S.players.find(p=>on.has(p.id))||S.players[0]).id;};
+const isHost=()=>hostId()===uid;
+function banner(text,color){const d=h('div',{class:'fxban',style:'--g:'+(color||'#FFE066')},text);document.body.append(d);setTimeout(()=>d.remove(),2300);}
+function confetti(){
+  if(REDUCE)return;const cols=['#FFE066','#FF8A3D','#7CE7B0','#4D8DF7','#ff5a5f','#c28bff'];
+  for(let i=0;i<80;i++){const d=h('i',{class:'cf',style:'left:'+Math.random()*100+'vw;background:'+cols[i%cols.length]+';animation-delay:'+Math.random()*.8+'s;animation-duration:'+(2.2+Math.random()*1.6)+'s;transform:rotate('+Math.random()*360+'deg)'});document.body.append(d);setTimeout(()=>d.remove(),4800);}
+}
+async function loadFirebase(cfg){
+  const V='10.14.1',B='https://www.gstatic.com/firebasejs/'+V+'/';
+  const [A,F]=await Promise.all([import(B+'firebase-app.js'),import(B+'firebase-firestore.js')]);
+  return makeDbFromSdk(F,F.getFirestore(A.initializeApp(cfg)));
+}
+const catOf=id=>CATS.find(c=>c[0]===id)||['mix','🎲','Mélange'];
+const catLbl=id=>id==='mix'?'🎲 Mélange':(catOf(id)[1]+' '+catOf(id)[2]);
+/* ---- salle ---- */
+function myDoc(extra){
+  const d={name:myName||'Joueur',t:(roster.find(p=>p.id===uid)||{}).t||Date.now(),seen:Date.now(),room:BASE+ROOM,qz:1,pf:mySlug,av:myAv};
+  if(myAns){d.qg=myAns.g;d.qi=myAns.i;d.qa=myAns.a;d.qms=myAns.ms;}
+  if(!S&&isHost()){d.qc=cfg.cat;d.qn=cfg.n;d.qt=cfg.T;}
+  return Object.assign(d,extra||{});
+}
+function beat(){if(!db||!ROOM)return;if(document.hidden)return;db.doc('lobby/qz_'+uid).set(myDoc()).catch(()=>{});}
+function joinRoom(n){
+  if(!db)return;
+  if(!myName||myName.trim().length<2){pendingJoin=n;render();return;}
+  pendingJoin=0;ROOM=n;mode='online';S=null;myAns=null;
+  db.doc('lobby/qz_'+uid).set(Object.assign(myDoc(),{t:Date.now()})).catch(()=>{});
+  if(stateUnsub){stateUnsub();stateUnsub=null;}
+  stateUnsub=db.doc(gp(n)).onSnapshot(sn=>{onState(sn.exists?sn.data():null);},()=>{});
+  clearInterval(hb);hb=setInterval(beat,25000);
+  try{history.replaceState(null,'',location.pathname+'?table='+n);}catch(e){}
+  render();
+}
+function leaveRoom(){
+  if(db&&ROOM)db.doc('lobby/qz_'+uid).delete().catch(()=>{});
+  if(stateUnsub){stateUnsub();stateUnsub=null;}
+  clearInterval(hb);hb=null;ROOM=0;mode=null;S=null;myAns=null;qKey='';
+  try{history.replaceState(null,'',location.pathname);}catch(e){}
+  render();
+}
+const joinUrl=()=>location.origin+location.pathname+'?table='+ROOM;
+function startOnline(){
+  const ps=roomPlayers(ROOM).slice(0,MAXP);if(ps.length<2)return;
+  myAns=null;
+  commit(qzNew(ps.map(p=>({id:p.id,name:p.name,av:p.av})),QB,cfg.cat,cfg.n,cfg.T));
+}
+function commit(s){
+  S=s;onLocalChange();render();
+  if(mode==='online'){const c=CLONE(s);chain=chain.then(()=>db.doc(gp(ROOM)).set(c)).catch(()=>banner('Action non envoyée, réessaie.','#E5484D'));}
+}
+function onState(d){
+  const prev=S;
+  if(!d){if(mode==='online'){S=null;myAns=null;qKey='';render();}return;}
+  if(prev&&d.rev<prev.rev&&d.gid===prev.gid)return;
+  S=d;onLocalChange();render();
+}
+/* nouvelle question détectée -> chrono local */
+function onLocalChange(){
+  if(!S)return;
+  const k=S.gid+':'+S.qi;
+  if(k!==qKey){
+    qKey=k;qT0=performance.now();
+    if(myAns&&(myAns.g!==S.gid||myAns.i!==S.qi))myAns=null;
+    if(S.phase==='q'&&mode==='solo'){soloBots={};S.players.filter(p=>p.bot).forEach(p=>{soloBots[p.id]=qzBotAnswer(S,p.skill||.7);});}
+    if(S.phase==='q')Snd.play('start');
+  }
+  const pk=S.gid+':'+S.qi+':'+S.phase;
+  if(pk!==lastKey){
+    lastKey=pk;
+    if(S.phase==='reveal'){Snd.play(S.res&&S.res.ok[uid]?'ok':'bad');}
+    if(S.phase==='end'&&celebrated!==S.gid){celebrated=S.gid;Snd.play('win');setTimeout(confetti,300);}
+  }
+}
+const ansOf=id=>{
+  if(id===uid)return myAns&&S&&myAns.g===S.gid&&myAns.i===S.qi?{a:myAns.a,ms:myAns.ms}:null;
+  if(mode==='solo')return soloBots[id]&&S&&S.phase==='q'&&soloBots[id].ms<=elapsedMs()?soloBots[id]:null;
+  const p=roster.find(x=>x.id===id);
+  return p&&S&&p.qg===S.gid&&p.qi===S.qi&&typeof p.qa==='number'?{a:p.qa,ms:p.qms}:null;
+};
+const elapsedMs=()=>performance.now()-qT0;
+function answer(d){
+  if(!S||S.phase!=='q'||isSpec()||myAns&&myAns.g===S.gid&&myAns.i===S.qi)return;
+  if(elapsedMs()>S.T*1000+300)return;
+  myAns={g:S.gid,i:S.qi,a:d,ms:Math.min(S.T*1000,Math.round(elapsedMs()))};
+  Snd.play('place');
+  if(mode==='online')beat();
+  render();
+  if(mode==='solo')setTimeout(()=>{if(S&&S.phase==='q')doReveal();},700);
+}
+function doReveal(){
+  if(!S||S.phase!=='q')return;
+  const s=CLONE(S),an={};
+  s.players.forEach(p=>{const r=mode==='solo'?(p.id===uid?ansOf(p.id):soloBots[p.id]):ansOf(p.id);if(r)an[p.id]=r;});
+  qzReveal(s,an);commit(s);
+}
+function doNext(){
+  if(!S||S.phase!=='reveal')return;
+  const s=CLONE(S);qzNext(s);myAns=null;commit(s);
+}
+function hostTick(){
+  if(!S||!isHost()||mode==='solo'&&S.phase==='q')return;
+  const now=Date.now();
+  if(S.phase==='q'){
+    const on=new Set(roomPlayers(ROOM).map(p=>p.id)),need=S.players.filter(p=>on.has(p.id)||p.id===uid);
+    if(!need.length||need.every(p=>ansOf(p.id))||now>S.t0+S.T*1000+GRACE)doReveal();
+  }else if(S.phase==='reveal'&&now>S.rt+REV_MS)doNext();
+}
+function tick(){
+  if(S&&S.phase==='q'){
+    const left=Math.max(0,S.T-elapsedMs()/1000);
+    const b=$('tbar'),n=$('tnum');
+    if(b)b.style.transform='scaleX('+(left/S.T)+')';
+    if(n){const v=Math.ceil(left);if(n.textContent!==String(v)){n.textContent=String(v);if(v<=5&&v>0&&!myAns)Snd.play('tick');}}
+    const c=$('acount');
+    if(c){
+      const need=S.players.filter(p=>mode==='solo'?!p.bot:true);
+      const got=need.filter(p=>ansOf(p.id)).length;c.textContent=got+' / '+need.length+' ont répondu';
+    }
+    if(mode==='solo'&&left<=0&&!isSpec())setTimeout(()=>{if(S&&S.phase==='q')doReveal();},0);
+  }
+  if(S&&S.phase==='reveal'){const r=$('rcount');if(r){const sec=Math.max(0,Math.ceil((S.rt+REV_MS-Date.now())/1000));if(mode==='solo')r.textContent='';else r.textContent='Suite dans '+sec+' s';}}
+  if(mode==='online')hostTick();
+  if(mode==='solo'&&S&&S.phase==='reveal'&&Date.now()>S.rt+REV_MS)doNext();
+}
+function startSolo(){
+  const names=['Karim','Yasmine','Omar','Salma'];
+  const ps=[{id:uid,name:myName||'Moi',av:myAv}].concat([...Array(cfg.bots)].map((_,i)=>({id:'bot'+i,name:names[i]+' 🤖',bot:true,av:AVATARS[(i*7+3)%AVATARS.length],skill:[.55,.7,.8,.9][i%4]})));
+  mode='solo';ROOM=0;myAns=null;qKey='';
+  const s=qzNew(ps,QB,cfg.cat,cfg.n,cfg.T);s.players.forEach((p,i)=>{if(ps[i].skill)p.skill=ps[i].skill;});
+  S=s;lastKey='';onLocalChange();render();
+}
+function endGameHost(){if(mode==='solo'){leaveRoom();return;}db.doc(gp(ROOM)).delete().catch(()=>{});}
+/* ---- rendus ---- */
+function avEl(p,cls){const a=validAv(p.av)?p.av:null;const e=h('span',{class:'av'+(cls?' '+cls:''),style:'background:hsl('+hue(p.id)+' 45% 38%)'});if(a){e.innerHTML=avSVGa(a);e.classList.add('has');}else e.textContent=(p.name||'?')[0].toUpperCase();return e;}
+function renderTop(sub,right){
+  const chip=myName?h('span',{class:'pchip',title:'Ton profil'},avEl({id:mySlug||uid,name:myName,av:myAv},'sm'),h('b',null,myName)):null;
+  const jeux=h('a',{class:'btn sm',href:'index.html#jeux'},'🎮 Jeux');
+  jeux.addEventListener('click',ev=>{ev.preventDefault();showLoader('f7');setTimeout(()=>{location.href='index.html#jeux';},650);});
+  return h('div',{class:'top'},h('div',{class:'brand'},'QUIZ',h('small',null,sub||'Questions pour tous')),
+    right||null,chip,h('button',{class:'btn sm',type:'button',onclick:()=>{Snd.set(!Snd.on);render();}},Snd.on?'🔊 Sons':'🔇 Sons'),jeux);
+}
+function render(){
+  const app=$('app');
+  let view;
+  if(!mode)view=renderPicker();else if(mode==='online'&&!S)view=renderLobby();else view=renderGame();
+  const keep=document.activeElement&&document.activeElement.id==='nm-in'?{v:document.activeElement.value,s:document.activeElement.selectionStart}:null;
+  app.replaceChildren(h('div',{class:'wrap'},view));
+  if(keep){const i=$('nm-in');if(i){i.focus();i.value=keep.v;try{i.setSelectionRange(keep.s,keep.s);}catch(e){}}}
+  tick();
+}
+function catChips(onpick){
+  const all=[['mix','🎲','Mélange']].concat(CATS);
+  return h('div',{class:'cats'},all.map(c=>h('button',{type:'button',class:'cat'+(cfg.cat===c[0]?' on':''),onclick:()=>{cfg.cat=c[0];onpick();}},h('span',{class:'ce'},c[1]),h('b',null,c[2]))));
+}
+const segEl=(vals,key,fmt,onpick)=>h('div',{class:'seg'},vals.map(v=>h('button',{type:'button',class:cfg[key]===v?'on':'',onclick:()=>{cfg[key]=v;onpick();}},fmt(v))));
+function renderPicker(){
+  const rooms=[1,2,3,4].map(n=>{
+    const ps=roomPlayers(n);
+    return h('button',{class:'rcard',type:'button',onclick:()=>joinRoom(n),disabled:!db||!(myName&&myName.trim().length>=2)},
+      h('b',null,'Table '+n),h('span',{class:'st '+(ps.length?'':'free')},ps.length?ps.length+' joueur'+(ps.length>1?'s':''):'Libre'),
+      h('span',{class:'muted'},ps.length?ps.map(p=>p.name).slice(0,6).join(', '):'Aucun joueur'));
+  });
+  const nm=h('input',{id:'nm-in',class:'t',maxlength:'16',placeholder:'Ton pseudo',value:myName,'aria-label':'Pseudo'});
+  nm.addEventListener('input',()=>{myName=nm.value.trim().slice(0,16);lsSet(NAME_K,myName);const dis=!db||myName.length<2;document.querySelectorAll('.rcard,#join-go').forEach(b=>b.disabled=dis);const sg=$('solo-go');if(sg)sg.disabled=myName.length<2;renderChat();});
+  const jb=pendingJoin?h('button',{id:'join-go',class:'btn primary',type:'button',disabled:!db||myName.length<2,onclick:()=>joinRoom(pendingJoin)},'➡ Rejoindre la table '+pendingJoin):null;
+  return[renderTop('Questions pour tous'),
+    pendingJoin?h('div',{class:'panel'},h('h2',null,'Tu as été invité(e) !'),h('p',{class:'muted'},'Choisis un pseudo pour rejoindre la table '+pendingJoin+'.'),nm,jb):null,
+    h('div',{class:'panel'},h('h2',null,'Quiz · le jeu des questions'),
+      h('p',{class:'muted'},'Une question pour tout le monde, 4 réponses, une seule est bonne. Plus tu réponds vite, plus tu marques de points. Les bonnes séries donnent des bonus !'),
+      h('div',{class:'rules'},
+        h('div',null,h('b',null,'Rejoindre'),' : choisis une table, ou scanne le QR code de l\'hôte avec ton téléphone.'),
+        h('div',null,h('b',null,'Catégories'),' : informatique, culture générale, sciences, sport, histoire & géo ou un mélange.'),
+        h('div',null,h('b',null,'Points'),' : jusqu\'à 1000 par question + bonus de série (jusqu\'à +250).')),
+      pendingJoin?null:h('div',{class:'stack'},h('p',{class:'muted'},'Ton pseudo :'),nm)),
+    h('div',{class:'panel'},h('h2',null,'Jouer en ligne'),h('div',{class:'rooms'},rooms),
+      !db?h('p',{class:'err'},'Connexion à la base impossible : seul le mode solo est disponible.'):null),
+    h('div',{class:'panel'},h('h2',null,'Solo contre l\'ordinateur'),
+      h('div',{class:'row'},h('span',null,'Catégorie')),catChips(render),
+      h('div',{class:'row'},h('span',null,'Questions'),segEl([10,15,20],'n',v=>String(v),render),h('span',null,'Temps'),segEl([15,20,30],'T',v=>v+' s',render)),
+      h('div',{class:'row'},h('span',null,'Adversaires'),segEl([0,1,2,3,4],'bots',v=>String(v),render)),
+      h('button',{id:'solo-go',class:'btn primary',type:'button',disabled:myName.length<2,onclick:startSolo},'🤖 Lancer la partie'))];
+}
+function qrEl(url){
+  const w=h('div',{class:'qr',role:'img','aria-label':'QR code pour rejoindre la table'});
+  try{const q=qrcode(0,'M');q.addData(url);q.make();w.innerHTML=q.createSvgTag({cellSize:6,margin:2,scalable:true});}catch(e){w.textContent='QR indisponible';}
+  return w;
+}
+function renderLobby(){
+  const ps=roomPlayers(ROOM),host=ps[0]&&ps[0].id===uid;
+  const hp=ps[0],ccat=host?cfg.cat:(hp&&hp.qc)||'mix',cn=host?cfg.n:(hp&&hp.qn)||10,ct=host?cfg.T:(hp&&hp.qt)||20;
+  const can=host&&ps.length>=2;const upd=()=>{beat();render();};
+  return[renderTop('Table '+ROOM,h('button',{class:'btn sm',type:'button',onclick:leaveRoom},'↩ Quitter la table')),
+    h('div',{class:'lobgrid'},
+      h('div',{class:'panel'},h('h2',null,'Rejoins la table '+ROOM),qrEl(joinUrl()),
+        h('p',{class:'muted ctr'},'Scanne le QR code avec ton téléphone, ou envoie ce lien :'),
+        h('button',{class:'btn sm',type:'button',onclick:()=>{const u=joinUrl();(navigator.clipboard?navigator.clipboard.writeText(u):Promise.reject()).then(()=>banner('Lien copié ✔','#7CE7B0')).catch(()=>prompt('Copie ce lien :',u));}},'📋 Copier le lien')),
+      h('div',{class:'panel'},h('h2',null,'Salle d\'attente'),
+        ...ps.slice(0,MAXP).map((p,i)=>h('div',{class:'pl'},avEl(p),h('b',null,p.name+(p.id===uid?' (toi)':'')),i===0?h('span',{class:'muted'},'Hôte'):null)),
+        ps.length>MAXP?h('p',{class:'muted'},'Seuls les '+MAXP+' premiers arrivés jouent.'):null,
+        host?h('div',{class:'stack'},h('div',{class:'row'},h('span',null,'Catégorie')),catChips(upd),
+          h('div',{class:'row'},h('span',null,'Questions'),segEl([10,15,20],'n',v=>String(v),upd),h('span',null,'Temps'),segEl([15,20,30],'T',v=>v+' s',upd)),
+          h('button',{class:'btn primary',type:'button',disabled:!can,onclick:startOnline},'▶ Lancer le quiz'),
+          can?null:h('p',{class:'muted'},'Il faut au moins 2 joueurs… partage le QR code.'))
+        :h('div',{class:'stack'},h('p',{class:'bigtxt'},catLbl(ccat)),h('p',{class:'muted'},cn+' questions · '+ct+' s par question'),h('p',{class:'muted'},'L\'hôte choisit la catégorie et lance la partie…'))))];
+}
+const COL=['#E5484D','#3B82F6','#F2B632','#2FB67C'];
+function board(s,n,delta){
+  const rk=qzRanking(s);
+  return h('ol',{class:'lb'},rk.slice(0,n).map((id,i)=>{
+    const p=s.players.find(x=>x.id===id),g=delta&&s.res?s.res.gain[id]:0;
+    return h('li',{class:id===uid?'me':''},h('i',null,String(i+1)),avEl(p,'sm'),h('b',null,p.name),(s.streak[id]>=2&&delta)?h('span',{class:'stk'},'🔥'+s.streak[id]):null,g?h('em',null,'+'+g):null,h('span',{class:'pts'},String(s.scores[id]||0)));
+  }));
+}
+function renderGame(){
+  const s=S,spec=isSpec(),q=QB[s.qs[s.qi]?s.qs[s.qi].i:0];
+  if(s.phase==='end')return renderEnd();
+  const perm=s.qs[s.qi].p,rev=s.phase==='reveal',mine=myAns&&myAns.g===s.gid&&myAns.i===s.qi?myAns.a:-1;
+  const topR=h('button',{class:'btn sm',type:'button',onclick:()=>{if(confirm('Quitter la partie ?'))leaveRoom();}},'↩ Quitter');
+  const opts=[0,1,2,3].map(d=>{
+    const txt=q.o[+perm[d]],good=perm[d]==='0';
+    const cls='ans a'+d+(rev?(good?' good':' dim'):'')+(!rev&&mine===d?' chosen':'')+(!rev&&mine>=0&&mine!==d?' dim':'');
+    return h('button',{type:'button',class:cls,disabled:rev||spec||mine>=0,onclick:()=>answer(d)},h('i',null,QZ_LET[d]),h('span',null,txt),rev?h('em',null,String(s.res.cnt[d])):null,rev&&good?h('u',null,'✔'):null);
+  });
+  const head=h('div',{class:'qhead'},h('span',{class:'qn'},'Question '+(s.qi+1)+' / '+s.qs.length),h('span',{class:'qcat'},catLbl(q.cat)),
+    h('span',{class:'qs'},'Score : ',h('b',null,String(s.scores[uid]||0))));
+  const view=[renderTop(catLbl(s.cat),topR),head];
+  const qcard=h('div',{class:'qcard'},h('h2',null,q.q));
+  if(!rev){
+    view.push(h('div',{class:'tm'},h('div',{class:'tbwrap'},h('div',{id:'tbar',class:'tbar'})),h('b',{id:'tnum',class:'tnum'},String(s.T))),qcard,h('div',{class:'ansg'},opts),
+      h('div',{class:'qfoot'},spec?h('p',{class:'muted'},'Tu regardes la partie.'):(mine>=0?h('p',{class:'muted'},'✔ Réponse envoyée, en attente des autres…'):h('p',{class:'muted'},'Choisis vite : plus tu réponds tôt, plus tu gagnes !')),h('span',{id:'acount',class:'muted'})));
+  }else{
+    const ok=s.res.ok[uid],gain=s.res.gain[uid]||0,st=s.streak[uid]||0;
+    const msg=spec?null:(mine<0?h('div',{class:'rmsg bad'},'⏱ Temps écoulé'):ok?h('div',{class:'rmsg ok'},'✔ Bonne réponse ! ',h('b',null,'+'+gain),st>=2?h('span',null,' 🔥 série de '+st):null):h('div',{class:'rmsg bad'},'✖ Raté… la bonne réponse : '+q.o[0]));
+    view.push(qcard,h('div',{class:'ansg'},opts),msg,
+      h('div',{class:'panel lbp'},h('h2',null,'Classement'),board(s,5,true)),
+      h('div',{class:'qfoot'},h('span',{id:'rcount',class:'muted'}),(mode==='solo'||isHost())?h('button',{class:'btn primary',type:'button',onclick:doNext},s.qi+1>=s.qs.length?'🏆 Résultats':'Question suivante ▶'):null));
+  }
+  return view;
+}
+function renderEnd(){
+  const s=S,rk=s.rank&&s.rank.length?s.rank:qzRanking(s);
+  const P=id=>s.players.find(p=>p.id===id);
+  const pod=[1,0,2].filter(i=>rk[i]).map(i=>{const p=P(rk[i]);return h('div',{class:'pod p'+(i+1)},h('div',{class:'pm'},['🥇','🥈','🥉'][i]),avEl(p),h('b',null,p.name),h('span',null,String(s.scores[p.id]||0)),h('div',{class:'bar'}));});
+  const myPos=rk.indexOf(uid)+1;
+  return[renderTop('Résultats'),
+    h('div',{class:'panel endp'},h('h2',null,'🏆 Classement final'),
+      !isSpec()?h('p',{class:'bigtxt'},myPos===1?'Tu as gagné ! 🎉':'Tu termines '+myPos+(myPos===1?'er':'e')+' sur '+rk.length):null,
+      h('div',{class:'podium'},pod),
+      h('ol',{class:'lb'},rk.map((id,i)=>{const p=P(id);return h('li',{class:id===uid?'me':''},h('i',null,String(i+1)),avEl(p,'sm'),h('b',null,p.name),h('span',{class:'pts'},String(s.scores[id]||0)));})),
+      h('div',{class:'row ctr'},
+        (mode==='solo'||isHost())?h('button',{class:'btn primary',type:'button',onclick:endGameHost},mode==='solo'?'↩ Menu':'🔁 Rejouer'):h('p',{class:'muted'},'L\'hôte peut relancer une partie…'),
+        h('button',{class:'btn',type:'button',onclick:leaveRoom},'Quitter')))];
+}
+/* ---- démarrage ---- */
+async function boot(){
+  setTimeout(hideLoader,6000);
+  uid=lsGet('f7id');if(!uid){uid='g_'+Math.random().toString(36).slice(2,12);lsSet('f7id',uid);}
+  const m=/[?&]table=(\d{1,2})/.exec(location.search);if(m)pendingJoin=+m[1];
+  chatBox();render();
+  setInterval(tick,250);
+  if(window.F7_FIREBASE){
+    try{db=await loadFirebase(window.F7_FIREBASE);}catch(e){db=null;}
+    if(db){
+      lobUnsub=db.collection('lobby').onSnapshot(sn=>{
+        roster=sn.docs.filter(d=>d.id.startsWith('qz_')).map(d=>{const v=d.data()||{};return{id:d.id.slice(3),name:String(v.name||'?').slice(0,16),t:+v.t||0,seen:+v.seen||0,room:+v.room||0,pf:String(v.pf||''),av:v.av,qg:v.qg,qi:v.qi,qa:v.qa,qms:v.qms,qc:v.qc,qn:v.qn,qt:v.qt};});
+        if(!mode||(mode==='online'&&!S))render();
+      },()=>{});
+      setInterval(()=>{if(!mode||(mode==='online'&&!S))render();},8000);
+    }
+    startChat();
+    if(pendingJoin&&db&&myName.trim().length>=2)joinRoom(pendingJoin);else render();
+  }
+  hideLoader();
+  window.addEventListener('beforeunload',()=>{if(db&&ROOM)db.doc('lobby/qz_'+uid).delete().catch(()=>{});});
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden)beat();});
+}
+
+boot();
+</script></body></html>

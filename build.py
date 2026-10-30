@@ -4,7 +4,7 @@ cfg={k:os.environ.get(v,'') for k,v in keys.items()}
 missing=[v for k,v in keys.items() if not cfg[k]]
 if missing:sys.exit('Variables manquantes dans Netlify : '+', '.join(missing))
 os.makedirs('dist',exist_ok=True)
-for src,dst in (('index.template.html','index.html'),('ronda.template.html','ronda.html'),('rami.template.html','rami.html'),('mytho.template.html','mytho.html')):
+for src,dst in (('index.template.html','index.html'),('ronda.template.html','ronda.html'),('rami.template.html','rami.html'),('mytho.template.html','mytho.html'),('quiz.template.html','quiz.html')):
     s=open(src,encoding='utf-8').read()
     i=s.index('<script>')
     out=s[:i]+'<script>window.F7_FIREBASE='+json.dumps(cfg)+';</script>\n'+s[i:]

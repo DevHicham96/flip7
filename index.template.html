@@ -794,6 +794,8 @@ body[data-tb="pool"] .felt::after{opacity:.8;background:url("data:image/svg+xml,
 .gload.f7 .lg-fan i{color:#fff;text-shadow:0 2px 0 rgba(0,0,0,.3)}
 .gload.f7 .lg-fan i:nth-child(1){background:#E5484D}.gload.f7 .lg-fan i:nth-child(2){background:#F2B632}.gload.f7 .lg-fan i:nth-child(3){background:#3B82F6}.gload.f7 .lg-fan i:nth-child(4){background:#2FB67C}.gload.f7 .lg-fan i:nth-child(5){background:#9B6BFF}
 .gload.rd .lg-fan i{background:#FBF1D2;border-color:#fff;font-size:28px}
+.gload.qz .lg-fan i{color:#fff;text-shadow:0 2px 0 rgba(0,0,0,.3)}.gload.qz .lg-fan i:nth-child(1){background:#E5484D}.gload.qz .lg-fan i:nth-child(2){background:#F2B632}.gload.qz .lg-fan i:nth-child(3){background:#3B82F6}.gload.qz .lg-fan i:nth-child(4){background:#2FB67C}.gload.qz .lg-fan i:nth-child(5){background:#9B6BFF}
+.hub-c.qz .hub-art span{display:grid;place-items:center;width:78px;height:78px;border-radius:16px;border:3px solid rgba(0,0,0,.25);box-shadow:0 6px 0 rgba(0,0,0,.28);font:800 38px var(--f-display);line-height:1}.hub-c.qz .hub-art span:first-child{background:linear-gradient(#5B9BF8,#2C63D6);transform:rotate(-8deg) translateX(8px)}.hub-c.qz .hub-art span:last-child{background:linear-gradient(#F7C948,#D69A12);transform:rotate(8deg) translateX(-8px)}
 .gload.my .lg-fan i{background:#fffdf6;border-color:#fff;font-size:32px;color:#1b1b1b}
 .gload.rm .lg-fan i{background:#fffdf6;border-color:#fff;font-size:34px;color:#1b1b1b}.gload.rm .lg-fan i:nth-child(even){color:#c8232c}
 .gload .lg-sign{position:relative;z-index:1;padding:12px 34px;border-radius:16px;background:linear-gradient(#8A5528,#5E3516);box-shadow:0 0 0 3px #3b2010,0 8px 0 rgba(0,0,0,.18),inset 0 2px 0 rgba(255,255,255,.25);color:#FFE066;font:800 clamp(22px,6vw,34px) 'Unbounded',system-ui,sans-serif;letter-spacing:.06em;text-shadow:0 3px 0 rgba(0,0,0,.4)}
@@ -870,7 +872,7 @@ h2{color:#E8632B;text-shadow:0 2px 0 rgba(255,246,210,.9),0 3px 0 rgba(120,60,10
 #hub::after{content:'';position:fixed;left:0;right:0;bottom:0;height:26vh;pointer-events:none;background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 300' preserveAspectRatio='none'><path d='M0 120 C200 40 380 60 560 120 S950 170 1200 80 V300 H0Z' fill='%237BC36B'/><path d='M0 190 C220 120 420 150 640 200 S1000 230 1200 160 V300 H0Z' fill='%234FA24A'/><path d='M0 250 C300 210 600 260 900 235 S1120 230 1200 245 V300 H0Z' fill='%232F8240'/></svg>") bottom/100% 100% no-repeat}
 .hub-in{position:relative;z-index:1;width:min(1060px,100%);display:grid;gap:14px;text-align:center}
 .hub-in h2{font-size:28px}.hub-s{color:#4A2B10;font-weight:700}
-.hub-g{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}.hub-c.f7 .hub-art .logo{width:min(100%,250px);height:auto;max-height:100px}.hub-c small{overflow-wrap:anywhere}
+.hub-g{display:grid;grid-template-columns:repeat(auto-fit,minmax(196px,1fr));gap:14px}.hub-c.f7 .hub-art .logo{width:min(100%,250px);height:auto;max-height:100px}.hub-c small{overflow-wrap:anywhere}
 .hub-c{display:grid;gap:8px;justify-items:center;padding:16px;border-radius:20px;cursor:pointer;font:inherit;color:#4A2B10;background:radial-gradient(ellipse at 50% 15%,#FFF7D6,#F3E0A0);border:4px solid #7A4A24;box-shadow:0 0 0 2px #3b2010,inset 0 0 0 2px #B88B45,0 8px 0 #3b2010,0 16px 24px rgba(0,0,0,.3);transition:transform .15s}
 .hub-c:hover{transform:translateY(-6px) rotate(-.6deg)}.hub-c:active{transform:translateY(2px)}
 .hub-art{min-height:130px;display:flex;align-items:center;justify-content:center;gap:0}.hub-art svg{height:100px;width:auto}
@@ -3222,7 +3224,7 @@ let hubWanted=true;
 function ssGet(k){try{return sessionStorage.getItem(k);}catch(e){return null;}}
 function ssSet(k,v){try{sessionStorage.setItem(k,v);}catch(e){}}
 function hideHub(){const o=$('hub');if(o)o.remove();}
-const LD_INNER={f7:'<div class="lg-cloud c1"></div><div class="lg-cloud c2"></div><div class="lg-fan" aria-hidden="true"><i>7</i><i>7</i><i>7</i><i>7</i><i>7</i></div><div class="lg-sign">Loading<b>.</b><b>.</b><b>.</b></div><div class="lg-bar" aria-hidden="true"></div>',my:'<div class="lg-cloud c1"></div><div class="lg-cloud c2"></div><div class="lg-fan" aria-hidden="true"><i>🤥</i><i>♠</i><i>🫵</i><i>♥</i><i>🤥</i></div><div class="lg-sign">Loading<b>.</b><b>.</b><b>.</b></div><div class="lg-bar" aria-hidden="true"></div>',rm:'<div class="lg-cloud c1"></div><div class="lg-cloud c2"></div><div class="lg-fan" aria-hidden="true"><i>♠</i><i>♥</i><i>🃏</i><i>♦</i><i>♣</i></div><div class="lg-sign">Loading<b>.</b><b>.</b><b>.</b></div><div class="lg-bar" aria-hidden="true"></div>',rd:'<div class="lg-cloud c1"></div><div class="lg-cloud c2"></div><div class="lg-fan" aria-hidden="true"><i>🪙</i><i>🗡️</i><i>🪵</i><i>🍵</i><i>🪙</i></div><div class="lg-sign">Loading<b>.</b><b>.</b><b>.</b></div><div class="lg-bar" aria-hidden="true"></div>'};
+const LD_INNER={qz:'<div class="lg-cloud c1"></div><div class="lg-cloud c2"></div><div class="lg-fan" aria-hidden="true"><i>❓</i><i>💡</i><i>🏆</i><i>⚡</i><i>❓</i></div><div class="lg-sign">Loading<b>.</b><b>.</b><b>.</b></div><div class="lg-bar" aria-hidden="true"></div>',f7:'<div class="lg-cloud c1"></div><div class="lg-cloud c2"></div><div class="lg-fan" aria-hidden="true"><i>7</i><i>7</i><i>7</i><i>7</i><i>7</i></div><div class="lg-sign">Loading<b>.</b><b>.</b><b>.</b></div><div class="lg-bar" aria-hidden="true"></div>',my:'<div class="lg-cloud c1"></div><div class="lg-cloud c2"></div><div class="lg-fan" aria-hidden="true"><i>🤥</i><i>♠</i><i>🫵</i><i>♥</i><i>🤥</i></div><div class="lg-sign">Loading<b>.</b><b>.</b><b>.</b></div><div class="lg-bar" aria-hidden="true"></div>',rm:'<div class="lg-cloud c1"></div><div class="lg-cloud c2"></div><div class="lg-fan" aria-hidden="true"><i>♠</i><i>♥</i><i>🃏</i><i>♦</i><i>♣</i></div><div class="lg-sign">Loading<b>.</b><b>.</b><b>.</b></div><div class="lg-bar" aria-hidden="true"></div>',rd:'<div class="lg-cloud c1"></div><div class="lg-cloud c2"></div><div class="lg-fan" aria-hidden="true"><i>🪙</i><i>🗡️</i><i>🪵</i><i>🍵</i><i>🪙</i></div><div class="lg-sign">Loading<b>.</b><b>.</b><b>.</b></div><div class="lg-bar" aria-hidden="true"></div>'};
 function showLoader(k){let l=$('gload');if(!l){l=document.createElement('div');l.id='gload';document.body.append(l);}l.className='gload '+k;l.innerHTML=LD_INNER[k]||LD_INNER.f7;}
 function endLoader(){const l=$('gload');if(!l)return;l.classList.add('out');setTimeout(()=>l.remove(),600);}
 function tryHub(){
@@ -3236,7 +3238,7 @@ function showHub(){
   if($('hub'))return;
   const nm=(prof&&prof.name)||lsGet('f7name')||'';
   const logo=(document.querySelector('.logo')||{outerHTML:'<b>FLIP 7</b>'}).outerHTML;
-  const choose=g=>{hubWanted=false;showLoader(g==='flip7'?'f7':g==='rami'?'rm':g==='mytho'?'my':'rd');if(g==='flip7'){ssSet('f7game','flip7');try{history.replaceState(null,'',location.pathname);}catch(e){}setTimeout(()=>{hideHub();endLoader();},700);}else setTimeout(()=>{location.href=g==='rami'?'rami.html':g==='mytho'?'mytho.html':'ronda.html';},700);};
+  const choose=g=>{hubWanted=false;showLoader(g==='flip7'?'f7':g==='rami'?'rm':g==='mytho'?'my':g==='quiz'?'qz':'rd');if(g==='flip7'){ssSet('f7game','flip7');try{history.replaceState(null,'',location.pathname);}catch(e){}setTimeout(()=>{hideHub();endLoader();},700);}else setTimeout(()=>{location.href=g==='rami'?'rami.html':g==='mytho'?'mytho.html':g==='quiz'?'quiz.html':'ronda.html';},700);};
   const card=(cls,art,title,sub,go)=>h('button',{class:'hub-c '+cls,type:'button',onclick:go},h('div',{class:'hub-art',html:art}),h('b',null,title),h('small',null,sub),h('span',{class:'hub-go'},'Jouer ›'));
   const ov=h('div',{id:'hub',role:'dialog','aria-label':'Choix du jeu'},
     h('div',{class:'hub-in'},
@@ -3245,7 +3247,8 @@ function showHub(){
         card('f7',logo,'Flip 7','Pioche, tente ta chance, 2 à 8 joueurs',()=>choose('flip7')),
         card('rd','<img src="'+HUB_IMG2+'" alt=""><img src="'+HUB_IMG+'" alt="">','Ronda','Jeu de cartes marocaines, 2 à 4 joueurs',()=>choose('ronda')),
         card('rm','<span>A♥</span><span>K♠</span>','Rami','Rami traditionnel, 2 à 5 joueurs',()=>choose('rami')),
-        card('my','<span>🤥</span><span>🫵</span>','Mytho','Bluff et accusations, 3 à 8 joueurs',()=>choose('mytho')))));
+        card('my','<span>🤥</span><span>🫵</span>','Mytho','Bluff et accusations, 3 à 8 joueurs',()=>choose('mytho')),
+        card('qz','<span>❓</span><span>🏆</span>','Quiz','Questions pour tous, scanne le QR pour jouer',()=>choose('quiz')))));
   document.body.append(ov);
 }
 
