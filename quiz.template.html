@@ -3236,6 +3236,7 @@ function hideLoader(){
 const NAME_K='f7name',BASE=400;
 let db=null,uid=null,myName=lsGet(NAME_K)||'',mySlug=lsGet('f7prof')||'',ROOM=0,mode=null;
 let S=null,roster=[],stateUnsub=null,lobUnsub=null,hb=null,chain=Promise.resolve(),myAns=null,qT0=0,qKey='',soloBots={},lastKey='',pendingJoin=0,celebrated='';
+const seenLive=new Set();
 let cfg={cats:CATS.map(c=>c[0]),n:10,T:20,bots:2};
 const seenGet=()=>{try{return new Set(JSON.parse(lsGet('qzseen')||'[]'));}catch(e){return new Set();}};
 const seenAdd=ids=>{const a=[...seenGet(),...ids].slice(-900);lsSet('qzseen',JSON.stringify(a));};
@@ -3295,13 +3296,19 @@ function startOnline(){
   const st=qzNew(ps.map(p=>({id:p.id,name:p.name,av:p.av})),QB,cfg.cats,cfg.n,cfg.T,seenGet());seenAdd(st.qs.map(q=>q.i));commit(st);
 }
 function commit(s){
-  S=s;onLocalChange();render();
+  seenLive.add(s.gid);S=s;onLocalChange();render();
   if(mode==='online'){const c=CLONE(s);chain=chain.then(()=>db.doc(gp(ROOM)).set(c)).catch(()=>banner('Action non envoyée, réessaie.','#E5484D'));}
 }
 function onState(d){
   const prev=S;
   if(!d){if(mode==='online'){S=null;myAns=null;qKey='';render();}return;}
   if(prev&&d.rev<prev.rev&&d.gid===prev.gid)return;
+  /* vieille partie restée dans la base : on l'ignore et on affiche la salle d'attente */
+  if(!prev||prev.gid!==d.gid){
+    const act=Math.max(d.t0||0,d.rt||0),old=d.phase==='end'||Date.now()-act>90000;
+    if(old&&!seenLive.has(d.gid)){if(prev){S=null;myAns=null;qKey='';render();}return;}
+  }
+  if(d.phase!=='end')seenLive.add(d.gid);
   S=d;onLocalChange();render();
 }
 /* nouvelle question détectée -> chrono local */
