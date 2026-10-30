@@ -2445,18 +2445,536 @@ var qrcode = function() {
     return qrcode;
 }));
 
-/*BANK_START*/const CATS=[['inf','💻','Informatique'],['cg','🌍','Culture générale'],['sci','🔬','Sciences'],['spo','⚽','Sport'],['his','🏛️','Histoire & Géo']];/* [catégorie, question, bonne réponse, 3 mauvaises réponses] */const QB_RAW=[['inf','Que signifie HTML ?','HyperText Markup Language','HighText Machine Language','Hyper Tool Multi Language','Home Tool Markup Language'],['inf','Quel langage sert surtout à mettre en forme une page web ?','CSS','SQL','Python','Bash'],['inf','Qui a créé le noyau Linux en 1991 ?','Linus Torvalds','Bill Gates','Steve Jobs','Dennis Ritchie'],['inf','Que signifie « CPU » ?','Central Processing Unit','Computer Personal Unit','Central Program Utility','Core Power Unit'],['inf','Quel protocole affiche un cadenas dans le navigateur ?','HTTPS','FTP','SMTP','DHCP'],['inf','Quelle commande Git envoie tes commits vers le dépôt distant ?','git push','git pull','git clone','git stash'],['inf','Quel langage a été créé par Guido van Rossum ?','Python','Java','Ruby','Go'],['inf','Combien de bits compose un octet ?','8','4','16','32'],['inf','Que signifie « SQL » ?','Structured Query Language','Simple Question Language','Standard Quick Link','Server Queue Logic'],['inf','Quel code HTTP signifie « page non trouvée » ?','404','200','500','301'],['inf','Que signifie « RAM » ?','Random Access Memory','Read Only Memory','Rapid Action Module','Remote Access Method'],['inf','Kubernetes sert principalement à…','Orchestrer des conteneurs','Compiler du code','Créer des bases de données','Éditer des images'],['inf','Quelle structure de données fonctionne en « LIFO » ?','La pile (stack)','La file (queue)','Le tableau trié','L\'arbre binaire'],['inf','Quel est le port par défaut du protocole HTTP ?','80','21','443','25'],['inf','Quel format de données utilise des paires clé/valeur entre accolades ?','JSON','CSV','XML','Markdown'],['inf','Que fait la commande « ls » sous Linux ?','Liste les fichiers','Supprime un fichier','Change de dossier','Affiche l\'heure'],['inf','Que signifie « API » ?','Application Programming Interface','Advanced Program Installer','Automatic Process Integration','Applied Python Interpreter'],['inf','Quel langage Apple a-t-il présenté en 2014 pour iOS ?','Swift','Kotlin','Dart','Rust'],['inf','Que signifie « DNS » ?','Domain Name System','Data Network Service','Digital Node Server','Direct Name Syntax'],['inf','Quelle couleur correspond au code #FF0000 ?','Rouge','Vert','Bleu','Noir'],['inf','Qui a inventé le World Wide Web ?','Tim Berners-Lee','Vint Cerf','Mark Zuckerberg','Alan Turing'],['inf','Quel fichier configure un pipeline GitLab CI ?','.gitlab-ci.yml','Jenkinsfile','pipeline.json','docker-compose.yml'],['inf','Que signifie « SSH » ?','Secure Shell','Simple Server Host','System Security Hub','Safe Socket Handler'],['inf','En JavaScript, que vaut 0.1 + 0.2 ?','0.30000000000000004','0.3','0.2','NaN'],['inf','En Java, quel mot-clé empêche l\'héritage d\'une classe ?','final','static','abstract','private'],['inf','Que signifie « IDE » ?','Integrated Development Environment','Internal Debug Engine','Interactive Data Exchange','Intelligent Design Editor'],['inf','Quel framework Java est très utilisé pour créer des microservices ?','Spring Boot','Django','Laravel','Rails'],['inf','Quel outil de gestion de versions a aussi été créé par Linus Torvalds ?','Git','SVN','Mercurial','CVS'],['inf','Que signifie « USB » ?','Universal Serial Bus','Unified System Board','Ultra Speed Buffer','Universal Storage Block'],['inf','Quelle balise HTML crée un lien hypertexte ?','<a>','<p>','<div>','<img>'],['cg','Quelle est la capitale de l\'Australie ?','Canberra','Sydney','Melbourne','Perth'],['cg','Qui a peint la Joconde ?','Léonard de Vinci','Michel-Ange','Raphaël','Botticelli'],['cg','Quel est le plus grand océan du monde ?','Le Pacifique','L\'Atlantique','L\'Indien','L\'Arctique'],['cg','Quel est le plus long fleuve de France ?','La Loire','La Seine','Le Rhône','La Garonne'],['cg','Qui a écrit « Les Misérables » ?','Victor Hugo','Émile Zola','Alexandre Dumas','Gustave Flaubert'],['cg','Quel est le plus petit pays du monde ?','Le Vatican','Monaco','Saint-Marin','Malte'],['cg','Quelle est la monnaie du Japon ?','Le yen','Le won','Le yuan','Le baht'],['cg','En quelle année la tour Eiffel a-t-elle été inaugurée ?','1889','1900','1850','1925'],['cg','Quelle est la capitale du Maroc ?','Rabat','Casablanca','Marrakech','Fès'],['cg','Qui a écrit « Le Petit Prince » ?','Antoine de Saint-Exupéry','Jules Verne','Albert Camus','Marcel Pagnol'],['cg','Quelle est la plus haute montagne du monde ?','L\'Everest','Le K2','Le Mont Blanc','Le Kilimandjaro'],['cg','Quelles sont les couleurs du drapeau italien ?','Vert, blanc, rouge','Bleu, blanc, rouge','Rouge, jaune, vert','Blanc, rouge, noir'],['cg','Dans quel pays se trouve le Machu Picchu ?','Le Pérou','Le Mexique','La Bolivie','Le Chili'],['cg','Qui a été le premier homme à marcher sur la Lune ?','Neil Armstrong','Buzz Aldrin','Youri Gagarine','John Glenn'],['cg','Quel est le plus grand désert chaud du monde ?','Le Sahara','Le Gobi','Le Kalahari','L\'Atacama'],['cg','Quelle mer sépare l\'Europe de l\'Afrique ?','La Méditerranée','La mer Rouge','La mer Noire','La mer Baltique'],['cg','Combien de pays compte l\'Union européenne en 2026 ?','27','25','28','30'],['cg','Quelle est la plus grande ville du Maroc ?','Casablanca','Rabat','Tanger','Agadir'],['cg','Qui a composé la 9e symphonie « Ode à la joie » ?','Beethoven','Mozart','Bach','Chopin'],['cg','De quel pays la pizza est-elle originaire ?','L\'Italie','L\'Espagne','La Grèce','La France'],['cg','Quelle est la capitale du Canada ?','Ottawa','Toronto','Montréal','Vancouver'],['cg','Qui a écrit « Roméo et Juliette » ?','William Shakespeare','Molière','Victor Hugo','Oscar Wilde'],['cg','Quel est le plus grand pays du monde par la superficie ?','La Russie','Le Canada','La Chine','Les États-Unis'],['cg','Combien y a-t-il de cases sur un échiquier ?','64','32','100','81'],['cg','Quel animal est le symbole de la Chine ?','Le panda','Le dragon rouge','Le tigre','La grue'],['cg','Quel peintre a réalisé « La Nuit étoilée » ?','Vincent van Gogh','Claude Monet','Pablo Picasso','Salvador Dalí'],['cg','Combien de touches compte un piano standard ?','88','76','92','64'],['sci','Quel est le symbole chimique de l\'or ?','Au','Or','Ag','Go'],['sci','Quelle planète est la plus proche du Soleil ?','Mercure','Vénus','Mars','La Terre'],['sci','Quelle est la formule chimique de l\'eau ?','H2O','CO2','O2','NaCl'],['sci','Quelle est la vitesse approximative de la lumière ?','300 000 km/s','150 000 km/s','30 000 km/s','3 000 000 km/s'],['sci','Quel est l\'os le plus long du corps humain ?','Le fémur','Le tibia','L\'humérus','Le radius'],['sci','Quel gaz est le plus abondant dans l\'atmosphère terrestre ?','L\'azote','L\'oxygène','Le dioxyde de carbone','L\'hydrogène'],['sci','Combien de planètes compte le système solaire ?','8','9','7','10'],['sci','Qui a formulé la théorie de la relativité ?','Albert Einstein','Isaac Newton','Galilée','Niels Bohr'],['sci','Quel est le plus grand organe du corps humain ?','La peau','Le foie','Le cœur','Les poumons'],['sci','À quelle température l\'eau bout-elle (pression normale) ?','100 °C','90 °C','80 °C','120 °C'],['sci','Quelle particule porte une charge électrique négative ?','L\'électron','Le proton','Le neutron','Le photon'],['sci','Quelle planète est surnommée « la planète rouge » ?','Mars','Jupiter','Vénus','Saturne'],['sci','Que signifie « ADN » ?','Acide désoxyribonucléique','Acide dynamique nucléaire','Analyse des noyaux','Atome double nucléaire'],['sci','Combien de dents compte un adulte (dents de sagesse comprises) ?','32','28','30','36'],['sci','Quelle unité mesure la force ?','Le newton','Le joule','Le watt','Le pascal'],['sci','Comment s\'appelle notre galaxie ?','La Voie lactée','Andromède','Le Triangle','Sombrero'],['sci','Quel est le plus grand animal vivant ?','La baleine bleue','L\'éléphant d\'Afrique','Le requin-baleine','La girafe'],['sci','Quel gaz les plantes rejettent-elles par la photosynthèse ?','L\'oxygène','L\'azote','Le méthane','L\'hélium'],['sci','Quel est le symbole chimique du sodium ?','Na','So','S','Sd'],['sci','Quel est le pH d\'une solution neutre ?','7','0','10','14'],['sci','Qui a découvert la pénicilline ?','Alexander Fleming','Louis Pasteur','Marie Curie','Robert Koch'],['sci','Combien de chromosomes compte l\'être humain ?','46','23','48','44'],['sci','Quel métal est liquide à température ambiante ?','Le mercure','Le plomb','L\'aluminium','Le cuivre'],['sci','Quelle est la plus grande planète du système solaire ?','Jupiter','Saturne','Neptune','La Terre'],['sci','Combien d\'os compte le squelette d\'un adulte ?','206','180','250','300'],['sci','Quelle est la plus petite unité du vivant ?','La cellule','L\'atome','L\'organe','Le tissu'],['sci','Quel scientifique est associé à la loi de la gravitation universelle ?','Isaac Newton','Nikola Tesla','Charles Darwin','Max Planck'],['spo','Combien de joueurs une équipe de football a-t-elle sur le terrain ?','11','10','9','12'],['spo','Quel pays a gagné la Coupe du monde de football 2018 ?','La France','La Croatie','La Belgique','L\'Allemagne'],['spo','Quel pays a gagné la Coupe du monde de football 2022 ?','L\'Argentine','La France','Le Brésil','Le Maroc'],['spo','Dans quel sport joue-t-on à Roland-Garros ?','Le tennis','Le golf','Le rugby','Le badminton'],['spo','Combien d\'anneaux compte le drapeau olympique ?','5','4','6','7'],['spo','Combien de points vaut un essai au rugby à XV ?','5','3','7','2'],['spo','Quel pays a accueilli les Jeux olympiques d\'été de 2024 ?','La France','Le Japon','Le Brésil','L\'Australie'],['spo','À quelle hauteur se trouve un panier de basket ?','3,05 m','2,80 m','3,50 m','2,40 m'],['spo','Quelle est la distance d\'un marathon ?','42,195 km','40 km','21,097 km','50 km'],['spo','Dans quel sport parle-t-on de « birdie » ?','Le golf','Le tennis','Le cricket','Le hockey'],['spo','Qui est surnommé « CR7 » ?','Cristiano Ronaldo','Karim Benzema','Kylian Mbappé','Neymar'],['spo','Quel sport utilise un volant ?','Le badminton','Le tennis','Le squash','Le ping-pong'],['spo','De quelle couleur est le maillot du leader du Tour de France ?','Jaune','Vert','À pois','Blanc'],['spo','Combien de joueurs par équipe sont sur le terrain au volley-ball ?','6','5','7','8'],['spo','Quel pays a inventé le judo ?','Le Japon','La Chine','La Corée','La Thaïlande'],['spo','Quel club joue ses matchs au Camp Nou ?','Le FC Barcelone','Le Real Madrid','L\'Atlético de Madrid','Valence'],['spo','Quelle carte signifie l\'expulsion d\'un joueur au football ?','La rouge','La jaune','La verte','La blanche'],['spo','Qui a remporté le Ballon d\'or 2023 ?','Lionel Messi','Erling Haaland','Karim Benzema','Kylian Mbappé'],['spo','Quel pays compte le plus de Coupes du monde de football ?','Le Brésil','L\'Allemagne','L\'Italie','L\'Argentine'],['spo','Dans quel sport marque-t-on un « ippon » ?','Le judo','Le karaté','Le sumo','Le kendo'],['spo','Quelle est la longueur d\'une piscine olympique ?','50 mètres','25 mètres','100 mètres','33 mètres'],['spo','Combien dure un quart-temps en NBA ?','12 minutes','10 minutes','15 minutes','8 minutes'],['spo','Quel club français a remporté sa première Ligue des champions en 2025 ?','Le Paris Saint-Germain','L\'Olympique de Marseille','Lyon','Monaco'],['spo','Au tennis, comment s\'appelle un score de zéro point ?','Zéro (« love »)','Rien','Nul','Vide'],['spo','Quel sport pratique Tony Parker ?','Le basket-ball','Le football','Le tennis','Le handball'],['his','Où Napoléon Ier est-il mort ?','Sainte-Hélène','L\'île d\'Elbe','Paris','Waterloo'],['his','En quelle année le mur de Berlin est-il tombé ?','1989','1961','1991','1975'],['his','Qui fut le premier président de la Ve République ?','Charles de Gaulle','Georges Pompidou','François Mitterrand','René Coty'],['his','En quelle année a débuté la Seconde Guerre mondiale ?','1939','1914','1945','1936'],['his','Dans quel pays se trouvent les pyramides de Gizeh ?','L\'Égypte','Le Mexique','Le Soudan','L\'Irak'],['his','Quelle est la capitale du Brésil ?','Brasilia','Rio de Janeiro','São Paulo','Salvador'],['his','Quel roi a fait construire le château de Versailles ?','Louis XIV','Louis XVI','François Ier','Henri IV'],['his','Quel fleuve traverse Paris ?','La Seine','La Loire','La Marne','Le Rhin'],['his','En quelle année l\'homme a-t-il marché sur la Lune ?','1969','1957','1975','1981'],['his','Quelle civilisation a construit le Machu Picchu ?','Les Incas','Les Mayas','Les Aztèques','Les Olmèques'],['his','Quel est le pays le plus peuplé du monde en 2026 ?','L\'Inde','La Chine','Les États-Unis','L\'Indonésie'],['his','Quel est le plus haut sommet d\'Europe occidentale ?','Le Mont Blanc','Le Cervin','L\'Etna','Le Mulhacén'],['his','La guerre de Cent Ans a opposé la France à…','L\'Angleterre','L\'Espagne','L\'Allemagne','L\'Italie'],['his','Quel détroit sépare l\'Espagne du Maroc ?','Gibraltar','Bosphore','Messine','Magellan'],['his','Quelle est la capitale de la Turquie ?','Ankara','Istanbul','Izmir','Antalya'],['his','Quel pays d\'Afrique est le plus peuplé ?','Le Nigeria','L\'Égypte','L\'Éthiopie','L\'Afrique du Sud'],['his','Quel roi de France a été guillotiné en 1793 ?','Louis XVI','Louis XIV','Charles X','Louis XV'],['his','Quel pays a offert la statue de la Liberté aux États-Unis ?','La France','L\'Angleterre','L\'Italie','L\'Espagne'],['his','En quelle année a débuté la Première Guerre mondiale ?','1914','1918','1905','1923'],['his','Quel océan borde la côte ouest du Maroc ?','L\'Atlantique','L\'Indien','Le Pacifique','L\'Arctique'],['his','Quelle est la capitale du Japon ?','Tokyo','Kyoto','Osaka','Séoul'],['his','Quel est le plus grand pays d\'Afrique par la superficie ?','L\'Algérie','La RD Congo','Le Soudan','La Libye'],['his','Quelle est la capitale de l\'Allemagne ?','Berlin','Munich','Hambourg','Francfort'],['his','Qui fut la dernière reine d\'Égypte ptolémaïque ?','Cléopâtre','Néfertiti','Hatshepsout','Isis'],['his','Quel continent est le plus peuplé ?','L\'Asie','L\'Afrique','L\'Europe','L\'Amérique du Nord']];const QB=QB_RAW.map((r,i)=>({id:i,cat:r[0],q:r[1],o:[r[2],r[3],r[4],r[5]]}));/*BANK_END*/
+/*BANK_START*/
+const CATS=[['inf','💻','Informatique'],['cg','🌍','Culture générale'],['sci','🔬','Sciences'],['spo','⚽','Sport'],['his','🏛️','Histoire & Géo'],['eco','💹','Économie & Diplomatie'],['geo','🧭','Géopolitique & Modèles'],['arc','🏺','Archéologie']];
+/* [catégorie, question, bonne réponse, 3 mauvaises réponses] */
+const QB_RAW=[
+['inf','Que signifie HTML ?','HyperText Markup Language','HighText Machine Language','Hyper Tool Multi Language','Home Tool Markup Language'],
+['inf','Quel langage sert surtout à mettre en forme une page web ?','CSS','SQL','Python','Bash'],
+['inf','Qui a créé le noyau Linux en 1991 ?','Linus Torvalds','Bill Gates','Steve Jobs','Dennis Ritchie'],
+['inf','Que signifie « CPU » ?','Central Processing Unit','Computer Personal Unit','Central Program Utility','Core Power Unit'],
+['inf','Quel protocole affiche un cadenas dans le navigateur ?','HTTPS','FTP','SMTP','DHCP'],
+['inf','Quelle commande Git envoie tes commits vers le dépôt distant ?','git push','git pull','git clone','git stash'],
+['inf','Quel langage a été créé par Guido van Rossum ?','Python','Java','Ruby','Go'],
+['inf','Combien de bits compose un octet ?','8','4','16','32'],
+['inf','Que signifie « SQL » ?','Structured Query Language','Simple Question Language','Standard Quick Link','Server Queue Logic'],
+['inf','Quel code HTTP signifie « page non trouvée » ?','404','200','500','301'],
+['inf','Que signifie « RAM » ?','Random Access Memory','Read Only Memory','Rapid Action Module','Remote Access Method'],
+['inf','Kubernetes sert principalement à…','Orchestrer des conteneurs','Compiler du code','Créer des bases de données','Éditer des images'],
+['inf','Quelle structure de données fonctionne en « LIFO » ?','La pile (stack)','La file (queue)','Le tableau trié','L\'arbre binaire'],
+['inf','Quel est le port par défaut du protocole HTTP ?','80','21','443','25'],
+['inf','Quel format de données utilise des paires clé/valeur entre accolades ?','JSON','CSV','XML','Markdown'],
+['inf','Que fait la commande « ls » sous Linux ?','Liste les fichiers','Supprime un fichier','Change de dossier','Affiche l\'heure'],
+['inf','Que signifie « API » ?','Application Programming Interface','Advanced Program Installer','Automatic Process Integration','Applied Python Interpreter'],
+['inf','Quel langage Apple a-t-il présenté en 2014 pour iOS ?','Swift','Kotlin','Dart','Rust'],
+['inf','Que signifie « DNS » ?','Domain Name System','Data Network Service','Digital Node Server','Direct Name Syntax'],
+['inf','Quelle couleur correspond au code #FF0000 ?','Rouge','Vert','Bleu','Noir'],
+['inf','Qui a inventé le World Wide Web ?','Tim Berners-Lee','Vint Cerf','Mark Zuckerberg','Alan Turing'],
+['inf','Quel fichier configure un pipeline GitLab CI ?','.gitlab-ci.yml','Jenkinsfile','pipeline.json','docker-compose.yml'],
+['inf','Que signifie « SSH » ?','Secure Shell','Simple Server Host','System Security Hub','Safe Socket Handler'],
+['inf','En JavaScript, que vaut 0.1 + 0.2 ?','0.30000000000000004','0.3','0.2','NaN'],
+['inf','En Java, quel mot-clé empêche l\'héritage d\'une classe ?','final','static','abstract','private'],
+['inf','Que signifie « IDE » ?','Integrated Development Environment','Internal Debug Engine','Interactive Data Exchange','Intelligent Design Editor'],
+['inf','Quel framework Java est très utilisé pour créer des microservices ?','Spring Boot','Django','Laravel','Rails'],
+['inf','Quel outil de gestion de versions a aussi été créé par Linus Torvalds ?','Git','SVN','Mercurial','CVS'],
+['inf','Que signifie « USB » ?','Universal Serial Bus','Unified System Board','Ultra Speed Buffer','Universal Storage Block'],
+['inf','Quelle balise HTML crée un lien hypertexte ?','<a>','<p>','<div>','<img>'],
+['cg','Quelle est la capitale de l\'Australie ?','Canberra','Sydney','Melbourne','Perth'],
+['cg','Qui a peint la Joconde ?','Léonard de Vinci','Michel-Ange','Raphaël','Botticelli'],
+['cg','Quel est le plus grand océan du monde ?','Le Pacifique','L\'Atlantique','L\'Indien','L\'Arctique'],
+['cg','Quel est le plus long fleuve de France ?','La Loire','La Seine','Le Rhône','La Garonne'],
+['cg','Qui a écrit « Les Misérables » ?','Victor Hugo','Émile Zola','Alexandre Dumas','Gustave Flaubert'],
+['cg','Quel est le plus petit pays du monde ?','Le Vatican','Monaco','Saint-Marin','Malte'],
+['cg','Quelle est la monnaie du Japon ?','Le yen','Le won','Le yuan','Le baht'],
+['cg','En quelle année la tour Eiffel a-t-elle été inaugurée ?','1889','1900','1850','1925'],
+['cg','Quelle est la capitale du Maroc ?','Rabat','Casablanca','Marrakech','Fès'],
+['cg','Qui a écrit « Le Petit Prince » ?','Antoine de Saint-Exupéry','Jules Verne','Albert Camus','Marcel Pagnol'],
+['cg','Quelle est la plus haute montagne du monde ?','L\'Everest','Le K2','Le Mont Blanc','Le Kilimandjaro'],
+['cg','Quelles sont les couleurs du drapeau italien ?','Vert, blanc, rouge','Bleu, blanc, rouge','Rouge, jaune, vert','Blanc, rouge, noir'],
+['cg','Dans quel pays se trouve le Machu Picchu ?','Le Pérou','Le Mexique','La Bolivie','Le Chili'],
+['cg','Qui a été le premier homme à marcher sur la Lune ?','Neil Armstrong','Buzz Aldrin','Youri Gagarine','John Glenn'],
+['cg','Quel est le plus grand désert chaud du monde ?','Le Sahara','Le Gobi','Le Kalahari','L\'Atacama'],
+['cg','Quelle mer sépare l\'Europe de l\'Afrique ?','La Méditerranée','La mer Rouge','La mer Noire','La mer Baltique'],
+['cg','Combien de pays compte l\'Union européenne en 2026 ?','27','25','28','30'],
+['cg','Quelle est la plus grande ville du Maroc ?','Casablanca','Rabat','Tanger','Agadir'],
+['cg','Qui a composé la 9e symphonie « Ode à la joie » ?','Beethoven','Mozart','Bach','Chopin'],
+['cg','De quel pays la pizza est-elle originaire ?','L\'Italie','L\'Espagne','La Grèce','La France'],
+['cg','Quelle est la capitale du Canada ?','Ottawa','Toronto','Montréal','Vancouver'],
+['cg','Qui a écrit « Roméo et Juliette » ?','William Shakespeare','Molière','Victor Hugo','Oscar Wilde'],
+['cg','Quel est le plus grand pays du monde par la superficie ?','La Russie','Le Canada','La Chine','Les États-Unis'],
+['cg','Combien y a-t-il de cases sur un échiquier ?','64','32','100','81'],
+['cg','Quel animal est le symbole de la Chine ?','Le panda','Le dragon rouge','Le tigre','La grue'],
+['cg','Quel peintre a réalisé « La Nuit étoilée » ?','Vincent van Gogh','Claude Monet','Pablo Picasso','Salvador Dalí'],
+['cg','Combien de touches compte un piano standard ?','88','76','92','64'],
+['sci','Quel est le symbole chimique de l\'or ?','Au','Or','Ag','Go'],
+['sci','Quelle planète est la plus proche du Soleil ?','Mercure','Vénus','Mars','La Terre'],
+['sci','Quelle est la formule chimique de l\'eau ?','H2O','CO2','O2','NaCl'],
+['sci','Quelle est la vitesse approximative de la lumière ?','300 000 km/s','150 000 km/s','30 000 km/s','3 000 000 km/s'],
+['sci','Quel est l\'os le plus long du corps humain ?','Le fémur','Le tibia','L\'humérus','Le radius'],
+['sci','Quel gaz est le plus abondant dans l\'atmosphère terrestre ?','L\'azote','L\'oxygène','Le dioxyde de carbone','L\'hydrogène'],
+['sci','Combien de planètes compte le système solaire ?','8','9','7','10'],
+['sci','Qui a formulé la théorie de la relativité ?','Albert Einstein','Isaac Newton','Galilée','Niels Bohr'],
+['sci','Quel est le plus grand organe du corps humain ?','La peau','Le foie','Le cœur','Les poumons'],
+['sci','À quelle température l\'eau bout-elle (pression normale) ?','100 °C','90 °C','80 °C','120 °C'],
+['sci','Quelle particule porte une charge électrique négative ?','L\'électron','Le proton','Le neutron','Le photon'],
+['sci','Quelle planète est surnommée « la planète rouge » ?','Mars','Jupiter','Vénus','Saturne'],
+['sci','Que signifie « ADN » ?','Acide désoxyribonucléique','Acide dynamique nucléaire','Analyse des noyaux','Atome double nucléaire'],
+['sci','Combien de dents compte un adulte (dents de sagesse comprises) ?','32','28','30','36'],
+['sci','Quelle unité mesure la force ?','Le newton','Le joule','Le watt','Le pascal'],
+['sci','Comment s\'appelle notre galaxie ?','La Voie lactée','Andromède','Le Triangle','Sombrero'],
+['sci','Quel est le plus grand animal vivant ?','La baleine bleue','L\'éléphant d\'Afrique','Le requin-baleine','La girafe'],
+['sci','Quel gaz les plantes rejettent-elles par la photosynthèse ?','L\'oxygène','L\'azote','Le méthane','L\'hélium'],
+['sci','Quel est le symbole chimique du sodium ?','Na','So','S','Sd'],
+['sci','Quel est le pH d\'une solution neutre ?','7','0','10','14'],
+['sci','Qui a découvert la pénicilline ?','Alexander Fleming','Louis Pasteur','Marie Curie','Robert Koch'],
+['sci','Combien de chromosomes compte l\'être humain ?','46','23','48','44'],
+['sci','Quel métal est liquide à température ambiante ?','Le mercure','Le plomb','L\'aluminium','Le cuivre'],
+['sci','Quelle est la plus grande planète du système solaire ?','Jupiter','Saturne','Neptune','La Terre'],
+['sci','Combien d\'os compte le squelette d\'un adulte ?','206','180','250','300'],
+['sci','Quelle est la plus petite unité du vivant ?','La cellule','L\'atome','L\'organe','Le tissu'],
+['sci','Quel scientifique est associé à la loi de la gravitation universelle ?','Isaac Newton','Nikola Tesla','Charles Darwin','Max Planck'],
+['spo','Combien de joueurs une équipe de football a-t-elle sur le terrain ?','11','10','9','12'],
+['spo','Quel pays a gagné la Coupe du monde de football 2018 ?','La France','La Croatie','La Belgique','L\'Allemagne'],
+['spo','Quel pays a gagné la Coupe du monde de football 2022 ?','L\'Argentine','La France','Le Brésil','Le Maroc'],
+['spo','Dans quel sport joue-t-on à Roland-Garros ?','Le tennis','Le golf','Le rugby','Le badminton'],
+['spo','Combien d\'anneaux compte le drapeau olympique ?','5','4','6','7'],
+['spo','Combien de points vaut un essai au rugby à XV ?','5','3','7','2'],
+['spo','Quel pays a accueilli les Jeux olympiques d\'été de 2024 ?','La France','Le Japon','Le Brésil','L\'Australie'],
+['spo','À quelle hauteur se trouve un panier de basket ?','3,05 m','2,80 m','3,50 m','2,40 m'],
+['spo','Quelle est la distance d\'un marathon ?','42,195 km','40 km','21,097 km','50 km'],
+['spo','Dans quel sport parle-t-on de « birdie » ?','Le golf','Le tennis','Le cricket','Le hockey'],
+['spo','Qui est surnommé « CR7 » ?','Cristiano Ronaldo','Karim Benzema','Kylian Mbappé','Neymar'],
+['spo','Quel sport utilise un volant ?','Le badminton','Le tennis','Le squash','Le ping-pong'],
+['spo','De quelle couleur est le maillot du leader du Tour de France ?','Jaune','Vert','À pois','Blanc'],
+['spo','Combien de joueurs par équipe sont sur le terrain au volley-ball ?','6','5','7','8'],
+['spo','Quel pays a inventé le judo ?','Le Japon','La Chine','La Corée','La Thaïlande'],
+['spo','Quel club joue ses matchs au Camp Nou ?','Le FC Barcelone','Le Real Madrid','L\'Atlético de Madrid','Valence'],
+['spo','Quelle carte signifie l\'expulsion d\'un joueur au football ?','La rouge','La jaune','La verte','La blanche'],
+['spo','Qui a remporté le Ballon d\'or 2023 ?','Lionel Messi','Erling Haaland','Karim Benzema','Kylian Mbappé'],
+['spo','Quel pays compte le plus de Coupes du monde de football ?','Le Brésil','L\'Allemagne','L\'Italie','L\'Argentine'],
+['spo','Dans quel sport marque-t-on un « ippon » ?','Le judo','Le karaté','Le sumo','Le kendo'],
+['spo','Quelle est la longueur d\'une piscine olympique ?','50 mètres','25 mètres','100 mètres','33 mètres'],
+['spo','Combien dure un quart-temps en NBA ?','12 minutes','10 minutes','15 minutes','8 minutes'],
+['spo','Quel club français a remporté sa première Ligue des champions en 2025 ?','Le Paris Saint-Germain','L\'Olympique de Marseille','Lyon','Monaco'],
+['spo','Au tennis, comment s\'appelle un score de zéro point ?','Zéro (« love »)','Rien','Nul','Vide'],
+['spo','Quel sport pratique Tony Parker ?','Le basket-ball','Le football','Le tennis','Le handball'],
+['his','Où Napoléon Ier est-il mort ?','Sainte-Hélène','L\'île d\'Elbe','Paris','Waterloo'],
+['his','En quelle année le mur de Berlin est-il tombé ?','1989','1961','1991','1975'],
+['his','Qui fut le premier président de la Ve République ?','Charles de Gaulle','Georges Pompidou','François Mitterrand','René Coty'],
+['his','En quelle année a débuté la Seconde Guerre mondiale ?','1939','1914','1945','1936'],
+['his','Dans quel pays se trouvent les pyramides de Gizeh ?','L\'Égypte','Le Mexique','Le Soudan','L\'Irak'],
+['his','Quelle est la capitale du Brésil ?','Brasilia','Rio de Janeiro','São Paulo','Salvador'],
+['his','Quel roi a fait construire le château de Versailles ?','Louis XIV','Louis XVI','François Ier','Henri IV'],
+['his','Quel fleuve traverse Paris ?','La Seine','La Loire','La Marne','Le Rhin'],
+['his','En quelle année l\'homme a-t-il marché sur la Lune ?','1969','1957','1975','1981'],
+['his','Quelle civilisation a construit le Machu Picchu ?','Les Incas','Les Mayas','Les Aztèques','Les Olmèques'],
+['his','Quel est le pays le plus peuplé du monde en 2026 ?','L\'Inde','La Chine','Les États-Unis','L\'Indonésie'],
+['his','Quel est le plus haut sommet d\'Europe occidentale ?','Le Mont Blanc','Le Cervin','L\'Etna','Le Mulhacén'],
+['his','La guerre de Cent Ans a opposé la France à…','L\'Angleterre','L\'Espagne','L\'Allemagne','L\'Italie'],
+['his','Quel détroit sépare l\'Espagne du Maroc ?','Gibraltar','Bosphore','Messine','Magellan'],
+['his','Quelle est la capitale de la Turquie ?','Ankara','Istanbul','Izmir','Antalya'],
+['his','Quel pays d\'Afrique est le plus peuplé ?','Le Nigeria','L\'Égypte','L\'Éthiopie','L\'Afrique du Sud'],
+['his','Quel roi de France a été guillotiné en 1793 ?','Louis XVI','Louis XIV','Charles X','Louis XV'],
+['his','Quel pays a offert la statue de la Liberté aux États-Unis ?','La France','L\'Angleterre','L\'Italie','L\'Espagne'],
+['his','En quelle année a débuté la Première Guerre mondiale ?','1914','1918','1905','1923'],
+['his','Quel océan borde la côte ouest du Maroc ?','L\'Atlantique','L\'Indien','Le Pacifique','L\'Arctique'],
+['his','Quelle est la capitale du Japon ?','Tokyo','Kyoto','Osaka','Séoul'],
+['his','Quel est le plus grand pays d\'Afrique par la superficie ?','L\'Algérie','La RD Congo','Le Soudan','La Libye'],
+['his','Quelle est la capitale de l\'Allemagne ?','Berlin','Munich','Hambourg','Francfort'],
+['his','Qui fut la dernière reine d\'Égypte ptolémaïque ?','Cléopâtre','Néfertiti','Hatshepsout','Isis'],
+['his','Quel continent est le plus peuplé ?','L\'Asie','L\'Afrique','L\'Europe','L\'Amérique du Nord']
+];
+/*RAW1_END*/
+/* ===== ajout : sport ===== */
+QB_RAW.push(
+['spo','Qui a gagné la Coupe du monde de football en 1998 ?','La France','Le Brésil','L\'Italie','L\'Allemagne'],
+['spo','Qui a gagné la Coupe du monde de football en 2002 ?','Le Brésil','L\'Allemagne','La Turquie','L\'Espagne'],
+['spo','Qui a gagné la Coupe du monde de football en 2006 ?','L\'Italie','La France','L\'Allemagne','Le Portugal'],
+['spo','Qui a gagné la Coupe du monde de football en 2010 ?','L\'Espagne','Les Pays-Bas','L\'Allemagne','L\'Uruguay'],
+['spo','Qui a gagné la Coupe du monde de football en 2014 ?','L\'Allemagne','L\'Argentine','Le Brésil','Les Pays-Bas'],
+['spo','Qui a gagné la Coupe du monde de football en 1986 ?','L\'Argentine','L\'Allemagne de l\'Ouest','La France','Le Brésil'],
+['spo','Quelle équipe a battu la France en finale de la Coupe du monde 2006 ?','L\'Italie','Le Brésil','Le Portugal','L\'Espagne'],
+['spo','Contre qui la France a-t-elle gagné la finale de la Coupe du monde 2018 ?','La Croatie','La Belgique','L\'Angleterre','L\'Argentine'],
+['spo','Quel score la finale Argentine–France de 2022 affichait-elle après prolongation ?','3-3 (4-2 aux tirs au but)','2-2 (5-4 aux tirs au but)','1-1 (3-2 aux tirs au but)','4-2'],
+['spo','Quel joueur a marqué un triplé en finale de la Coupe du monde 2022 ?','Kylian Mbappé','Lionel Messi','Julián Álvarez','Olivier Giroud'],
+['spo','Qui est le meilleur buteur de l\'histoire de la Coupe du monde (16 buts) ?','Miroslav Klose','Ronaldo (Brésil)','Pelé','Just Fontaine'],
+['spo','Quel joueur français a marqué 13 buts lors de la Coupe du monde 1958 ?','Just Fontaine','Raymond Kopa','Michel Platini','Zinedine Zidane'],
+['spo','Qui a marqué le but du titre pour l\'Allemagne en finale 2014 ?','Mario Götze','Thomas Müller','Miroslav Klose','Mesut Özil'],
+['spo','Qui a marqué le but de la victoire de l\'Espagne en finale 2010 ?','Andrés Iniesta','Xavi','David Villa','Fernando Torres'],
+['spo','Quel joueur a reçu un carton rouge pour un coup de tête en finale 2006 ?','Zinedine Zidane','Thierry Henry','Patrick Vieira','Franck Ribéry'],
+['spo','Quel pays africain a atteint les demi-finales de la Coupe du monde 2022 ?','Le Maroc','Le Sénégal','Le Cameroun','Le Ghana'],
+['spo','Quel pays accueille la Coupe du monde de football 2026 (avec 48 équipes) ?','Les États-Unis, le Canada et le Mexique','Le Brésil','L\'Arabie saoudite','Le Maroc et l\'Espagne'],
+['spo','Quels pays organisent ensemble la Coupe du monde de football 2030 ?','Le Maroc, l\'Espagne et le Portugal','La France et l\'Allemagne','L\'Argentine et l\'Uruguay','Le Qatar et l\'Arabie saoudite'],
+['spo','Où s\'est jouée la Coupe du monde de football 2022 ?','Au Qatar','En Russie','Au Brésil','En Afrique du Sud'],
+['spo','Quel joueur a remporté le Ballon d\'or 2024 ?','Rodri','Vinícius Júnior','Kylian Mbappé','Jude Bellingham'],
+['spo','Quel joueur a remporté le Ballon d\'or 2022 ?','Karim Benzema','Robert Lewandowski','Sadio Mané','Kevin De Bruyne'],
+['spo','Quel joueur a remporté le Ballon d\'or 2018 ?','Luka Modrić','Antoine Griezmann','Kylian Mbappé','Mohamed Salah'],
+['spo','Quel joueur a remporté le Ballon d\'or 2025 ?','Ousmane Dembélé','Lamine Yamal','Raphinha','Vitinha'],
+['spo','Combien de Ballons d\'or Lionel Messi a-t-il remportés ?','8','6','7','9'],
+['spo','Quel joueur français a remporté 3 Ballons d\'or consécutifs (1983-1985) ?','Michel Platini','Jean-Pierre Papin','Raymond Kopa','Zinedine Zidane'],
+['spo','Quel joueur français a gagné le Ballon d\'or en 1998 ?','Zinedine Zidane','Thierry Henry','Didier Deschamps','Marcel Desailly'],
+['spo','Quel joueur a remporté le Ballon d\'or 2008 ?','Cristiano Ronaldo','Lionel Messi','Kaká','Xavi'],
+['spo','Quel club a remporté la Ligue des champions 2024 ?','Le Real Madrid','Manchester City','Le Bayern Munich','Dortmund'],
+['spo','Quel club a remporté la Ligue des champions 2023 ?','Manchester City','L\'Inter Milan','Le Real Madrid','Chelsea'],
+['spo','Quel club a remporté la Ligue des champions 2022 ?','Le Real Madrid','Liverpool','Manchester City','Chelsea'],
+['spo','Quel club a remporté la Ligue des champions 2021 ?','Chelsea','Manchester City','Le PSG','Le Bayern Munich'],
+['spo','Quel club a remporté la Ligue des champions 2020 ?','Le Bayern Munich','Le PSG','Liverpool','Lyon'],
+['spo','Quel club a remporté la Ligue des champions 2019 ?','Liverpool','Tottenham','L\'Ajax Amsterdam','Barcelone'],
+['spo','Quel club a remporté la Ligue des champions 2015 ?','Le FC Barcelone','La Juventus','Le Bayern Munich','Le Real Madrid'],
+['spo','Quel club détient le record de victoires en Ligue des champions ?','Le Real Madrid','L\'AC Milan','Liverpool','Le Bayern Munich'],
+['spo','Contre quel adversaire le PSG a-t-il gagné la finale de Ligue des champions 2025 ?','L\'Inter Milan','Arsenal','Le Bayern Munich','Liverpool'],
+['spo','Quel est le score de la finale de Ligue des champions 2025 remportée par le PSG ?','5-0','2-1','3-1','1-0'],
+['spo','Quel est le seul club français à avoir gagné la Ligue des champions avant le PSG (1993) ?','L\'Olympique de Marseille','L\'AS Monaco','Lyon','Saint-Étienne'],
+['spo','Comment appelle-t-on la remontada de Liverpool contre l\'AC Milan en finale 2005 ?','Le miracle d\'Istanbul','Le miracle de Berne','Le choc de Séville','La nuit de Wembley'],
+['spo','Quelle équipe a remporté l\'Euro 2024 de football ?','L\'Espagne','L\'Angleterre','La France','L\'Allemagne'],
+['spo','Quelle équipe a remporté l\'Euro 2016 de football ?','Le Portugal','La France','L\'Allemagne','L\'Italie'],
+['spo','Quel joueur a marqué en finale de l\'Euro 2016 en prolongation ?','Éder','Cristiano Ronaldo','Nani','Renato Sanches'],
+['spo','Quelle équipe a remporté l\'Euro 2004 de football, une surprise ?','La Grèce','Le Portugal','La Tchéquie','L\'Italie'],
+['spo','Quelle équipe a remporté l\'Euro 2000 grâce à un but en or de Trezeguet ?','La France','L\'Italie','Les Pays-Bas','L\'Espagne'],
+['spo','Quelle nation a remporté la Coupe d\'Afrique des nations 2023 ?','La Côte d\'Ivoire','Le Nigeria','Le Sénégal','L\'Égypte'],
+['spo','Quelle nation a remporté la Coupe d\'Afrique des nations 2021 (disputée début 2022) ?','Le Sénégal','L\'Égypte','Le Cameroun','L\'Algérie'],
+['spo','Quelle nation africaine détient le record de victoires à la CAN (7 titres) ?','L\'Égypte','Le Cameroun','Le Ghana','Le Nigeria'],
+['spo','Quel stade accueille le Real Madrid ?','Santiago-Bernabéu','Camp Nou','San Siro','Allianz Arena'],
+['spo','Dans quelle ville se trouve le stade Old Trafford ?','Manchester','Liverpool','Londres','Birmingham'],
+['spo','Quelle équipe a créé la surprise en remportant la Premier League 2015-2016 ?','Leicester City','Tottenham','Everton','West Ham'],
+['spo','Quel joueur a marqué la « main de Dieu » contre l\'Angleterre en 1986 ?','Diego Maradona','Pelé','Mario Kempes','Gabriel Batistuta'],
+['spo','Combien de Coupes du monde Pelé a-t-il gagnées ?','3','2','4','1'],
+['spo','Quel pays a remporté la Coupe du monde féminine de football 2023 ?','L\'Espagne','L\'Angleterre','Les États-Unis','L\'Allemagne'],
+['spo','Quel joueur est le meilleur buteur de l\'histoire de l\'équipe de France ?','Olivier Giroud','Thierry Henry','Antoine Griezmann','Kylian Mbappé'],
+['spo','Qui détient le record de matchs de Ligue des champions disputés et de buts ?','Cristiano Ronaldo','Lionel Messi','Karim Benzema','Raúl'],
+['spo','Quel pays a remporté la Coupe du monde de rugby 2023 ?','L\'Afrique du Sud','La Nouvelle-Zélande','L\'Angleterre','La France'],
+['spo','Quelle nation a organisé la Coupe du monde de rugby 2023 ?','La France','L\'Angleterre','L\'Australie','Le Japon'],
+['spo','Quel joueur de tennis détient le record de titres du Grand Chelem chez les hommes ?','Novak Djokovic','Rafael Nadal','Roger Federer','Pete Sampras'],
+['spo','Combien de fois Rafael Nadal a-t-il gagné Roland-Garros ?','14','12','10','16'],
+['spo','Qui a remporté Wimbledon en 2023 et 2024 ?','Carlos Alcaraz','Novak Djokovic','Jannik Sinner','Daniil Medvedev'],
+['spo','Quel pays a accueilli les Jeux olympiques d\'été de 2016 ?','Le Brésil','Le Royaume-Uni','La Chine','Le Japon'],
+['spo','Dans quelle ville auront lieu les Jeux olympiques d\'été de 2028 ?','Los Angeles','Brisbane','Londres','Rome'],
+['spo','Quel nageur français a remporté quatre médailles d\'or aux JO de Paris 2024 ?','Léon Marchand','Florent Manaudou','Yannick Agnel','Mehdy Metella'],
+['spo','Quel sprinter détient le record du monde du 100 m (9″58) ?','Usain Bolt','Carl Lewis','Tyson Gay','Justin Gatlin'],
+['spo','Quel nageur américain détient le record de 23 médailles d\'or olympiques ?','Michael Phelps','Mark Spitz','Ryan Lochte','Caeleb Dressel'],
+['spo','Quel judoka français a remporté 3 titres olympiques en +100 kg ?','Teddy Riner','Cyrille Maret','David Douillet','Daniel Fernandes'],
+['spo','Quelle équipe a remporté le titre NBA en 2025 ?','Oklahoma City Thunder','Boston Celtics','Denver Nuggets','Indiana Pacers'],
+['spo','Quel joueur français a été choisi n°1 de la draft NBA 2023 ?','Victor Wembanyama','Rudy Gobert','Evan Fournier','Nicolas Batum'],
+['spo','Avec quelle franchise Tony Parker a-t-il remporté 4 titres NBA ?','Les San Antonio Spurs','Les Lakers','Les Bulls','Les Celtics'],
+['spo','Combien de titres NBA Michael Jordan a-t-il gagnés avec les Bulls ?','6','3','5','7'],
+['spo','Quel pilote a remporté son premier titre de F1 en 2021 lors du dernier tour à Abu Dhabi ?','Max Verstappen','Lewis Hamilton','Charles Leclerc','Sebastian Vettel'],
+['spo','Combien de titres de champion du monde de F1 Lewis Hamilton a-t-il ?','7','5','8','6'],
+['spo','Quel coureur a remporté le Tour de France 2024 ?','Tadej Pogačar','Jonas Vingegaard','Remco Evenepoel','Primož Roglič'],
+['spo','Quel est le dernier Français vainqueur du Tour de France (1985) ?','Bernard Hinault','Laurent Fignon','Richard Virenque','Thibaut Pinot'],
+['spo','Quel coureur a remporté 5 Tours de France consécutifs (1991-1995) ?','Miguel Indurain','Eddy Merckx','Lance Armstrong','Greg LeMond'],
+['spo','Quelle équipe a remporté le Mondial de handball masculin 2023 ?','Le Danemark','La France','La Suède','L\'Espagne']
+);
+/* ===== ajout : capitales (culture G) ===== */
+[
+['l\'Égypte','Le Caire','Alexandrie','Louxor','Gizeh'],['l\'Argentine','Buenos Aires','Córdoba','Rosario','Montevideo'],
+['la Suisse','Berne','Zurich','Genève','Bâle'],['la Pologne','Varsovie','Cracovie','Gdańsk','Wrocław'],
+['la Suède','Stockholm','Göteborg','Malmö','Uppsala'],['la Norvège','Oslo','Bergen','Trondheim','Stavanger'],
+['le Portugal','Lisbonne','Porto','Faro','Coimbra'],['la Grèce','Athènes','Thessalonique','Patras','Héraklion'],
+['la Belgique','Bruxelles','Anvers','Liège','Gand'],['les Pays-Bas','Amsterdam','Rotterdam','La Haye','Utrecht'],
+['l\'Autriche','Vienne','Salzbourg','Graz','Innsbruck'],['la Nouvelle-Zélande','Wellington','Auckland','Christchurch','Hamilton'],
+['le Kenya','Nairobi','Mombasa','Kisumu','Nakuru'],['la Tunisie','Tunis','Sfax','Sousse','Kairouan'],
+['l\'Algérie','Alger','Oran','Constantine','Annaba'],['le Sénégal','Dakar','Saint-Louis','Thiès','Touba'],
+['la Côte d\'Ivoire','Yamoussoukro','Abidjan','Bouaké','San-Pédro'],['le Nigeria','Abuja','Lagos','Kano','Ibadan'],
+['l\'Éthiopie','Addis-Abeba','Gondar','Dire Dawa','Asmara'],['l\'Inde','New Delhi','Mumbai','Calcutta','Bangalore'],
+['le Pakistan','Islamabad','Karachi','Lahore','Peshawar'],['la Thaïlande','Bangkok','Phuket','Chiang Mai','Pattaya'],
+['le Vietnam','Hanoï','Hô Chi Minh-Ville','Da Nang','Hué'],['la Corée du Sud','Séoul','Busan','Incheon','Daegu'],
+['la Mongolie','Oulan-Bator','Karakorum','Erdenet','Darkhan'],['le Kazakhstan','Astana','Almaty','Shymkent','Aktaou'],
+['la Tanzanie','Dodoma','Dar es Salaam','Zanzibar','Arusha'],['la Colombie','Bogotá','Medellín','Cali','Carthagène'],
+['le Pérou','Lima','Cusco','Arequipa','Quito'],['le Chili','Santiago','Valparaíso','Concepción','Lima'],
+['Cuba','La Havane','Santiago de Cuba','Varadero','Camagüey'],['le Mexique','Mexico','Guadalajara','Cancún','Monterrey'],
+['l\'Islande','Reykjavik','Akureyri','Keflavik','Höfn'],['la Finlande','Helsinki','Tampere','Turku','Oulu'],
+['le Danemark','Copenhague','Aarhus','Odense','Aalborg'],['l\'Irlande','Dublin','Cork','Galway','Belfast'],
+['l\'Écosse','Édimbourg','Glasgow','Aberdeen','Dundee'],['la Hongrie','Budapest','Debrecen','Szeged','Pécs'],
+['la Tchéquie','Prague','Brno','Ostrava','Plzeň'],['la Roumanie','Bucarest','Cluj-Napoca','Timișoara','Constanța'],
+['l\'Ukraine','Kiev','Odessa','Lviv','Kharkiv'],['la Croatie','Zagreb','Split','Dubrovnik','Rijeka'],
+['la Serbie','Belgrade','Novi Sad','Niš','Sarajevo'],['l\'Arabie saoudite','Riyad','La Mecque','Djeddah','Médine'],
+['l\'Iran','Téhéran','Ispahan','Chiraz','Tabriz'],['l\'Irak','Bagdad','Bassora','Mossoul','Erbil'],
+['la Syrie','Damas','Alep','Homs','Lattaquié'],['le Liban','Beyrouth','Tripoli','Saïda','Tyr'],
+['la Jordanie','Amman','Aqaba','Petra','Irbid'],['le Qatar','Doha','Al Wakrah','Al Khor','Dubaï'],
+['les Émirats arabes unis','Abou Dabi','Dubaï','Charjah','Ajman'],['la Libye','Tripoli','Benghazi','Misrata','Syrte'],
+['la Mauritanie','Nouakchott','Nouadhibou','Atar','Kaédi'],['le Mali','Bamako','Tombouctou','Gao','Sikasso'],
+['le Cameroun','Yaoundé','Douala','Garoua','Bafoussam'],['le Gabon','Libreville','Port-Gentil','Franceville','Lambaréné'],
+['la RD Congo','Kinshasa','Lubumbashi','Goma','Kisangani'],['le Ghana','Accra','Kumasi','Tamale','Takoradi'],
+['Madagascar','Antananarivo','Tamatave','Majunga','Fianarantsoa'],['l\'Ouganda','Kampala','Entebbe','Jinja','Gulu'],
+['le Rwanda','Kigali','Butare','Gisenyi','Ruhengeri'],['le Soudan','Khartoum','Omdurman','Port-Soudan','Kassala'],
+['la Birmanie (Myanmar)','Naypyidaw','Rangoun','Mandalay','Bagan'],['l\'Afghanistan','Kaboul','Kandahar','Hérat','Mazar-e-Charif'],
+['le Népal','Katmandou','Pokhara','Lhassa','Thimphou'],['le Bangladesh','Dacca','Chittagong','Sylhet','Khulna'],
+['l\'Indonésie','Jakarta','Bali','Surabaya','Bandung'],['les Philippines','Manille','Cebu','Davao','Quezon City'],
+['la Malaisie','Kuala Lumpur','Penang','Malacca','Johor Bahru'],['Singapour','Singapour','Kuala Lumpur','Jakarta','Brunei'],
+['le Venezuela','Caracas','Maracaibo','Valencia','Barquisimeto'],['l\'Équateur','Quito','Guayaquil','Cuenca','Lima'],
+['la Bolivie (siège du gouvernement)','La Paz','Santa Cruz','Cochabamba','Lima'],['l\'Uruguay','Montevideo','Punta del Este','Salto','Asunción'],
+['le Paraguay','Asunción','Ciudad del Este','Encarnación','Montevideo'],['la Slovaquie','Bratislava','Košice','Prešov','Ljubljana'],
+['la Slovénie','Ljubljana','Maribor','Bled','Bratislava'],['la Bulgarie','Sofia','Plovdiv','Varna','Bucarest'],
+['la Lituanie','Vilnius','Kaunas','Klaipėda','Riga'],['la Lettonie','Riga','Daugavpils','Jūrmala','Tallinn'],
+['l\'Estonie','Tallinn','Tartu','Narva','Riga'],['l\'Albanie','Tirana','Durrës','Vlorë','Skopje'],
+['la Géorgie','Tbilissi','Batoumi','Koutaïssi','Erevan'],['l\'Arménie','Erevan','Gyumri','Vanadzor','Bakou'],
+['l\'Azerbaïdjan','Bakou','Gandja','Soumgaït','Tbilissi'],['la Biélorussie','Minsk','Brest','Gomel','Vitebsk'],
+['la Moldavie','Chisinau','Tiraspol','Bălți','Bucarest'],['l\'Afrique du Sud (capitale exécutive)','Pretoria','Johannesburg','Durban','Port Elizabeth'],
+['l\'Angola','Luanda','Benguela','Huambo','Lobito'],['le Mozambique','Maputo','Beira','Nampula','Pemba'],
+['la Zambie','Lusaka','Ndola','Kitwe','Livingstone'],['le Zimbabwe','Harare','Bulawayo','Mutare','Gweru'],
+['le Botswana','Gaborone','Francistown','Maun','Kasane'],['la Namibie','Windhoek','Swakopmund','Walvis Bay','Lüderitz'],
+['le Tchad','N\'Djamena','Moundou','Abéché','Sarh'],['le Niger','Niamey','Zinder','Agadez','Maradi'],
+['le Burkina Faso','Ouagadougou','Bobo-Dioulasso','Koudougou','Banfora'],['le Togo','Lomé','Kara','Sokodé','Atakpamé'],
+['le Bénin','Porto-Novo','Cotonou','Parakou','Abomey'],['la Guinée','Conakry','Kankan','Labé','Nzérékoré'],
+['le Luxembourg','Luxembourg','Esch-sur-Alzette','Differdange','Echternach'],['Malte','La Valette','Sliema','Mdina','Gozo']
+].forEach(r=>QB_RAW.push(['cg','Quelle est la capitale de '+r[0]+' ?',r[1],r[2],r[3],r[4]]));
+/* ===== ajout : culture générale ===== */
+QB_RAW.push(
+['cg','Quelle langue compte le plus de locuteurs natifs dans le monde ?','Le mandarin','L\'anglais','L\'espagnol','L\'hindi'],
+['cg','Quel est l\'animal terrestre le plus rapide ?','Le guépard','Le lion','L\'antilope','Le cheval'],
+['cg','Combien de couleurs compte l\'arc-en-ciel ?','7','5','6','8'],
+['cg','Qui est l\'auteur de « Harry Potter » ?','J. K. Rowling','Roald Dahl','Tolkien','C. S. Lewis'],
+['cg','Quel peintre a réalisé « Guernica » ?','Pablo Picasso','Salvador Dalí','Joan Miró','Henri Matisse'],
+['cg','Quel est le plus grand lac du monde par sa superficie ?','La mer Caspienne','Le lac Supérieur','Le lac Victoria','Le lac Baïkal'],
+['cg','Quel est le plus long fleuve d\'Afrique ?','Le Nil','Le Congo','Le Niger','Le Zambèze'],
+['cg','Quel pays compte le plus de fuseaux horaires, outre-mer compris ?','La France','La Russie','Les États-Unis','La Chine'],
+['cg','Dans quelle ville se trouve le Colisée ?','Rome','Athènes','Florence','Naples'],
+['cg','Quel compositeur autrichien a écrit « La Flûte enchantée » ?','Mozart','Beethoven','Haydn','Schubert'],
+['cg','Dans quel pays se trouve la ville de Marrakech ?','Le Maroc','La Tunisie','L\'Algérie','L\'Égypte'],
+['cg','Quelle est la boisson nationale du Maroc ?','Le thé à la menthe','Le café turc','Le karkadé','Le lait d\'amande'],
+['cg','Quel plat marocain est cuit dans un récipient conique en terre cuite ?','Le tajine','Le couscous','La pastilla','La harira'],
+['cg','Quel est l\'instrument qui possède 88 touches ?','Le piano','L\'orgue','L\'accordéon','Le clavecin'],
+['cg','Quel écrivain français a reçu le prix Nobel de littérature en 1957 ?','Albert Camus','Jean-Paul Sartre','André Gide','François Mauriac'],
+['cg','Quel est le plus grand continent par la superficie ?','L\'Asie','L\'Afrique','L\'Amérique du Nord','L\'Europe'],
+['cg','Quel pays est surnommé « le pays du Soleil-Levant » ?','Le Japon','La Chine','La Corée','Le Vietnam'],
+['cg','Combien de joueurs compose une équipe de basket sur le terrain ?','5','6','7','4'],
+['cg','Quel est le nom du plus haut gratte-ciel du monde (828 m) ?','Burj Khalifa','Shanghai Tower','Taipei 101','One World Trade Center'],
+['cg','Dans quelle ville se trouve la Sagrada Família ?','Barcelone','Madrid','Séville','Valence'],
+['cg','Quel est l\'océan qui borde la côte est de l\'Afrique ?','L\'océan Indien','L\'océan Atlantique','L\'océan Arctique','L\'océan Pacifique'],
+['cg','Quel est le pays le plus peuplé d\'Amérique du Sud ?','Le Brésil','L\'Argentine','La Colombie','Le Pérou'],
+['cg','Quelle ville est surnommée « la ville rose » ?','Toulouse','Marseille','Bordeaux','Albi'],
+['cg','Quel fleuve traverse Le Caire ?','Le Nil','Le Tigre','L\'Euphrate','Le Jourdain'],
+['cg','Quel monument de New York a été offert par la France ?','La statue de la Liberté','L\'Empire State Building','Le Flatiron','Le pont de Brooklyn'],
+['cg','Quel écrivain est l\'auteur du « Comte de Monte-Cristo » ?','Alexandre Dumas','Victor Hugo','Honoré de Balzac','Stendhal'],
+['cg','Quel est le sport national du Japon, avec ses lutteurs ?','Le sumo','Le judo','Le karaté','Le kendo'],
+['cg','Quel pays est célèbre pour la ville de Petra ?','La Jordanie','L\'Égypte','La Syrie','Israël'],
+['cg','Quelle est la monnaie du Royaume-Uni ?','La livre sterling','L\'euro','Le dollar','Le franc'],
+['cg','Quel fleuve traverse Londres ?','La Tamise','La Severn','La Clyde','La Mersey']
+);
+/* ===== ajout : archéologie ===== */
+QB_RAW.push(
+['arc','Qui a déchiffré les hiéroglyphes égyptiens en 1822 ?','Jean-François Champollion','Howard Carter','Auguste Mariette','Heinrich Schliemann'],
+['arc','Quelle pierre trilingue a permis de déchiffrer les hiéroglyphes ?','La pierre de Rosette','La stèle d\'Hammourabi','La pierre de Tanis','Le disque de Phaïstos'],
+['arc','Où la pierre de Rosette est-elle conservée aujourd\'hui ?','Au British Museum (Londres)','Au Louvre (Paris)','Au musée du Caire','À Berlin'],
+['arc','Qui a découvert la tombe de Toutânkhamon en 1922 ?','Howard Carter','Jean-François Champollion','Flinders Petrie','Heinrich Schliemann'],
+['arc','Dans quelle vallée se trouve la tombe de Toutânkhamon ?','La Vallée des Rois','La Vallée des Reines','La Vallée du Nil','La Vallée de Gizeh'],
+['arc','Quel volcan a détruit Pompéi en 79 apr. J.-C. ?','Le Vésuve','L\'Etna','Le Stromboli','Le Santorin'],
+['arc','Qui a redécouvert le Machu Picchu en 1911 pour le monde occidental ?','Hiram Bingham','Howard Carter','Indiana Jones','Francisco Pizarro'],
+['arc','Dans quelle région de France se trouve la grotte de Lascaux ?','La Dordogne','L\'Ardèche','Les Pyrénées','La Bretagne'],
+['arc','Quelle grotte ardéchoise, découverte en 1994, abrite des peintures d\'environ 36 000 ans ?','La grotte Chauvet','La grotte de Lascaux','La grotte d\'Altamira','La grotte de Niaux'],
+['arc','Quel archéologue a mis au jour le site présumé de Troie (Hisarlik) ?','Heinrich Schliemann','Arthur Evans','Howard Carter','Auguste Mariette'],
+['arc','Dans quel pays se trouve la cité rose de Pétra ?','La Jordanie','L\'Égypte','L\'Arabie saoudite','La Syrie'],
+['arc','Quel peuple a taillé la cité de Pétra dans la roche ?','Les Nabatéens','Les Perses','Les Romains','Les Phéniciens'],
+['arc','Dans quel pays se trouve le temple d\'Angkor Wat ?','Le Cambodge','La Thaïlande','Le Vietnam','L\'Inde'],
+['arc','Où se trouve le cromlech de Stonehenge ?','En Angleterre','En Irlande','En Écosse','En Bretagne'],
+['arc','Quel empereur a fait enterrer l\'armée de terre cuite de Xi\'an ?','Qin Shi Huangdi','Kublai Khan','Han Wudi','Tang Taizong'],
+['arc','Dans quel pays a été découverte « Lucy », australopithèque de 3,2 millions d\'années ?','L\'Éthiopie','Le Kenya','La Tanzanie','L\'Afrique du Sud'],
+['arc','Quel site de Turquie, vieux d\'environ 11 000 ans, est l\'un des plus anciens ensembles monumentaux ?','Göbekli Tepe','Çatalhöyük','Éphèse','Troie'],
+['arc','Quel manuscrit célèbre a été trouvé près de Qumran en 1947 ?','Les manuscrits de la mer Morte','Le Codex Sinaiticus','Le papyrus d\'Ani','Les tablettes de Linéaire B'],
+['arc','Quel roi de Babylone est connu pour son code de lois gravé sur une stèle ?','Hammourabi','Nabuchodonosor','Cyrus','Gilgamesh'],
+['arc','Quelle écriture a été inventée par les Sumériens ?','Le cunéiforme','Les hiéroglyphes','L\'alphabet phénicien','Le linéaire A'],
+['arc','Quelle est la seule des Sept Merveilles du monde antique encore debout ?','La pyramide de Khéops','Les jardins de Babylone','Le phare d\'Alexandrie','Le colosse de Rhodes'],
+['arc','Quelle cité fondée par les Phéniciens, en Tunisie, fut détruite par Rome en 146 av. J.-C. ?','Carthage','Utique','Leptis Magna','Tyr'],
+['arc','Quel site romain du Maroc est classé à l\'UNESCO, près de Meknès ?','Volubilis','Lixus','Chellah','Banasa'],
+['arc','Quelle civilisation a bâti Chichén Itzá, au Mexique ?','Les Mayas','Les Incas','Les Aztèques','Les Olmèques'],
+['arc','Quelle cité précolombienne du Mexique est dominée par la pyramide du Soleil ?','Teotihuacan','Tikal','Chichén Itzá','Palenque'],
+['arc','Comment s\'appellent les célèbres statues monumentales de l\'île de Pâques ?','Les moaï','Les totems','Les kouros','Les ushabtis'],
+['arc','Quel explorateur a retrouvé l\'épave du Titanic en 1985 ?','Robert Ballard','Jacques Cousteau','Paul Allen','James Cameron'],
+['arc','Quelle méthode de datation utilise le carbone 14 ?','La datation radiocarbone','La dendrochronologie','La stratigraphie','La thermoluminescence'],
+['arc','Quelle civilisation de Crète a construit le palais de Knossos ?','Les Minoens','Les Mycéniens','Les Doriens','Les Phéniciens'],
+['arc','À quelle déesse le Parthénon d\'Athènes était-il consacré ?','Athéna','Aphrodite','Artémis','Héra'],
+['arc','Quelle momie de glace a été découverte dans les Alpes en 1991 ?','Ötzi','Lucy','Tollund','Tutankhamon'],
+['arc','Quel pays abrite les temples d\'Abou Simbel, déplacés dans les années 1960 ?','L\'Égypte','Le Soudan','La Libye','La Jordanie'],
+['arc','Quel site marocain a livré les plus anciens restes d\'Homo sapiens connus (environ 300 000 ans) ?','Jebel Irhoud','Volubilis','Taforalt','Lixus'],
+['arc','Quelle pharaonne est célèbre pour son buste conservé à Berlin ?','Néfertiti','Cléopâtre','Hatchepsout','Néfertari'],
+['arc','Quel pharaon a fait construire Abou Simbel ?','Ramsès II','Khéops','Akhénaton','Thoutmosis III'],
+['arc','Dans quel pays se trouvent les églises monolithes de Lalibela ?','L\'Éthiopie','L\'Érythrée','Le Soudan','Le Kenya'],
+['arc','Quel site du Pakistan est une grande cité de la civilisation de l\'Indus ?','Mohenjo-daro','Pétra','Persépolis','Babylone'],
+['arc','Quelle cité perse était la capitale cérémonielle des Achéménides ?','Persépolis','Ctésiphon','Suse','Ispahan'],
+['arc','Quel empire a construit le Machu Picchu ?','L\'empire inca','L\'empire maya','L\'empire aztèque','L\'empire olmèque'],
+['arc','Quelle espèce humaine ancienne porte le nom d\'une vallée allemande ?','Néandertal','Cro-Magnon','Denisova','Flores'],
+['arc','Quelle grotte espagnole est célèbre pour ses bisons peints préhistoriques ?','Altamira','Lascaux','Chauvet','Pech Merle'],
+['arc','Quelle ville portait le nom de Lutèce à l\'époque romaine ?','Paris','Lyon','Marseille','Reims'],
+['arc','Quelle ville gauloise assiégée par César en 52 av. J.-C. vit se rendre Vercingétorix ?','Alésia','Gergovie','Bibracte','Avaricum'],
+['arc','Quel site de Jordanie est l\'ancienne Philadelphie romaine, aujourd\'hui capitale ?','Amman','Jerash','Aqaba','Madaba'],
+['arc','Quelle est la hauteur d\'origine approximative de la grande pyramide de Gizeh ?','Environ 146 m','Environ 80 m','Environ 200 m','Environ 300 m']
+);
+/* ===== ajout : économie & diplomatie ===== */
+QB_RAW.push(
+['eco','Où se trouve le siège de l\'Organisation mondiale du commerce (OMC) ?','Genève','New York','Bruxelles','Paris'],
+['eco','Où se trouve le siège du Fonds monétaire international (FMI) ?','Washington','Genève','Londres','Francfort'],
+['eco','Où se trouve le siège de la Banque centrale européenne ?','Francfort','Bruxelles','Paris','Luxembourg'],
+['eco','Où se trouve le siège de l\'OPEP ?','Vienne','Riyad','Genève','Doha'],
+['eco','Où se trouve le siège de l\'OCDE ?','Paris','New York','Genève','Londres'],
+['eco','Où se trouve le siège de l\'Union africaine ?','Addis-Abeba','Nairobi','Abuja','Le Caire'],
+['eco','Quels pays formaient le groupe BRICS à l\'origine (BRICS = 5 pays) ?','Brésil, Russie, Inde, Chine, Afrique du Sud','Belgique, Royaume-Uni, Irlande, Canada, Suède','Brésil, Russie, Indonésie, Chine, Singapour','Bolivie, Roumanie, Inde, Corée, Suisse'],
+['eco','Quels pays font partie du G7 ?','Allemagne, Canada, États-Unis, France, Italie, Japon, Royaume-Uni','Chine, Inde, Russie, Brésil, Mexique, Corée, Turquie','Espagne, Pays-Bas, Suède, Norvège, Suisse, Pologne, Belgique','États-Unis, Chine, Russie, France, Royaume-Uni, Allemagne, Inde'],
+['eco','Quel plan américain a financé la reconstruction de l\'Europe après 1945 ?','Le plan Marshall','Le plan Schuman','Le plan Dawes','Le plan Monnet'],
+['eco','Quels accords de 1944 ont créé le FMI et la Banque mondiale ?','Bretton Woods','Yalta','Maastricht','Schengen'],
+['eco','Quel pays a adopté l\'euro le 1er janvier 2023 ?','La Croatie','La Pologne','La Roumanie','La Suède'],
+['eco','Quel traité de 1992 a fixé les critères de convergence de l\'euro (3 % de déficit, 60 % de dette) ?','Le traité de Maastricht','Le traité de Rome','Le traité de Lisbonne','Le traité de Nice'],
+['eco','Quelle année le Royaume-Uni est-il officiellement sorti de l\'Union européenne ?','2020','2016','2018','2022'],
+['eco','Quelle est la première économie mondiale en PIB nominal ?','Les États-Unis','La Chine','L\'Allemagne','Le Japon'],
+['eco','Quelle est la deuxième économie mondiale en PIB nominal ?','La Chine','Le Japon','L\'Allemagne','L\'Inde'],
+['eco','Quel détroit voit passer environ un cinquième du pétrole mondial, entre l\'Iran et Oman ?','Le détroit d\'Ormuz','Le détroit de Malacca','Le Bosphore','Le détroit de Gibraltar'],
+['eco','Quel canal relie la Méditerranée à la mer Rouge ?','Le canal de Suez','Le canal de Panama','Le canal de Corinthe','Le canal Albert'],
+['eco','Pourquoi des navires évitent-ils parfois la mer Rouge depuis 2023-2024 ?','À cause d\'attaques de rebelles houthis','À cause d\'une pénurie de carburant','À cause de la glace','À cause d\'un blocus norvégien'],
+['eco','Quel itinéraire alternatif évite le canal de Suez ?','Le cap de Bonne-Espérance','Le détroit de Béring','Le canal de Panama','Le passage du Nord-Ouest'],
+['eco','Quelle mesure frappe les importations d\'un pays pour protéger la production locale ?','Les droits de douane','Les subventions','Les dividendes','Les cotisations'],
+['eco','Comment appelle-t-on l\'interdiction totale d\'échanger avec un pays ?','Un embargo','Un quota','Une dévaluation','Un moratoire'],
+['eco','Quelles sanctions ont visé la Russie après février 2022 ?','Gel d\'avoirs et restrictions financières et commerciales','Une hausse de l\'aide humanitaire','L\'adhésion à l\'OMC','La fin de tous les échanges mondiaux'],
+['eco','Quelle initiative chinoise lancée en 2013 vise à bâtir des infrastructures commerciales mondiales ?','Les nouvelles routes de la soie','Le plan Marshall chinois','L\'ASEAN','Le projet Dragon'],
+['eco','Quelle conférence climat a produit l\'accord de Paris en 2015 ?','La COP21','La COP15','La COP26','La COP7'],
+['eco','Quel organisme gère la monnaie de l\'Afrique de l\'Ouest (franc CFA UEMOA), depuis Dakar ?','La BCEAO','La BEAC','La BAD','La CEDEAO'],
+['eco','Quelle est la monnaie du Maroc ?','Le dirham','Le dinar','Le franc','La livre'],
+['eco','Quelle est la monnaie de l\'Algérie ?','Le dinar','Le dirham','Le rial','La livre'],
+['eco','Quelle est la monnaie du Nigeria ?','Le naira','Le cedi','Le rand','Le shilling'],
+['eco','Quelle est la monnaie du Brésil ?','Le real','Le peso','Le bolivar','Le sol'],
+['eco','Quelle est la monnaie de l\'Inde ?','La roupie','Le yuan','Le taka','Le ringgit'],
+['eco','Quel indicateur mesure la richesse produite par un pays sur un an ?','Le PIB','L\'IPC','Le Gini','Le CAC 40'],
+['eco','Que mesure l\'inflation ?','La hausse générale des prix','La croissance du PIB','Le taux de chômage','La valeur de la monnaie en bourse'],
+['eco','Quel pays est le plus grand exportateur de pétrole brut ?','L\'Arabie saoudite','La Russie','Le Canada','L\'Iran'],
+['eco','Quel pays est le premier producteur mondial de pétrole ?','Les États-Unis','L\'Arabie saoudite','La Russie','Le Venezuela'],
+['eco','Quel pays détient les premières réserves prouvées de pétrole du monde ?','Le Venezuela','L\'Arabie saoudite','L\'Iran','La Russie'],
+['eco','Quel pays est le premier producteur mondial de cobalt, utilisé dans les batteries ?','La RD Congo','La Chine','L\'Australie','Le Chili'],
+['eco','Quelle entreprise taïwanaise fabrique la majorité des puces électroniques avancées ?','TSMC','Samsung','Intel','Foxconn'],
+['eco','Quel pays contrôle la plus grande part du raffinage des terres rares ?','La Chine','Les États-Unis','L\'Australie','La Russie'],
+['eco','Quels pays ont signé les accords d\'Abraham en 2020 avec Israël (dont un pays du Maghreb) ?','Émirats, Bahreïn, Soudan et Maroc','Égypte, Syrie, Liban et Irak','Algérie, Tunisie, Libye et Mauritanie','Iran, Turquie, Qatar et Koweït'],
+['eco','Quel accord de libre-échange a remplacé l\'ALENA en 2020 ?','L\'AEUMC (USMCA)','Le Mercosur','Le TTIP','Le CETA'],
+['eco','Que vise la ZLECAf, lancée en 2021 ?','Un marché unique de libre-échange africain','Une monnaie unique africaine','Une armée africaine commune','Un passeport mondial'],
+['eco','Quel pays est le plus gros exportateur mondial de marchandises ?','La Chine','Les États-Unis','L\'Allemagne','Le Japon'],
+['eco','Quelle conférence réunit chaque hiver dirigeants et patrons à Davos ?','Le Forum économique mondial','Le G20','Le sommet de l\'OTAN','La COP'],
+['eco','Quel Forum de coopération économique réunit les pays autour du Pacifique ?','L\'APEC','L\'ASEAN','Le Mercosur','L\'OCS'],
+['eco','Que signifie « ASEAN » ?','Association des nations de l\'Asie du Sud-Est','Alliance sino-européenne','Accord de sécurité d\'Asie du Nord','Association des États d\'Amérique du Nord'],
+['eco','Quel pays a le premier fonds souverain du monde, alimenté par le pétrole et le gaz ?','La Norvège','L\'Arabie saoudite','Singapour','Les Émirats'],
+['eco','Que représente Tanger Med ?','Un des plus grands ports de conteneurs d\'Afrique et de Méditerranée','Une centrale nucléaire','Un aéroport international','Une raffinerie de pétrole'],
+['eco','Pourquoi le détroit de Gibraltar est-il stratégique pour le commerce ?','Il relie l\'Atlantique à la Méditerranée','Il relie la mer Rouge à l\'océan Indien','Il relie la Baltique à la mer du Nord','Il relie l\'Arctique au Pacifique'],
+['eco','Quel canal construit en 1914 relie l\'Atlantique au Pacifique ?','Le canal de Panama','Le canal de Suez','Le canal du Midi','Le canal de Kiel'],
+['eco','Quelle guerre commerciale oppose la Chine et les États-Unis depuis 2018 ?','Celle des droits de douane','Celle des brevets alimentaires','Celle du pétrole','Celle des monnaies locales'],
+['eco','Quelle monnaie est la principale monnaie de réserve mondiale ?','Le dollar américain','L\'euro','Le yen','Le yuan'],
+);
+/* ===== ajout : géopolitique & modèles ===== */
+QB_RAW.push(
+['geo','En quelle année l\'OTAN a-t-elle été fondée ?','1949','1945','1955','1991'],
+['geo','Que prévoit l\'article 5 du traité de l\'OTAN ?','La défense collective : attaquer un membre = attaquer tous','L\'interdiction des armes nucléaires','L\'adhésion automatique de tout pays','Le désarmement des membres'],
+['geo','Quels pays ont rejoint l\'OTAN en 2023 et 2024 ?','La Finlande puis la Suède','L\'Ukraine puis la Géorgie','La Suisse puis l\'Autriche','Le Maroc puis la Tunisie'],
+['geo','Quels sont les cinq membres permanents du Conseil de sécurité de l\'ONU ?','États-Unis, Russie, Chine, France, Royaume-Uni','États-Unis, Allemagne, Japon, France, Inde','Russie, Chine, Brésil, Inde, Afrique du Sud','France, Allemagne, Italie, Espagne, Royaume-Uni'],
+['geo','Quel pouvoir ont les membres permanents du Conseil de sécurité ?','Le droit de veto','Le droit de vote double','La présidence à vie','Le contrôle du budget de l\'ONU'],
+['geo','Quel pacte militaire regroupait l\'URSS et ses alliés pendant la guerre froide ?','Le pacte de Varsovie','L\'OTAN','L\'OTASE','Le pacte de Bagdad'],
+['geo','En quelle année l\'URSS s\'est-elle dissoute ?','1991','1989','1985','1999'],
+['geo','En quelle année l\'Allemagne a-t-elle été réunifiée ?','1990','1989','1991','1985'],
+['geo','Quel territoire ukrainien la Russie a-t-elle annexé en 2014 ?','La Crimée','Le Donbass','Odessa','La Transnistrie'],
+['geo','Quel pays est le plus jeune État reconnu du monde (indépendant depuis 2011) ?','Le Soudan du Sud','Le Kosovo','Le Timor oriental','L\'Érythrée'],
+['geo','En quelle année le Kosovo a-t-il proclamé son indépendance ?','2008','1999','2004','2014'],
+['geo','Quel mouvement de 2010-2011 est parti de Tunisie et a touché le monde arabe ?','Les printemps arabes','La révolution des œillets','Les Gilets jaunes','La perestroïka'],
+['geo','Quelle alliance de 2021 réunit l\'Australie, le Royaume-Uni et les États-Unis ?','L\'AUKUS','Le Quad','Les Five Eyes','Le G3'],
+['geo','Quelle région est disputée entre l\'Inde et le Pakistan ?','Le Cachemire','Le Pendjab','Le Bengale','Le Sikkim'],
+['geo','Quelle île est revendiquée par la Chine et dotée d\'un gouvernement autonome ?','Taïwan','Hainan','Hong Kong','Macao'],
+['geo','Quelle mer est le théâtre de revendications territoriales chinoises avec ses voisins ?','La mer de Chine méridionale','La mer Baltique','La mer des Caraïbes','La mer du Nord'],
+['geo','Quel barrage éthiopien est source de tensions avec l\'Égypte ?','Le barrage de la Renaissance','Le barrage d\'Assouan','Le barrage des Trois-Gorges','Le barrage Hoover'],
+['geo','Quel fleuve est au cœur des tensions entre l\'Éthiopie, le Soudan et l\'Égypte ?','Le Nil','Le Niger','Le Congo','Le Zambèze'],
+['geo','Quel économiste a écrit « La Richesse des nations » en 1776 ?','Adam Smith','John Maynard Keynes','Karl Marx','David Ricardo'],
+['geo','Quel économiste défendait l\'intervention de l\'État pour relancer l\'économie en crise ?','John Maynard Keynes','Milton Friedman','Adam Smith','Friedrich Hayek'],
+['geo','Quel penseur a écrit « Le Capital » ?','Karl Marx','Adam Smith','Max Weber','Joseph Schumpeter'],
+['geo','Comment appelle-t-on le modèle chinois où l\'État pilote une économie de marché ?','Le capitalisme d\'État','L\'économie planifiée pure','Le libéralisme classique','Le modèle nordique'],
+['geo','Quel pays est associé à l\'« économie sociale de marché » ?','L\'Allemagne','Les États-Unis','La Chine','Le Japon'],
+['geo','Quel est le point commun du « modèle nordique » ?','Un État-providence fort et une économie ouverte','Une économie fermée','L\'absence d\'impôts','Un système sans syndicats'],
+['geo','Quel nom désigne les 4 « tigres asiatiques » ?','Corée du Sud, Taïwan, Hong Kong, Singapour','Chine, Japon, Inde, Corée','Thaïlande, Vietnam, Laos, Cambodge','Japon, Malaisie, Indonésie, Philippines'],
+['geo','Que désigne le « syndrome hollandais » ?','La dépendance à une ressource qui nuit aux autres secteurs','Une crise du tulipier','Une fuite de capitaux','Un excès d\'exportations de fromage'],
+['geo','Quel plan saoudien vise à diversifier l\'économie hors pétrole ?','Vision 2030','Plan Émergence','Agenda 2063','Plan Marshall'],
+['geo','Quel est l\'agenda de développement de l\'Union africaine à horizon 2063 ?','L\'Agenda 2063','Vision 2030','Le plan Horizon','Le pacte de Lomé'],
+['geo','Quelle centrale solaire géante a été bâtie près d\'Ouarzazate, au Maroc ?','Noor','Ténéré','Atlas Sun','Sahara One'],
+['geo','Quelle usine automobile installée à Tanger illustre l\'industrialisation du Maroc ?','Renault','Toyota','Volkswagen','Tesla'],
+['geo','Quel indice de l\'ONU mesure santé, éducation et niveau de vie ?','L\'IDH','Le Gini','Le PIB par habitant','L\'IPC'],
+['geo','Quel coefficient mesure les inégalités de revenus ?','Le coefficient de Gini','Le ratio de Sharpe','L\'indice Dow Jones','Le coefficient de Lorenz-Euler'],
+['geo','Quel est le pays le plus peuplé depuis 2023 ?','L\'Inde','La Chine','Les États-Unis','L\'Indonésie'],
+['geo','Quel terme de Joseph Nye désigne l\'influence par la culture et l\'attractivité ?','Le soft power','Le hard power','Le smart grid','Le deep state'],
+['geo','Quel pays est le principal exportateur de gaz naturel liquéfié avec les États-Unis ?','Le Qatar','Le Maroc','L\'Algérie','La Norvège'],
+['geo','Quelle organisation regroupe la Chine, la Russie et des pays d\'Asie centrale (OCS) ?','L\'Organisation de coopération de Shanghai','L\'OTSC','L\'APEC','L\'OSCE'],
+['geo','Où se trouve le siège de l\'Union du Maghreb arabe ?','Rabat','Alger','Tunis','Tripoli'],
+['geo','Où se trouve le siège de la Ligue arabe ?','Le Caire','Riyad','Amman','Doha'],
+['geo','Où se trouve le siège de la CEDEAO ?','Abuja','Dakar','Accra','Abidjan'],
+['geo','Quel pays européen est connu pour sa neutralité et n\'est pas dans l\'UE ?','La Suisse','La Belgique','Le Danemark','La Pologne'],
+['geo','Quel accord de 1985 a supprimé les contrôles aux frontières entre plusieurs pays européens ?','Schengen','Maastricht','Lisbonne','Amsterdam'],
+['geo','Quelle politique de l\'Union européenne soutient les agriculteurs ?','La PAC','Le MES','La PESC','Le FEDER'],
+['geo','Quels pays se disputent les îles Kouriles ?','Le Japon et la Russie','La Chine et le Japon','La Corée et le Japon','La Russie et l\'Alaska'],
+['geo','Quel gazoduc reliait la Russie à l\'Allemagne sous la Baltique ?','Nord Stream','Yamal','Blue Stream','Druzhba'],
+['geo','Quel pays contrôle le plus de réserves de lithium en Amérique du Sud (triangle du lithium) ?','Le Chili, l\'Argentine et la Bolivie','Le Brésil et le Pérou','La Colombie et le Venezuela','L\'Équateur et l\'Uruguay'],
+['geo','Quelle région fond rapidement et ouvre de nouvelles routes maritimes et ressources ?','L\'Arctique','L\'Antarctique','Le Sahara','Les Alpes'],
+['geo','Quel territoire arctique, rattaché au Danemark, suscite l\'intérêt stratégique américain ?','Le Groenland','L\'Islande','Le Svalbard','Les îles Féroé'],
+['geo','Quelle ville accueille le siège de l\'ONU ?','New York','Genève','Vienne','La Haye']
+);
+/* ===== ajout : histoire & géo ===== */
+QB_RAW.push(
+['his','En quelle année a eu lieu la Révolution française ?','1789','1799','1776','1815'],
+['his','Quelle bataille a mis fin à l\'Empire de Napoléon en 1815 ?','Waterloo','Austerlitz','Trafalgar','Iéna'],
+['his','Quelle bataille de 1944 a marqué le début de la libération de l\'Europe de l\'Ouest ?','Le Débarquement de Normandie','Verdun','Stalingrad','Dunkerque'],
+['his','En quelle année la France a-t-elle gagné la Coupe du monde pour la première fois ?','1998','1982','2006','1986'],
+['his','Quel empire a pris Constantinople en 1453 ?','L\'Empire ottoman','L\'Empire mongol','L\'Empire perse','L\'Empire byzantin'],
+['his','Qui a découvert l\'Amérique en 1492 pour l\'Espagne ?','Christophe Colomb','Vasco de Gama','Magellan','Marco Polo'],
+['his','Quelles puissances se sont partagé le protectorat du Maroc (1912-1956) ?','La France et l\'Espagne','La France et l\'Italie','L\'Espagne et le Portugal','Le Royaume-Uni et la France'],
+['his','En quelle année le Maroc a-t-il retrouvé son indépendance ?','1956','1962','1947','1960'],
+['his','Quel souverain a fondé Marrakech au XIe siècle ?','Youssef ibn Tachfine','Idriss Ier','Hassan II','Mohammed V'],
+['his','Qui a fondé la ville de Fès ?','Idriss Ier et Idriss II','Les Almohades','Les Mérinides','Les Romains'],
+['his','Quel est le plus grand pays du Maghreb par la superficie ?','L\'Algérie','Le Maroc','La Libye','La Tunisie'],
+['his','Quel chef d\'État français a quitté le pouvoir en 1969 après un référendum ?','Charles de Gaulle','Georges Pompidou','Valéry Giscard d\'Estaing','François Mitterrand'],
+['his','Quel président français a aboli la peine de mort en 1981 ?','François Mitterrand','Jacques Chirac','Valéry Giscard d\'Estaing','Nicolas Sarkozy'],
+['his','En quelle année la France est-elle passée à l\'euro (billets et pièces) ?','2002','1999','2005','1992'],
+['his','Quel fleuve traverse Bordeaux ?','La Garonne','La Loire','Le Rhône','La Dordogne'],
+['his','Quelle est la plus grande île de la Méditerranée ?','La Sicile','La Sardaigne','La Corse','Chypre'],
+['his','Quel pays est entièrement entouré par l\'Afrique du Sud ?','Le Lesotho','L\'Eswatini','Le Botswana','La Namibie'],
+['his','Quelle chaîne de montagnes sépare l\'Europe de l\'Asie, en partie ?','L\'Oural','Les Alpes','Les Pyrénées','Le Caucase du Sud'],
+['his','Quel est le plus haut sommet d\'Afrique ?','Le Kilimandjaro','Le mont Kenya','Le Toubkal','L\'Elgon'],
+['his','Quel est le plus haut sommet d\'Afrique du Nord, au Maroc ?','Le Toubkal','Le mont Kenya','Le Tahat','Le Ras Dashen']
+);
+/* ===== ajout : sciences & informatique ===== */
+QB_RAW.push(
+['sci','Quel est le nom de la force qui nous maintient au sol ?','La gravité','Le magnétisme','La friction','L\'inertie'],
+['sci','Combien de cœurs une pieuvre possède-t-elle ?','3','1','2','8'],
+['sci','Quel est le symbole chimique du fer ?','Fe','Fr','F','Ir'],
+['sci','Quelle planète possède les anneaux les plus spectaculaires ?','Saturne','Jupiter','Uranus','Mars'],
+['sci','Quel organe pompe le sang dans le corps ?','Le cœur','Le foie','Le cerveau','Le rein'],
+['sci','Quel scientifique a découvert la radioactivité naturelle en 1896 ?','Henri Becquerel','Marie Curie','Pierre Curie','Ernest Rutherford'],
+['sci','À quelle température l\'eau pure gèle-t-elle (pression normale) ?','0 °C','4 °C','-10 °C','10 °C'],
+['sci','Quel est le satellite naturel de la Terre ?','La Lune','Phobos','Titan','Europe'],
+['inf','Quel langage est surtout utilisé pour rendre une page web interactive ?','JavaScript','HTML','CSS','SQL'],
+['inf','Quelle commande Git crée une copie locale d\'un dépôt distant ?','git clone','git commit','git branch','git merge'],
+['inf','Quel conteneur très utilisé permet de packager une application avec ses dépendances ?','Docker','Excel','Photoshop','Slack'],
+['inf','Quel outil de gestion de configuration Kubernetes utilise des « charts » ?','Helm','Maven','Gradle','Ansible'],
+['inf','Quel code HTTP signifie « succès » ?','200','404','500','403'],
+['inf','Quel code HTTP signifie « erreur serveur » ?','500','200','404','301'],
+['inf','Quel mot-clé SQL sert à récupérer des données ?','SELECT','INSERT','DELETE','UPDATE'],
+['inf','Quel outil de build Java utilise un fichier pom.xml ?','Maven','Gradle','npm','Make'],
+['inf','Que signifie « CI/CD » ?','Intégration continue / livraison continue','Code Input / Code Display','Central Interface / Central Data','Container Init / Container Deploy'],
+['inf','Quel système de gestion de versions décentralisé est le plus utilisé ?','Git','Subversion','CVS','Perforce'],
+['inf','Quel protocole est utilisé pour envoyer des e-mails ?','SMTP','FTP','SSH','DNS']
+);
+const QB=QB_RAW.map((r,i)=>({id:i,cat:r[0],q:r[1],o:[r[2],r[3],r[4],r[5]]}));
+/*BANK_END*/
+
+
 /*ENGINE_START*/
 const QZ_LET='ABCD';
 function qzShuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));const t=a[i];a[i]=a[j];a[j]=t;}return a;}
 function qzPerm(){return qzShuffle([0,1,2,3]).join('');}
 /* cat : 'mix' ou id de catégorie ; n : nb de questions ; T : secondes */
-function qzPick(bank,cat,n){
-  const pool=bank.filter(q=>cat==='mix'||q.cat===cat);
-  return qzShuffle(pool).slice(0,Math.min(n,pool.length)).map(q=>({i:q.id,p:qzPerm()}));
+/* cats : tableau d'ids de catégories (ou 'mix' = toutes) ; seen : Set d'ids déjà joués (on les évite) */
+function qzPick(bank,cats,n,seen){
+  seen=seen||new Set();
+  const set=Array.isArray(cats)&&cats.length?cats:null;
+  const groups={};
+  bank.forEach(q=>{if(!set||set.includes(q.cat))(groups[q.cat]=groups[q.cat]||[]).push(q);});
+  const keys=qzShuffle(Object.keys(groups));
+  keys.forEach(k=>{const g=groups[k];groups[k]=qzShuffle(g.filter(q=>!seen.has(q.id))).concat(qzShuffle(g.filter(q=>seen.has(q.id))));});
+  const out=[];let k=0,guard=0;
+  while(out.length<n&&keys.some(c=>groups[c].length)&&guard++<5000){
+    const g=groups[keys[k%keys.length]];k++;
+    if(g.length)out.push(g.shift());
+  }
+  return qzShuffle(out).map(q=>({i:q.id,p:qzPerm()}));
 }
-function qzNew(players,bank,cat,n,T){
-  const qs=qzPick(bank,cat,n);
+function qzNew(players,bank,cat,n,T,seen){
+  const qs=qzPick(bank,cat,n,seen);
   const s={v:1,rev:1,gid:Date.now().toString(36)+Math.random().toString(36).slice(2,6),phase:'q',cat:cat,T:T,
     players:players.map(p=>({id:p.id,name:p.name,av:p.av||'',bot:!!p.bot})),
     scores:{},streak:{},qs:qs,qi:0,t0:Date.now(),rt:0,res:null,rank:[]};
@@ -2718,7 +3236,9 @@ function hideLoader(){
 const NAME_K='f7name',BASE=400;
 let db=null,uid=null,myName=lsGet(NAME_K)||'',mySlug=lsGet('f7prof')||'',ROOM=0,mode=null;
 let S=null,roster=[],stateUnsub=null,lobUnsub=null,hb=null,chain=Promise.resolve(),myAns=null,qT0=0,qKey='',soloBots={},lastKey='',pendingJoin=0,celebrated='';
-let cfg={cat:'mix',n:10,T:20,bots:2};
+let cfg={cats:CATS.map(c=>c[0]),n:10,T:20,bots:2};
+const seenGet=()=>{try{return new Set(JSON.parse(lsGet('qzseen')||'[]'));}catch(e){return new Set();}};
+const seenAdd=ids=>{const a=[...seenGet(),...ids].slice(-900);lsSet('qzseen',JSON.stringify(a));};
 const REDUCE=matchMedia('(prefers-reduced-motion:reduce)').matches;
 const REV_MS=6500,GRACE=1800,MAXP=30;
 const fresh=p=>Date.now()-(p.seen||0)<75000;
@@ -2738,12 +3258,14 @@ async function loadFirebase(cfg){
   return makeDbFromSdk(F,F.getFirestore(A.initializeApp(cfg)));
 }
 const catOf=id=>CATS.find(c=>c[0]===id)||['mix','🎲','Mélange'];
-const catLbl=id=>id==='mix'?'🎲 Mélange':(catOf(id)[1]+' '+catOf(id)[2]);
+const catLbl=id=>catOf(id)[1]+' '+catOf(id)[2];
+const catsLbl=a=>{a=Array.isArray(a)?a:CATS.map(c=>c[0]);if(a.length>=CATS.length)return '🎲 Mélange';if(a.length===1)return catLbl(a[0]);return '🎲 '+a.map(x=>catOf(x)[1]).join(' ')+' Mix';};
+const availCount=a=>QB.filter(q=>a.includes(q.cat)).length;
 /* ---- salle ---- */
 function myDoc(extra){
   const d={name:myName||'Joueur',t:(roster.find(p=>p.id===uid)||{}).t||Date.now(),seen:Date.now(),room:BASE+ROOM,qz:1,pf:mySlug,av:myAv};
   if(myAns){d.qg=myAns.g;d.qi=myAns.i;d.qa=myAns.a;d.qms=myAns.ms;}
-  if(!S&&isHost()){d.qc=cfg.cat;d.qn=cfg.n;d.qt=cfg.T;}
+  if(!S&&isHost()){d.qc=cfg.cats.join(',');d.qn=cfg.n;d.qt=cfg.T;}
   return Object.assign(d,extra||{});
 }
 function beat(){if(!db||!ROOM)return;if(document.hidden)return;db.doc('lobby/qz_'+uid).set(myDoc()).catch(()=>{});}
@@ -2769,7 +3291,8 @@ const joinUrl=()=>location.origin+location.pathname+'?table='+ROOM;
 function startOnline(){
   const ps=roomPlayers(ROOM).slice(0,MAXP);if(ps.length<2)return;
   myAns=null;
-  commit(qzNew(ps.map(p=>({id:p.id,name:p.name,av:p.av})),QB,cfg.cat,cfg.n,cfg.T));
+  if(!cfg.cats.length)return;
+  const st=qzNew(ps.map(p=>({id:p.id,name:p.name,av:p.av})),QB,cfg.cats,cfg.n,cfg.T,seenGet());seenAdd(st.qs.map(q=>q.i));commit(st);
 }
 function commit(s){
   S=s;onLocalChange();render();
@@ -2853,7 +3376,8 @@ function startSolo(){
   const names=['Karim','Yasmine','Omar','Salma'];
   const ps=[{id:uid,name:myName||'Moi',av:myAv}].concat([...Array(cfg.bots)].map((_,i)=>({id:'bot'+i,name:names[i]+' 🤖',bot:true,av:AVATARS[(i*7+3)%AVATARS.length],skill:[.55,.7,.8,.9][i%4]})));
   mode='solo';ROOM=0;myAns=null;qKey='';
-  const s=qzNew(ps,QB,cfg.cat,cfg.n,cfg.T);s.players.forEach((p,i)=>{if(ps[i].skill)p.skill=ps[i].skill;});
+  if(!cfg.cats.length)return;
+  const s=qzNew(ps,QB,cfg.cats,cfg.n,cfg.T,seenGet());seenAdd(s.qs.map(q=>q.i));s.players.forEach((p,i)=>{if(ps[i].skill)p.skill=ps[i].skill;});
   S=s;lastKey='';onLocalChange();render();
 }
 function endGameHost(){if(mode==='solo'){leaveRoom();return;}db.doc(gp(ROOM)).delete().catch(()=>{});}
@@ -2876,8 +3400,12 @@ function render(){
   tick();
 }
 function catChips(onpick){
-  const all=[['mix','🎲','Mélange']].concat(CATS);
-  return h('div',{class:'cats'},all.map(c=>h('button',{type:'button',class:'cat'+(cfg.cat===c[0]?' on':''),onclick:()=>{cfg.cat=c[0];onpick();}},h('span',{class:'ce'},c[1]),h('b',null,c[2]))));
+  const tog=id=>{const a=cfg.cats;cfg.cats=a.includes(id)?a.filter(x=>x!==id):a.concat(id);onpick();};
+  const all=cfg.cats.length===CATS.length;
+  return h('div',{class:'stack'},
+    h('div',{class:'cats'},CATS.map(c=>h('button',{type:'button',class:'cat'+(cfg.cats.includes(c[0])?' on':''),'aria-pressed':cfg.cats.includes(c[0])?'true':'false',onclick:()=>tog(c[0])},h('span',{class:'ce'},c[1]),h('b',null,c[2])))),
+    h('div',{class:'row'},h('button',{type:'button',class:'btn sm',onclick:()=>{cfg.cats=all?[]:CATS.map(c=>c[0]);onpick();}},all?'☐ Tout décocher':'☑ Tout cocher'),
+      h('span',{class:'muted'},cfg.cats.length?'🎲 '+catsLbl(cfg.cats).replace('🎲 ','')+' · '+availCount(cfg.cats)+' questions disponibles':'Choisis au moins une catégorie')));
 }
 const segEl=(vals,key,fmt,onpick)=>h('div',{class:'seg'},vals.map(v=>h('button',{type:'button',class:cfg[key]===v?'on':'',onclick:()=>{cfg[key]=v;onpick();}},fmt(v))));
 function renderPicker(){
@@ -2896,16 +3424,16 @@ function renderPicker(){
       h('p',{class:'muted'},'Une question pour tout le monde, 4 réponses, une seule est bonne. Plus tu réponds vite, plus tu marques de points. Les bonnes séries donnent des bonus !'),
       h('div',{class:'rules'},
         h('div',null,h('b',null,'Rejoindre'),' : choisis une table, ou scanne le QR code de l\'hôte avec ton téléphone.'),
-        h('div',null,h('b',null,'Catégories'),' : informatique, culture générale, sciences, sport, histoire & géo ou un mélange.'),
+        h('div',null,h('b',null,'Catégories'),' : 8 thèmes (informatique, culture G, sciences, sport, histoire, économie, géopolitique, archéologie). Coche ceux que tu veux mélanger ; les questions déjà vues reviennent en dernier.'),
         h('div',null,h('b',null,'Points'),' : jusqu\'à 1000 par question + bonus de série (jusqu\'à +250).')),
       pendingJoin?null:h('div',{class:'stack'},h('p',{class:'muted'},'Ton pseudo :'),nm)),
     h('div',{class:'panel'},h('h2',null,'Jouer en ligne'),h('div',{class:'rooms'},rooms),
       !db?h('p',{class:'err'},'Connexion à la base impossible : seul le mode solo est disponible.'):null),
     h('div',{class:'panel'},h('h2',null,'Solo contre l\'ordinateur'),
-      h('div',{class:'row'},h('span',null,'Catégorie')),catChips(render),
+      h('div',{class:'row'},h('span',null,'Catégories (coche celles que tu veux mélanger)')),catChips(render),
       h('div',{class:'row'},h('span',null,'Questions'),segEl([10,15,20],'n',v=>String(v),render),h('span',null,'Temps'),segEl([15,20,30],'T',v=>v+' s',render)),
       h('div',{class:'row'},h('span',null,'Adversaires'),segEl([0,1,2,3,4],'bots',v=>String(v),render)),
-      h('button',{id:'solo-go',class:'btn primary',type:'button',disabled:myName.length<2,onclick:startSolo},'🤖 Lancer la partie'))];
+      h('button',{id:'solo-go',class:'btn primary',type:'button',disabled:myName.length<2||!cfg.cats.length,onclick:startSolo},'🤖 Lancer la partie'))];
 }
 function qrEl(url){
   const w=h('div',{class:'qr',role:'img','aria-label':'QR code pour rejoindre la table'});
@@ -2914,8 +3442,8 @@ function qrEl(url){
 }
 function renderLobby(){
   const ps=roomPlayers(ROOM),host=ps[0]&&ps[0].id===uid;
-  const hp=ps[0],ccat=host?cfg.cat:(hp&&hp.qc)||'mix',cn=host?cfg.n:(hp&&hp.qn)||10,ct=host?cfg.T:(hp&&hp.qt)||20;
-  const can=host&&ps.length>=2;const upd=()=>{beat();render();};
+  const hp=ps[0],ccat=host?cfg.cats:((hp&&hp.qc)?String(hp.qc).split(',').filter(x=>CATS.some(c=>c[0]===x)):CATS.map(c=>c[0])),cn=host?cfg.n:(hp&&hp.qn)||10,ct=host?cfg.T:(hp&&hp.qt)||20;
+  const can=host&&ps.length>=2&&cfg.cats.length>0;const upd=()=>{beat();render();};
   return[renderTop('Table '+ROOM,h('button',{class:'btn sm',type:'button',onclick:leaveRoom},'↩ Quitter la table')),
     h('div',{class:'lobgrid'},
       h('div',{class:'panel'},h('h2',null,'Rejoins la table '+ROOM),qrEl(joinUrl()),
@@ -2924,11 +3452,11 @@ function renderLobby(){
       h('div',{class:'panel'},h('h2',null,'Salle d\'attente'),
         ...ps.slice(0,MAXP).map((p,i)=>h('div',{class:'pl'},avEl(p),h('b',null,p.name+(p.id===uid?' (toi)':'')),i===0?h('span',{class:'muted'},'Hôte'):null)),
         ps.length>MAXP?h('p',{class:'muted'},'Seuls les '+MAXP+' premiers arrivés jouent.'):null,
-        host?h('div',{class:'stack'},h('div',{class:'row'},h('span',null,'Catégorie')),catChips(upd),
+        host?h('div',{class:'stack'},h('div',{class:'row'},h('span',null,'Catégories (coche celles que tu veux mélanger)')),catChips(upd),
           h('div',{class:'row'},h('span',null,'Questions'),segEl([10,15,20],'n',v=>String(v),upd),h('span',null,'Temps'),segEl([15,20,30],'T',v=>v+' s',upd)),
           h('button',{class:'btn primary',type:'button',disabled:!can,onclick:startOnline},'▶ Lancer le quiz'),
           can?null:h('p',{class:'muted'},'Il faut au moins 2 joueurs… partage le QR code.'))
-        :h('div',{class:'stack'},h('p',{class:'bigtxt'},catLbl(ccat)),h('p',{class:'muted'},cn+' questions · '+ct+' s par question'),h('p',{class:'muted'},'L\'hôte choisit la catégorie et lance la partie…'))))];
+        :h('div',{class:'stack'},h('p',{class:'bigtxt'},catsLbl(ccat)),h('p',{class:'muted'},cn+' questions · '+ct+' s par question'),h('p',{class:'muted'},'L\'hôte choisit la catégorie et lance la partie…'))))];
 }
 const COL=['#E5484D','#3B82F6','#F2B632','#2FB67C'];
 function board(s,n,delta){
@@ -2950,7 +3478,7 @@ function renderGame(){
   });
   const head=h('div',{class:'qhead'},h('span',{class:'qn'},'Question '+(s.qi+1)+' / '+s.qs.length),h('span',{class:'qcat'},catLbl(q.cat)),
     h('span',{class:'qs'},'Score : ',h('b',null,String(s.scores[uid]||0))));
-  const view=[renderTop(catLbl(s.cat),topR),head];
+  const view=[renderTop(catsLbl(s.cat),topR),head];
   const qcard=h('div',{class:'qcard'},h('h2',null,q.q));
   if(!rev){
     view.push(h('div',{class:'tm'},h('div',{class:'tbwrap'},h('div',{id:'tbar',class:'tbar'})),h('b',{id:'tnum',class:'tnum'},String(s.T))),qcard,h('div',{class:'ansg'},opts),
