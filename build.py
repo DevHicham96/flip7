@@ -23,6 +23,7 @@ VER=_ver();print('version',VER)
 os.makedirs('dist',exist_ok=True)
 import shutil
 if os.path.isdir('sounds'):shutil.copytree('sounds','dist/sounds',dirs_exist_ok=True)
+if os.path.isdir('avatars'):shutil.copytree('avatars','dist/avatars',dirs_exist_ok=True)
 for src,dst in (('index.template.html','index.html'),('ronda.template.html','ronda.html'),('rami.template.html','rami.html'),('mytho.template.html','mytho.html'),('quiz.template.html','quiz.html'),('loupgarou.template.html','loupgarou.html'),('skyjo.template.html','skyjo.html')):
     s=open(src,encoding='utf-8').read()
     i=s.index('<script>')

@@ -385,10 +385,11 @@ function avDraw(sp,cid){
   return `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs><clipPath id="c${i}"><circle cx="50" cy="50" r="50"/></clipPath></defs><g clip-path="url(#c${i})"><rect width="100" height="100" fill="${B}"/>${pre}${back}<path d="M12 100C14 80 32 73 50 73S86 80 88 100Z" fill="${T}"/><rect x="42" y="60" width="16" height="18" rx="6" fill="${S}"/><rect x="42" y="60" width="16" height="18" rx="6" fill="#000" opacity=".12"/><circle cx="29" cy="48" r="4.5" fill="${S}"/><circle cx="71" cy="48" r="4.5" fill="${S}"/><ellipse cx="50" cy="46" rx="21" ry="24" fill="${S}"/>${beard}<circle cx="35" cy="56" r="4" fill="#FF6B6B" opacity=".25"/><circle cx="65" cy="56" r="4" fill="#FF6B6B" opacity=".25"/><path d="M50 49q-2.5 6 1 7" fill="none" stroke="#000" stroke-opacity=".25" stroke-width="1.6" stroke-linecap="round"/>${mouth}${eyes}<path d="M35.5 39.5Q41 36.5 46.5 39.5M53.5 39.5Q59 36.5 64.5 39.5" fill="none" stroke="${H==='#E8E3D8'||H==='#FFFFFF'?'#9A9488':H}" stroke-width="2.3" stroke-linecap="round"/>${glasses}${front}${post}</g></svg>`;
 }
 
-const AVATARS=Array.from({length:36},(_,i)=>'a'+i);
+const AVATARS=[...Array.from({length:6},(_,i)=>'p'+i),...Array.from({length:36},(_,i)=>'a'+i)];
 const AV_RE=/^c\d{1,2}(-\d{1,2}){8}$/;
 const validAv=a=>typeof a==='string'&&(AVATARS.includes(a)||AV_RE.test(a));
 function avSVGa(a){
+  if(/^p\d$/.test(a))return `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><defs><clipPath id="cl${a}"><circle cx="50" cy="50" r="50"/></clipPath></defs><image href="avatars/${a}.webp" width="100" height="100" preserveAspectRatio="xMidYMid slice" clip-path="url(#cl${a})"/></svg>`;
   if(AV_RE.test(a)){const n=a.slice(1).split('-').map(Number);return avDraw([n[0],n[1],n[2],AV_STY[n[3]%AV_STY.length],n[4],n[5]%AV_GLN,n[6]%3,n[7],n[8]],a);}
   return avSVG(+a.slice(1));
 }
