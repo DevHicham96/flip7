@@ -35,7 +35,7 @@ var root=$('atm');
 $('atm-b').addEventListener('click',function(){root.classList.toggle('open');});
 $('atm-m').addEventListener('click',function(){if(vol===0){vol=.3;s(K,vol);}on=!(on&&vol>0)?true:false;if(on&&vol===0)vol=.3;s(KO,on?'1':'0');sync();});
 $('atm-v').addEventListener('input',function(e){vol=e.target.value/100;s(K,vol);if(vol>0&&!on){on=true;s(KO,'1');}sync();});
-window.ATMUSIC={duck:function(f){duck=f;apply();},sync:sync};
+window.ATMUSIC={duck:function(f){duck=f;apply();},sync:sync,isOn:function(){return on&&vol>0;},setOn:function(v){on=!!v;if(on&&vol===0)vol=.3;s(KO,on?'1':'0');s(K,vol);sync();}};
 apply();sync();
 })();
 </script>
