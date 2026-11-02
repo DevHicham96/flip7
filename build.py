@@ -10,4 +10,6 @@ for src,dst in (('index.template.html','index.html'),('ronda.template.html','ron
     s=open(src,encoding='utf-8').read()
     i=s.index('<script>')
     out=s[:i]+'<script>window.F7_FIREBASE='+json.dumps(cfg)+';</script>\n'+s[i:]
+    mu=open('music.js',encoding='utf-8').read()
+    out=out.replace('</body>',mu+'</body>',1) if '</body>' in out else out+mu
     open('dist/'+dst,'w',encoding='utf-8').write(out);print('ok',dst,len(out))

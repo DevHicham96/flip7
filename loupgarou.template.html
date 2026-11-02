@@ -593,7 +593,7 @@ const Snd=(()=>{
     start:t=>{[392,523,659,784].forEach((f,i)=>tone(f,t+i*.08,.3,{type:'triangle',v:.16}));},
     lose:t=>{[392,349,311,262].forEach((f,i)=>tone(f,t+i*.2,.5,{type:'sawtooth',v:.1,to:f*.9}));}
   };
-  const FILES={howl:['sounds/howl1.mp3',.85],howl2:['sounds/howl2.mp3',.7]},AMBF={night:['sounds/night.mp3',.4],day:['sounds/day.mp3',.45]},cache={},ambEl={};let ambKind='';
+  const FILES={howl:['sounds/howl1.mp3',.85],howl2:['sounds/howl2.mp3',.7],win:['sounds/winner.mp3',.8],bonus:['sounds/bonus.mp3',.8]},AMBF={night:['sounds/night.mp3',.4],day:['sounds/day.mp3',.45],vote:['sounds/suspense.mp3',.5]},cache={},ambEl={};let ambKind='';
   const synth=n=>{const k=S[n]?n:'howl';if(ctx)try{S[k](ctx.currentTime+.01);}catch(e){}};
   const fileSnd=n=>{const f=FILES[n];if(!f)return false;
     try{let a=cache[n];if(!a){a=new Audio(f[0]);a.preload='auto';a.volume=f[1];a.onerror=()=>{cache[n]=null;};cache[n]=a;}
@@ -776,7 +776,7 @@ function evBuild(e){
     return T('ev-role',[h('div',{class:'evsub'},'Ton rôle secret'),
       h('div',{class:'flip'},h('div',{class:'flipin'},h('div',{class:'fcb'},'🎴'),h('div',{class:'fcf'},h('span',null,R(r).e),h('b',null,R(r).n)))),
       h('p',{class:'evs'},R(r).d),mates.length?h('p',{class:'evs mates'},'🐺 Tes complices : '+mates.join(', ')):null,
-      s.lov&&s.lov.length?null:null],5500,'start');
+      s.lov&&s.lov.length?null:null],5500,'bonus');
   }
   if(k==='dawn'){
     const d=e.d||[];
@@ -799,11 +799,11 @@ function evBuild(e){
     if(me!==e.a&&me!==e.b)return null;
     const o=me===e.a?e.b:e.a;
     return T('ev-love',hearts().concat([h('div',{class:'evemo'},'💘'),h('h1',{class:'evt'},'Tu es amoureux(se) !'),h('div',{class:'evrow'},evCard(o,{role:false,note:'ton âme sœur'})),
-      h('p',{class:'evs'},'Si l\'un de vous meurt, l\'autre meurt de chagrin.')]),5600,'ok');
+      h('p',{class:'evs'},'Si l\'un de vous meurt, l\'autre meurt de chagrin.')]),5600,'bonus');
   }
   if(k==='seer'){
     if(e.to!==me)return null;
-    return T('ev-seer',[h('div',{class:'ball'},'🔮'),h('h1',{class:'evt'},nm(e.t)),h('div',{class:'evrole big'},h('span',null,R(e.r).e),h('small',null,R(e.r).n))],3800,'ok');
+    return T('ev-seer',[h('div',{class:'ball'},'🔮'),h('h1',{class:'evt'},nm(e.t)),h('div',{class:'evrole big'},h('span',null,R(e.r).e),h('small',null,R(e.r).n))],3800,'bonus');
   }
   if(k==='end'){
     const w=e.w,mine=!spec&&(w==='lovers'?s.lov.includes(me):((s.roles[me]==='wolf')!==(w==='village')));
@@ -895,8 +895,8 @@ function onState(d){
   if(d.ph!=='end')seenLive.add(d.gid);
   S=d;onLocalChange();render();
 }
-const ambFor=()=>!S||S.ph==='end'?'':(isNight()?'night':(['dawn','day','vote','vres','hunter'].includes(S.ph)?'day':''));
-function ambSync(){Snd.amb(ambFor());}
+const ambFor=()=>!S||S.ph==='end'?'':(isNight()?'night':(S.ph==='vote'?'vote':(['dawn','day','vres','hunter'].includes(S.ph)?'day':'')));
+function ambSync(){const k=ambFor();Snd.amb(k);if(window.ATMUSIC)ATMUSIC.duck(k?.35:1);}
 function onLocalChange(){
   if(!S){ambSync();return;}
   const pk=S.gid+':'+S.st;
