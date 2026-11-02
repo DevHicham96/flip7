@@ -108,7 +108,7 @@ input.t{min-height:44px;border-radius:12px;border:2px solid #B88B45;background:#
 #ch-list li.me{border-color:#E8590C}#ch-list li.rx{font-style:italic;color:var(--ink-2)}
 #ch-form{display:flex;gap:6px}#ch-form input{flex:1;min-width:0;min-height:40px;border-radius:10px;border:2px solid #B88B45;background:#FFF8E1;color:var(--ink);font:500 15px var(--f-body);padding:0 10px}
 /* écran de chargement (thème aventure) */
-.gload{position:fixed;inset:0;z-index:300;display:grid;place-items:center;align-content:center;gap:20px;background:linear-gradient(#5CC3E6 0%,#A5E1F0 45%,#D8F4EE 75%);overflow:hidden;transition:opacity .5s ease,visibility .5s;font-family:'Unbounded','Figtree',system-ui,sans-serif}
+.gload{position:fixed;inset:0;z-index:300;display:grid;place-items:center;align-content:center;gap:20px;background:linear-gradient(#5CC3E6 0%,#A5E1F0 45%,#D8F4EE 75%);overflow:hidden;transition:opacity .25s ease,visibility .25s;font-family:'Unbounded','Figtree',system-ui,sans-serif}
 .gload.out{opacity:0;visibility:hidden}
 .gload::before{content:'';position:absolute;left:0;right:0;bottom:0;height:30vh;min-height:140px;pointer-events:none;background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 300' preserveAspectRatio='none'><path d='M0 120 C200 40 380 60 560 120 S950 170 1200 80 V300 H0Z' fill='%237BC36B'/><path d='M0 190 C220 120 420 150 640 200 S1000 230 1200 160 V300 H0Z' fill='%234FA24A'/><path d='M0 250 C300 210 600 260 900 235 S1120 230 1200 245 V300 H0Z' fill='%232F8240'/></svg>") bottom/100% 100% no-repeat}
 .gload .lg-cloud{position:absolute;width:120px;height:40px;border-radius:99px;background:rgba(255,255,255,.85);box-shadow:30px -14px 0 8px rgba(255,255,255,.85),-26px -8px 0 2px rgba(255,255,255,.85);animation:lgcl 22s linear infinite}
@@ -655,7 +655,7 @@ function avEl(p,cls){const a=validAv(p.av)?p.av:null;const e=h('span',{class:'av
 function renderTop(sub,right){
   const chip=myName?h('span',{class:'pchip',title:'Ton profil'},avEl({id:mySlug||uid,name:myName,av:myAv},'sm'),h('b',null,myName),mySlug==='hitch'?h('span',{class:'shd',title:'Admin'},'🛡'):null):null;
   const jeux=h('a',{class:'btn sm',href:'index.html#jeux'},'🎮 Jeux');
-  jeux.addEventListener('click',ev=>{ev.preventDefault();showLoader('f7');setTimeout(()=>{location.href='index.html#jeux';},650);});
+  jeux.addEventListener('click',ev=>{ev.preventDefault();showLoader('f7');setTimeout(()=>{location.href="index.html#jeux";},200);});
   return h('div',{class:'top'},h('div',{class:'brand'},'RAMI',h('small',null,sub||'Rami traditionnel')),
     right||null,chip,
     h('button',{class:'btn sm',type:'button',onclick:toggleChat},'💬 Discussion',unread?h('span',{class:'ubadge'},String(unread)):null),
@@ -870,7 +870,7 @@ function showLoader(kind){
 }
 function hideLoader(){
   const l=$('gload');if(!l)return;
-  setTimeout(()=>{l.classList.add('out');setTimeout(()=>l.remove(),600);},Math.max(0,900-(performance.now()-LD_T0)));
+  setTimeout(()=>{l.classList.add('out');setTimeout(()=>l.remove(),300);},Math.max(0,250-(performance.now()-LD_T0)));
 }
 /* ---- démarrage ---- */
 async function boot(){

@@ -122,7 +122,7 @@ input.t:focus{outline:0;border-color:var(--pur)}
 .ch-toast.out{opacity:0;transform:translateY(-6px);transition:.4s}
 @keyframes tin{from{opacity:0;transform:translateY(10px)}}
 /* chargement */
-.gload{position:fixed;inset:0;z-index:300;display:grid;place-items:center;align-content:center;gap:20px;background:linear-gradient(160deg,var(--bg1),var(--bg2) 70%,#6d2fd6);overflow:hidden;transition:opacity .5s ease,visibility .5s;font-family:var(--f-display)}
+.gload{position:fixed;inset:0;z-index:300;display:grid;place-items:center;align-content:center;gap:20px;background:linear-gradient(160deg,var(--bg1),var(--bg2) 70%,#6d2fd6);overflow:hidden;transition:opacity .25s ease,visibility .25s;font-family:var(--f-display)}
 .gload.out{opacity:0;visibility:hidden}
 .gload .lg-cloud{display:none}
 .gload .lg-fan{position:relative;width:170px;height:140px}
@@ -561,7 +561,7 @@ function showLoader(kind){
 }
 function hideLoader(){
   const l=$('gload');if(!l)return;
-  setTimeout(()=>{l.classList.add('out');setTimeout(()=>l.remove(),600);},Math.max(0,900-(performance.now()-LD_T0)));
+  setTimeout(()=>{l.classList.add('out');setTimeout(()=>l.remove(),300);},Math.max(0,250-(performance.now()-LD_T0)));
 }
 /* ---- état ---- */
 const NAME_K='f7name',BASE=500;
@@ -692,7 +692,7 @@ function avEl(p,cls){const a=validAv(p.av)?p.av:null;const e=h('span',{class:'av
 function renderTop(sub,right){
   const chip=myName?h('span',{class:'pchip'},avEl({id:mySlug||uid,name:myName,av:myAv},'sm'),h('b',null,myName)):null;
   const jeux=h('a',{class:'btn sm',href:'index.html#jeux'},'🎮 Jeux');
-  jeux.addEventListener('click',ev=>{ev.preventDefault();showLoader('f7');setTimeout(()=>{location.href='index.html#jeux';},650);});
+  jeux.addEventListener('click',ev=>{ev.preventDefault();showLoader('f7');setTimeout(()=>{location.href="index.html#jeux";},200);});
   return h('div',{class:'top'},h('div',{class:'brand'},'LOUP-GAROU',h('small',null,sub||'Le village dort…')),
     right||null,chip,h('button',{class:'btn sm',type:'button',onclick:()=>{Snd.set(!Snd.on);render();}},Snd.on?'🔊 Sons':'🔇 Sons'),jeux);
 }
