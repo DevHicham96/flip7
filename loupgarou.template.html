@@ -593,7 +593,24 @@ const Snd=(()=>{
     start:t=>{[392,523,659,784].forEach((f,i)=>tone(f,t+i*.08,.3,{type:'triangle',v:.16}));},
     lose:t=>{[392,349,311,262].forEach((f,i)=>tone(f,t+i*.2,.5,{type:'sawtooth',v:.1,to:f*.9}));}
   };
-  return{play(n){if(!on||!init())return;try{S[n](ctx.currentTime+.01);}catch(e){}},get on(){return on;},set(v){on=!!v;lsSet('qzsfx',v?'1':'0');if(v)init();}};
+  const FILES={howl:['sounds/howl1.mp3',.85],howl2:['sounds/howl2.mp3',.7]},AMBF={night:['sounds/night.mp3',.4],day:['sounds/day.mp3',.45]},cache={},ambEl={};let ambKind='';
+  const synth=n=>{const k=S[n]?n:'howl';if(ctx)try{S[k](ctx.currentTime+.01);}catch(e){}};
+  const fileSnd=n=>{const f=FILES[n];if(!f)return false;
+    try{let a=cache[n];if(!a){a=new Audio(f[0]);a.preload='auto';a.volume=f[1];a.onerror=()=>{cache[n]=null;};cache[n]=a;}
+      a.currentTime=0;const p=a.play();if(p&&p.catch)p.catch(()=>{});return true;}catch(e){return false;}};
+  const fade=(a,to,ms,done)=>{clearInterval(a._f);const from=a.volume,t0=Date.now();a._f=setInterval(()=>{const k=Math.min(1,(Date.now()-t0)/ms);a.volume=Math.max(0,Math.min(1,from+(to-from)*k));if(k>=1){clearInterval(a._f);if(done)done();}},60);};
+  const ambSet=k=>{
+    ambKind=k;
+    Object.keys(AMBF).forEach(n=>{
+      const a=ambEl[n];
+      if(n===k&&on&&!document.hidden){
+        let e=a;if(!e){e=new Audio(AMBF[n][0]);e.loop=true;e.volume=0;ambEl[n]=e;}
+        if(e.paused){e.volume=0;const p=e.play();if(p&&p.catch)p.catch(()=>{});}
+        fade(e,AMBF[n][1],1800);
+      }else if(a&&!a.paused)fade(a,0,1200,()=>{if(ambKind!==n||!on)a.pause();});
+    });
+  };
+  return{play(n){if(!on)return;init();if(fileSnd(n))return;synth(n);},amb:ambSet,ambKind:()=>ambKind,get on(){return on;},set(v){on=!!v;lsSet('qzsfx',v?'1':'0');if(v)init();ambSet(on?ambKind:'');}};
 })();
 function makeDbFromSdk(F,fs){
   const ws=x=>({exists:x.exists(),data:()=>x.data()});
@@ -766,7 +783,7 @@ function evBuild(e){
     return T('ev-dawn',[h('div',{class:'sunrise'},h('i',{class:'rays'}),h('i',{class:'sun'})),h('h1',{class:'evt'},'Le jour se lève'),
       d.length?h('div',{class:'evrow'},d.map(id=>evCard(id,{cls:'dead'}))):h('div',null,h('div',{class:'evemo'},'🎉'),h('p',{class:'evs big'},'Personne n\'est mort cette nuit !')),
       d.length?h('p',{class:'evs'},d.length>1?'Le village perd '+d.length+' habitants…':'Le village perd un habitant…'):null,
-      d.length>1&&s.lov.length===2&&d.every(i=>s.lov.includes(i))?h('p',{class:'evs'},'💔 Mort de chagrin'):null],5800+Math.min(2,Math.max(0,d.length-1))*1200,'dawn',d.length?{snd2:'bad'}:{});
+      d.length>1&&s.lov.length===2&&d.every(i=>s.lov.includes(i))?h('p',{class:'evs'},'💔 Mort de chagrin'):null],5800+Math.min(2,Math.max(0,d.length-1))*1200,'dawn',d.length?{snd2:'howl2'}:{});
   }
   if(k==='day')return T('ev-day',big('☀️','Place au débat','Qui est le loup ? · '+lgAlive(s).length+' en vie'),2600,'turn');
   if(k==='vote')return T('ev-vote',big('🗳️','Place au vote',e.mark?'🐦‍⬛ Le corbeau désigne '+nm(e.mark)+' : +2 voix contre lui !':'Désignez le loup !'),3200,'tick');
@@ -792,7 +809,7 @@ function evBuild(e){
     const w=e.w,mine=!spec&&(w==='lovers'?s.lov.includes(me):((s.roles[me]==='wolf')!==(w==='village')));
     const t=w==='village'?['🧑‍🌾','Le village a gagné !']:w==='wolves'?['🐺','Les loups ont gagné !']:['💘','Les amoureux ont gagné !'];
     return T('ev-end '+w,[h('div',{class:'rays big'}),h('div',{class:'evemo huge'},t[0]),h('h1',{class:'evt'},t[1]),spec?null:h('p',{class:'evs big'},mine?'Tu as gagné ! 🎉':'Perdu… 😅'),
-      h('div',{class:'evrow sm'},s.players.filter(p=>w==='lovers'?s.lov.includes(p.id):((s.roles[p.id]==='wolf')===(w==='wolves'))).map(p=>evCard(p.id,{})))],8500,spec||mine?'win':'lose',{conf:spec||mine});
+      h('div',{class:'evrow sm'},s.players.filter(p=>w==='lovers'?s.lov.includes(p.id):((s.roles[p.id]==='wolf')===(w==='wolves'))).map(p=>evCard(p.id,{})))],8500,w==='wolves'?'howl2':(spec||mine?'win':'lose'),{conf:spec||mine});
   }
   return null;
 }
@@ -847,7 +864,7 @@ function joinRoom(n){
 function leaveRoom(){
   if(db&&ROOM)db.doc('lobby/lg_'+uid).delete().catch(()=>{});
   if(stateUnsub){stateUnsub();stateUnsub=null;}
-  clearInterval(hb);hb=null;ROOM=0;mode=null;S=null;myAct=null;lastPk='';evReset();
+  clearInterval(hb);hb=null;ROOM=0;mode=null;S=null;myAct=null;lastPk='';evReset();ambSync();
   try{history.replaceState(null,'',location.pathname);}catch(e){}
   chatRoomChanged();render();
 }
@@ -878,10 +895,12 @@ function onState(d){
   if(d.ph!=='end')seenLive.add(d.gid);
   S=d;onLocalChange();render();
 }
+const ambFor=()=>!S||S.ph==='end'?'':(isNight()?'night':(['dawn','day','vote','vres','hunter'].includes(S.ph)?'day':''));
+function ambSync(){Snd.amb(ambFor());}
 function onLocalChange(){
-  if(!S)return;
+  if(!S){ambSync();return;}
   const pk=S.gid+':'+S.st;
-  if(pk!==lastPk)lastPk=pk;
+  if(pk!==lastPk){lastPk=pk;ambSync();}
   evScan();
 }
 /* ---- actions ---- */
@@ -1149,7 +1168,8 @@ async function boot(){
   }
   hideLoader();
   window.addEventListener('beforeunload',()=>{if(db&&ROOM)db.doc('lobby/lg_'+uid).delete().catch(()=>{});});
-  document.addEventListener('visibilitychange',()=>{if(!document.hidden)beat();});
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden)beat();ambSync();});
+  document.addEventListener('pointerdown',()=>ambSync(),{passive:true});
 }
 
 boot();
