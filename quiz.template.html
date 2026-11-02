@@ -3423,7 +3423,7 @@ function renderPicker(){
       h('span',{class:'muted'},ps.length?ps.map(p=>p.name).slice(0,6).join(', '):'Aucun joueur'));
   });
   const nm=h('input',{id:'nm-in',class:'t',maxlength:'16',placeholder:'Ton pseudo',value:myName,'aria-label':'Pseudo'});
-  nm.addEventListener('input',()=>{myName=nm.value.trim().slice(0,16);lsSet(NAME_K,myName);const dis=!db||myName.length<2;document.querySelectorAll('.rcard,#join-go').forEach(b=>b.disabled=dis);const sg=$('solo-go');if(sg)sg.disabled=myName.length<2;renderChat();});
+  nm.addEventListener('input',()=>{myName=nm.value.trim().slice(0,16);lsSet(NAME_K,myName);const dis=!db||myName.length<2;document.querySelectorAll('.rcard,#join-go').forEach(b=>b.disabled=dis);const sg=$('solo-go');if(sg)sg.disabled=myName.length<2;});
   const jb=pendingJoin?h('button',{id:'join-go',class:'btn primary',type:'button',disabled:!db||myName.length<2,onclick:()=>joinRoom(pendingJoin)},'➡ Rejoindre la table '+pendingJoin):null;
   return[renderTop('Questions pour tous'),
     pendingJoin?h('div',{class:'panel'},h('h2',null,'Tu as été invité(e) !'),h('p',{class:'muted'},'Choisis un pseudo pour rejoindre la table '+pendingJoin+'.'),nm,jb):null,
@@ -3518,7 +3518,7 @@ async function boot(){
   setTimeout(hideLoader,6000);
   uid=lsGet('f7id');if(!uid){uid='g_'+Math.random().toString(36).slice(2,12);lsSet('f7id',uid);}
   const m=/[?&]table=(\d{1,2})/.exec(location.search);if(m)pendingJoin=+m[1];
-  chatBox();render();
+  render();
   setInterval(tick,250);
   if(window.F7_FIREBASE){
     try{db=await loadFirebase(window.F7_FIREBASE);}catch(e){db=null;}
@@ -3529,7 +3529,6 @@ async function boot(){
       },()=>{});
       setInterval(()=>{if(!mode||(mode==='online'&&!S))render();},8000);
     }
-    startChat();
     if(pendingJoin&&db&&myName.trim().length>=2)joinRoom(pendingJoin);else render();
   }
   hideLoader();
