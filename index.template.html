@@ -879,6 +879,21 @@ h2{color:#E8632B;text-shadow:0 2px 0 rgba(255,246,210,.9),0 3px 0 rgba(120,60,10
 .hub-c.rd .hub-art img{width:84px;height:auto;filter:drop-shadow(0 6px 4px rgba(0,0,0,.35))}.hub-c.rd .hub-art img:first-child{transform:rotate(-9deg) translateX(10px)}.hub-c.rd .hub-art img:last-child{transform:rotate(8deg) translateX(-10px)}
 .hub-c.rm .hub-art span{display:grid;place-items:center;width:62px;height:88px;border-radius:9px;background:#fffdf6;border:1px solid #b9a77c;box-shadow:0 6px 4px rgba(0,0,0,.3);font:800 30px var(--f-display);color:#1b1b1b;line-height:1}.hub-c.rm .hub-art span:first-child{transform:rotate(-10deg) translateX(10px);color:#c8232c}.hub-c.rm .hub-art span:last-child{transform:rotate(9deg) translateX(-10px)}
 @media (max-height:860px){.hub-in{gap:10px}.hub-g{gap:10px}.hub-c{padding:10px;gap:4px}.hub-art{min-height:84px}.hub-art svg{height:64px}.hub-c.rd .hub-art img{width:56px}.hub-c.rm .hub-art span{width:46px;height:64px;font-size:22px}.hub-c b{font-size:20px}.hub-go{padding:7px 22px}}
+
+.gload.lg{background:linear-gradient(170deg,#060a22,#2a1466)}.gload.lg .lg-fan i{background:linear-gradient(#3b2f95,#150f55);border-color:#ffd76a;font-size:30px}
+.hub-in h2{font-size:clamp(26px,5vw,38px)}
+.hub-fl{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.hub-p{border:0;font:800 14px var(--f-body);padding:9px 16px;border-radius:99px;background:rgba(255,255,255,.78);color:#5E3516;cursor:pointer;box-shadow:0 3px 0 rgba(94,53,22,.35);transition:transform .1s}
+.hub-p:hover{transform:translateY(-2px)}.hub-p b{margin-left:6px;background:rgba(94,53,22,.15);border-radius:99px;padding:0 8px;font-size:12px}
+.hub-p.on{background:linear-gradient(#FF8A3D,#E8590C);color:#fff;box-shadow:0 3px 0 #8f330a}.hub-p.on b{background:rgba(255,255,255,.3)}
+.hub-g{grid-template-columns:repeat(auto-fill,minmax(230px,1fr))}
+.hub-c{position:relative;padding-top:38px;animation:hubin .35s both}
+@keyframes hubin{from{opacity:0;transform:translateY(14px) scale(.96)}to{opacity:1;transform:none}}
+.hub-tg{position:absolute;left:12px;top:10px;font:800 11px var(--f-body);padding:3px 10px;border-radius:99px;color:#fff;background:#E8590C}
+.hub-c[data-t=bluff] .hub-tg{background:#7C3AED}.hub-c[data-t=quiz] .hub-tg{background:#2C63D6}
+.hub-m{display:flex;gap:6px;flex-wrap:wrap;justify-content:center}.hub-m i{font:700 12px var(--f-body);font-style:normal;background:rgba(122,82,36,.14);color:#7A5224;border-radius:99px;padding:2px 10px}
+.hub-c.lg .hub-art span{display:grid;place-items:center;width:78px;height:78px;border-radius:50%;font-size:40px;background:radial-gradient(#4a3ec0,#0e0a3a);border:3px solid #ffd76a;box-shadow:0 6px 0 rgba(0,0,0,.3)}.hub-c.lg .hub-art span:first-child{transform:translateX(8px)}.hub-c.lg .hub-art span:last-child{transform:translateX(-8px)}
+@media (prefers-reduced-motion:reduce){.hub-c{animation:none}}
 .hub-c.my .hub-art span{display:grid;place-items:center;width:62px;height:88px;border-radius:9px;background:#fffdf6;border:1px solid #b9a77c;box-shadow:0 6px 4px rgba(0,0,0,.3);font:800 34px var(--f-display);line-height:1}.hub-c.my .hub-art span:first-child{transform:rotate(-10deg) translateX(10px)}.hub-c.my .hub-art span:last-child{transform:rotate(9deg) translateX(-10px)}
 .hub-c b{font:800 24px var(--f-display);color:#E8632B;text-shadow:0 2px 0 #fff6d2}.hub-c small{font-size:14px;color:#7A5224}
 .hub-go{margin-top:4px;padding:10px 26px;border-radius:14px;border:2px solid #b8430a;background:linear-gradient(#FF8A3D,#E8590C);color:#fff;font:800 16px var(--f-body);box-shadow:0 4px 0 #8f330a;text-shadow:0 2px 0 rgba(0,0,0,.25)}
@@ -3224,7 +3239,7 @@ let hubWanted=true;
 function ssGet(k){try{return sessionStorage.getItem(k);}catch(e){return null;}}
 function ssSet(k,v){try{sessionStorage.setItem(k,v);}catch(e){}}
 function hideHub(){const o=$('hub');if(o)o.remove();}
-const LD_INNER={qz:'<div class="lg-cloud c1"></div><div class="lg-cloud c2"></div><div class="lg-fan" aria-hidden="true"><i>❓</i><i>💡</i><i>🏆</i><i>⚡</i><i>❓</i></div><div class="lg-sign">Loading<b>.</b><b>.</b><b>.</b></div><div class="lg-bar" aria-hidden="true"></div>',f7:'<div class="lg-cloud c1"></div><div class="lg-cloud c2"></div><div class="lg-fan" aria-hidden="true"><i>7</i><i>7</i><i>7</i><i>7</i><i>7</i></div><div class="lg-sign">Loading<b>.</b><b>.</b><b>.</b></div><div class="lg-bar" aria-hidden="true"></div>',my:'<div class="lg-cloud c1"></div><div class="lg-cloud c2"></div><div class="lg-fan" aria-hidden="true"><i>🤥</i><i>♠</i><i>🫵</i><i>♥</i><i>🤥</i></div><div class="lg-sign">Loading<b>.</b><b>.</b><b>.</b></div><div class="lg-bar" aria-hidden="true"></div>',rm:'<div class="lg-cloud c1"></div><div class="lg-cloud c2"></div><div class="lg-fan" aria-hidden="true"><i>♠</i><i>♥</i><i>🃏</i><i>♦</i><i>♣</i></div><div class="lg-sign">Loading<b>.</b><b>.</b><b>.</b></div><div class="lg-bar" aria-hidden="true"></div>',rd:'<div class="lg-cloud c1"></div><div class="lg-cloud c2"></div><div class="lg-fan" aria-hidden="true"><i>🪙</i><i>🗡️</i><i>🪵</i><i>🍵</i><i>🪙</i></div><div class="lg-sign">Loading<b>.</b><b>.</b><b>.</b></div><div class="lg-bar" aria-hidden="true"></div>'};
+const LD_INNER={lg:'<div class="lg-cloud c1"></div><div class="lg-cloud c2"></div><div class="lg-fan" aria-hidden="true"><i>🌙</i><i>🐺</i><i>🔮</i><i>🧪</i><i>🏹</i></div><div class="lg-sign">Loading<b>.</b><b>.</b><b>.</b></div><div class="lg-bar" aria-hidden="true"></div>',qz:'<div class="lg-cloud c1"></div><div class="lg-cloud c2"></div><div class="lg-fan" aria-hidden="true"><i>❓</i><i>💡</i><i>🏆</i><i>⚡</i><i>❓</i></div><div class="lg-sign">Loading<b>.</b><b>.</b><b>.</b></div><div class="lg-bar" aria-hidden="true"></div>',f7:'<div class="lg-cloud c1"></div><div class="lg-cloud c2"></div><div class="lg-fan" aria-hidden="true"><i>7</i><i>7</i><i>7</i><i>7</i><i>7</i></div><div class="lg-sign">Loading<b>.</b><b>.</b><b>.</b></div><div class="lg-bar" aria-hidden="true"></div>',my:'<div class="lg-cloud c1"></div><div class="lg-cloud c2"></div><div class="lg-fan" aria-hidden="true"><i>🤥</i><i>♠</i><i>🫵</i><i>♥</i><i>🤥</i></div><div class="lg-sign">Loading<b>.</b><b>.</b><b>.</b></div><div class="lg-bar" aria-hidden="true"></div>',rm:'<div class="lg-cloud c1"></div><div class="lg-cloud c2"></div><div class="lg-fan" aria-hidden="true"><i>♠</i><i>♥</i><i>🃏</i><i>♦</i><i>♣</i></div><div class="lg-sign">Loading<b>.</b><b>.</b><b>.</b></div><div class="lg-bar" aria-hidden="true"></div>',rd:'<div class="lg-cloud c1"></div><div class="lg-cloud c2"></div><div class="lg-fan" aria-hidden="true"><i>🪙</i><i>🗡️</i><i>🪵</i><i>🍵</i><i>🪙</i></div><div class="lg-sign">Loading<b>.</b><b>.</b><b>.</b></div><div class="lg-bar" aria-hidden="true"></div>'};
 function showLoader(k){let l=$('gload');if(!l){l=document.createElement('div');l.id='gload';document.body.append(l);}l.className='gload '+k;l.innerHTML=LD_INNER[k]||LD_INNER.f7;}
 function endLoader(){const l=$('gload');if(!l)return;l.classList.add('out');setTimeout(()=>l.remove(),600);}
 function tryHub(){
@@ -3238,17 +3253,31 @@ function showHub(){
   if($('hub'))return;
   const nm=(prof&&prof.name)||lsGet('f7name')||'';
   const logo=(document.querySelector('.logo')||{outerHTML:'<b>FLIP 7</b>'}).outerHTML;
-  const choose=g=>{hubWanted=false;showLoader(g==='flip7'?'f7':g==='rami'?'rm':g==='mytho'?'my':g==='quiz'?'qz':'rd');if(g==='flip7'){ssSet('f7game','flip7');try{history.replaceState(null,'',location.pathname);}catch(e){}setTimeout(()=>{hideHub();endLoader();},700);}else setTimeout(()=>{location.href=g==='rami'?'rami.html':g==='mytho'?'mytho.html':g==='quiz'?'quiz.html':'ronda.html';},700);};
-  const card=(cls,art,title,sub,go)=>h('button',{class:'hub-c '+cls,type:'button',onclick:go},h('div',{class:'hub-art',html:art}),h('b',null,title),h('small',null,sub),h('span',{class:'hub-go'},'Jouer ›'));
+  const LOAD={flip7:'f7',rami:'rm',mytho:'my',quiz:'qz',loup:'lg',ronda:'rd'},URL={rami:'rami.html',mytho:'mytho.html',quiz:'quiz.html',loup:'loupgarou.html',ronda:'ronda.html'};
+  const choose=g=>{hubWanted=false;showLoader(LOAD[g]||'rd');if(g==='flip7'){ssSet('f7game','flip7');try{history.replaceState(null,'',location.pathname);}catch(e){}setTimeout(()=>{hideHub();endLoader();},700);}else setTimeout(()=>{location.href=URL[g];},700);};
+  const TYPES=[['all','🎮 Tous'],['cartes','🃏 Cartes'],['bluff','🎭 Bluff & déduction'],['quiz','🧠 Quiz & culture']];
+  const TN={cartes:'🃏 Cartes',bluff:'🎭 Bluff',quiz:'🧠 Quiz'};
+  const GAMES=[
+    {id:'flip7',cls:'f7',t:'cartes',title:'Flip 7',sub:'Pioche, tente ta chance et évite les doublons.',pl:'2–8 joueurs',dur:'~15 min',art:logo},
+    {id:'ronda',cls:'rd',t:'cartes',title:'Ronda',sub:'Le jeu de cartes marocain : ramasse, annonce, marque.',pl:'2–4 joueurs',dur:'~15 min',art:'<img src="'+HUB_IMG2+'" alt=""><img src="'+HUB_IMG+'" alt="">'},
+    {id:'rami',cls:'rm',t:'cartes',title:'Rami',sub:'Rami traditionnel : suites, brelans et jokers.',pl:'2–5 joueurs',dur:'~30 min',art:'<span>A♥</span><span>K♠</span>'},
+    {id:'mytho',cls:'my',t:'bluff',title:'Mytho',sub:'Pose, mens, et repère les menteurs.',pl:'3–8 joueurs',dur:'~15 min',art:'<span>🤥</span><span>🫵</span>'},
+    {id:'loup',cls:'lg',t:'bluff',title:'Loup-Garou',sub:'Rôles secrets, nuit et jour : qui est le loup ?',pl:'4–16 joueurs',dur:'~30 min',art:'<span>🐺</span><span>🌙</span>'},
+    {id:'quiz',cls:'qz',t:'quiz',title:'Quiz',sub:'8 thèmes, des questions pour tous, scanne le QR.',pl:'1–30 joueurs',dur:'~10 min',art:'<span>❓</span><span>🏆</span>'}
+  ];
+  let flt=ssGet('hubf')||'all';if(!TYPES.some(t=>t[0]===flt))flt='all';
+  const grid=h('div',{class:'hub-g'}),fl=h('div',{class:'hub-fl',role:'tablist','aria-label':'Filtrer par type de jeu'});
+  const cnt=t=>t==='all'?GAMES.length:GAMES.filter(g=>g.t===t).length;
+  const draw=()=>{
+    fl.replaceChildren(...TYPES.map(t=>h('button',{type:'button',role:'tab','aria-selected':flt===t[0]?'true':'false',class:'hub-p'+(flt===t[0]?' on':''),onclick:()=>{flt=t[0];ssSet('hubf',flt);draw();}},t[1],h('b',null,String(cnt(t[0]))))));
+    grid.replaceChildren(...GAMES.filter(g=>flt==='all'||g.t===flt).map((g,i)=>h('button',{class:'hub-c '+g.cls,'data-t':g.t,type:'button',style:'animation-delay:'+(i*50)+'ms',onclick:()=>choose(g.id)},
+      h('span',{class:'hub-tg'},TN[g.t]),h('div',{class:'hub-art',html:g.art}),h('b',null,g.title),h('small',null,g.sub),
+      h('div',{class:'hub-m'},h('i',null,'👥 '+g.pl),h('i',null,'⏱ '+g.dur)),h('span',{class:'hub-go'},'Jouer ›'))));
+  };
+  draw();
   const ov=h('div',{id:'hub',role:'dialog','aria-label':'Choix du jeu'},
     h('div',{class:'hub-in'},
-      h('h2',null,nm?'Salut '+nm+' !':'Bienvenue !'),h('p',{class:'hub-s'},'À quel jeu veux-tu jouer ?'),
-      h('div',{class:'hub-g'},
-        card('f7',logo,'Flip 7','Pioche, tente ta chance, 2 à 8 joueurs',()=>choose('flip7')),
-        card('rd','<img src="'+HUB_IMG2+'" alt=""><img src="'+HUB_IMG+'" alt="">','Ronda','Jeu de cartes marocaines, 2 à 4 joueurs',()=>choose('ronda')),
-        card('rm','<span>A♥</span><span>K♠</span>','Rami','Rami traditionnel, 2 à 5 joueurs',()=>choose('rami')),
-        card('my','<span>🤥</span><span>🫵</span>','Mytho','Bluff et accusations, 3 à 8 joueurs',()=>choose('mytho')),
-        card('qz','<span>❓</span><span>🏆</span>','Quiz','Questions pour tous, scanne le QR pour jouer',()=>choose('quiz')))));
+      h('h2',null,nm?'Salut '+nm+' !':'Bienvenue !'),h('p',{class:'hub-s'},'À quel jeu veux-tu jouer ?'),fl,grid));
   document.body.append(ov);
 }
 
