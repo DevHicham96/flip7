@@ -400,27 +400,30 @@ function rdDiscSafe(s,pid){return rdDrawDisc(s,pid);}
 
 
 /* avatars dessinés (SVG générés, originaux) */
-const AV_BG=['#E9B949','#8DBBD9','#C9A7C8','#4E9AA6','#E58B3A','#9F6AA8','#7FB77E','#D96C5F','#6C7FD1','#D4A5A5','#5DB7A6','#F2A65A','#2B2F3A','#F7F3E0','#E8537A','#3FA7E0'];
+const AV_BG=['#E9B949','#8DBBD9','#C9A7C8','#4E9AA6','#E58B3A','#9F6AA8','#7FB77E','#D96C5F','#6C7FD1','#D4A5A5','#5DB7A6','#F2A65A','#2B2F3A','#F7F3E0','#E8537A','#3FA7E0','#FF5E3A','#1B1F3B','#00B8D9','#7A5CFF','#FFB020','#12B886'];
 const AV_SKIN=['#F6D3B5','#EAB68E','#C98B63','#9A6240','#6B3F27','#F2C9A0'];
-const AV_HAIR=['#2B1B12','#5A3A22','#B5541C','#D9B04A','#8E8E96','#1D1D26','#C23B5A','#E8E3D8','#3D7BE0','#2FB67C','#F26CC8','#8A4DE0'];
+const AV_HAIR=['#2B1B12','#5A3A22','#B5541C','#D9B04A','#8E8E96','#1D1D26','#C23B5A','#E8E3D8','#3D7BE0','#2FB67C','#F26CC8','#8A4DE0','#00E5FF','#FF3B6B','#7CFF6B','#FFFFFF','#FFD400','#5B2CFF','#FF7A1A'];
 const AV_SHIRT=['#3B5BA9','#D94F4F','#2E8B6F','#F2B632','#7A4BA6','#2B2F3A','#E87BA8','#4FB0C6','#FFFFFF','#FF8A3D'];
-const AV_STY=['short','long','curly','side','afro','bun','bob','spiky','cap','none'];
-const AV_STYL=['Courts','Longs','Bouclés','Mèche','Afro','Chignon','Carré','Pointus','Casquette','Chauve'];
+const AV_STY=['short','long','curly','side','afro','bun','bob','spiky','cap','none','swoop','spikyxl','twin','ponytail','messy'];
+const AV_STYL=['Courts','Longs','Bouclés','Mèche','Afro','Chignon','Carré','Pointus','Casquette','Chauve','Mèche rebelle','Pointes géantes','Couettes','Queue de cheval','Ébouriffé'];
+const AV_GLN=10;
 const AV_SPEC=[
  [0,0,0,'short',0,0,0],[1,1,1,'long',1,0,0],[2,2,5,'curly',2,0,0],[3,3,0,'short',3,1,1],[4,4,0,'afro',4,0,0],[5,0,4,'none',5,0,1],
  [6,5,6,'bob',6,1,0],[7,1,3,'side',7,0,0],[8,2,2,'bun',0,0,0],[9,3,1,'cap',1,0,1],[10,4,5,'afro',2,1,0],[11,0,7,'short',3,1,1],
  [0,1,2,'curly',4,0,0],[1,2,0,'side',5,1,0],[2,5,3,'long',6,0,0],[3,0,5,'spiky',7,0,0],[4,3,1,'bob',0,0,0],[5,4,4,'none',1,1,1],
- [6,1,6,'long',2,0,0],[7,2,0,'cap',3,0,0],[8,5,2,'curly',4,1,0],[9,3,7,'short',5,0,1],[10,0,3,'bun',6,1,0],[11,4,0,'spiky',7,0,0]
+ [6,1,6,'long',2,0,0],[7,2,0,'cap',3,0,0],[8,5,2,'curly',4,1,0],[9,3,7,'short',5,0,1],[10,0,3,'bun',6,1,0],[11,4,0,'spiky',7,0,0],
+ [17,0,13,'swoop',5,9,0,2,7],[19,5,14,'twin',6,0,0,0,5],[16,2,0,'swoop',5,3,0,2,6],[18,1,15,'messy',2,8,0,0,5],[20,3,1,'ponytail',3,7,0,1,7],[17,4,14,'spikyxl',9,4,0,0,7],
+ [21,0,17,'swoop',0,0,0,5,8],[16,2,3,'messy',7,5,0,1,1],[19,1,18,'ponytail',1,0,0,0,5],[17,5,15,'spikyxl',5,6,2,2,6],[18,0,13,'bob',4,8,0,1,5],[21,3,17,'spikyxl',8,3,0,1,7]
 ];
 function avSVG(i){
-  const [bg,sk,hr,st,sh,gl,bd]=AV_SPEC[i%AV_SPEC.length];
-  return avDraw([bg,sk,hr,st,sh,gl?1:0,bd?1:0,(i%3===0)?0:1,0],'c'+i);
+  const r=AV_SPEC[i%AV_SPEC.length],full=r.length>=9;
+  return avDraw([r[0],r[1],r[2],r[3],r[4],full?r[5]:(r[5]?1:0),full?r[6]:(r[6]?1:0),full?r[7]:((i%3===0)?0:1),full?r[8]:0],'c'+i);
 }
 function avDraw(sp,cid){
   const [bg,sk,hr,st,sh,gl,bd,mo,ey]=sp;
   const B=AV_BG[bg%AV_BG.length],S=AV_SKIN[sk%AV_SKIN.length],H=AV_HAIR[hr%AV_HAIR.length],T=AV_SHIRT[sh%AV_SHIRT.length];
   const i=cid;
-  let back='',front='';
+  let back='',front='',pre='',post='';
   if(st==='long')back=`<path d="M23 52C18 18 36 10 50 10S82 18 77 52L80 82H20Z" fill="${H}"/>`;
   if(st==='afro')back=`<circle cx="50" cy="34" r="31" fill="${H}"/>`;
   if(st==='bun')back=`<circle cx="50" cy="13" r="10" fill="${H}"/>`;
@@ -432,6 +435,11 @@ function avDraw(sp,cid){
   if(st==='afro')front=`<path d="M29 42C28 28 38 22 50 22S72 28 71 42C66 34 58 30 50 30S34 34 29 42Z" fill="${H}"/>`;
   if(st==='spiky')front=`<path d="M27 42L26 24L35 30L38 14L47 26L53 11L58 26L66 15L67 30L74 24L73 42C67 33 60 29 50 29S33 33 27 42Z" fill="${H}"/>`;
   if(st==='cap')front=`<path d="M25 40C25 15 75 15 75 40Z" fill="${T}"/><path d="M22 40H82C84 43 78 45 70 44H25C21 44 20 42 22 40Z" fill="${T}" opacity=".85"/>`;
+  if(st==='swoop')front=`<path d="M26 46C22 20 42 10 58 14C72 18 77 30 74 46C71 38 64 31 55 30C47 35 41 45 37 58C32 54 28 52 26 46Z" fill="${H}"/>`;
+  if(st==='spikyxl')front=`<path d="M26 44L16 22L30 27L27 5L42 23L50 1L58 23L73 7L71 28L86 20L74 44C67 34 60 29 50 29S33 34 26 44Z" fill="${H}"/>`;
+  if(st==='twin'){back=`<path d="M27 42C8 46 6 76 14 90C22 80 25 66 29 52Z" fill="${H}"/><path d="M73 42C92 46 94 76 86 90C78 80 75 66 71 52Z" fill="${H}"/>`;front=`<path d="M27 44C25 22 38 13 50 13S75 22 73 44C68 33 60 27 50 27S32 33 27 44Z" fill="${H}"/><path d="M36 28L40 40L46 28ZM54 28L60 40L64 28Z" fill="${H}"/>`;}
+  if(st==='ponytail'){back=`<path d="M62 18C94 12 98 54 86 80C80 64 78 50 70 40Z" fill="${H}"/>`;front=`<path d="M28 44C25 22 38 13 50 13S75 22 72 44C68 33 60 27 50 27S32 33 28 44Z" fill="${H}"/>`;}
+  if(st==='messy')front=`<path d="M27 44C23 26 30 14 41 17L45 7L52 16L60 9L63 18L73 19C78 28 76 38 73 44C68 34 60 28 50 29S32 34 27 44Z" fill="${H}"/>`;
   const beard=bd===1?`<path d="M29 54C30 76 70 76 71 54C66 63 58 64 50 64S34 63 29 54Z" fill="${H}"/>`:bd===2?`<path d="M38 57Q44 52 50 56Q56 52 62 57Q56 59 50 58Q44 59 38 57Z" fill="${H}"/>`:'';
   const glasses=gl===1?`<g fill="none" stroke="#2B2B33" stroke-width="2"><circle cx="41" cy="46" r="7.5"/><circle cx="59" cy="46" r="7.5"/><path d="M48.5 46H51.5"/></g>`:gl===2?`<g><rect x="32" y="40" width="17" height="11" rx="4" fill="#15151C"/><rect x="51" y="40" width="17" height="11" rx="4" fill="#15151C"/><path d="M49 44H51" stroke="#15151C" stroke-width="2"/><path d="M35 43l5-1" stroke="#fff" stroke-opacity=".5" stroke-width="1.5"/></g>`:'';
   const MO=[`<path d="M42 59Q50 65 58 59" fill="none" stroke="#7A3E2E" stroke-width="2" stroke-linecap="round"/>`,
@@ -445,16 +453,27 @@ function avDraw(sp,cid){
     `<path d="M37.5 47Q41 42.5 44.5 47M55.5 47Q59 42.5 62.5 47" fill="none" stroke="#2B2B33" stroke-width="2.3" stroke-linecap="round"/>`,
     `<circle cx="41" cy="46" r="2.8" fill="#2B2B33"/><path d="M55.5 46.5Q59 43 62.5 46.5" fill="none" stroke="#2B2B33" stroke-width="2.3" stroke-linecap="round"/>`,
     `<circle cx="41" cy="46" r="4" fill="#fff" stroke="#2B2B33" stroke-width="1.2"/><circle cx="59" cy="46" r="4" fill="#fff" stroke="#2B2B33" stroke-width="1.2"/><circle cx="41" cy="46" r="2" fill="#2B2B33"/><circle cx="59" cy="46" r="2" fill="#2B2B33"/>`,
-    `<path d="M38 44L44 47M62 44L56 47" fill="none" stroke="#2B2B33" stroke-width="2.3" stroke-linecap="round"/><circle cx="41.5" cy="48" r="2.4" fill="#2B2B33"/><circle cx="58.5" cy="48" r="2.4" fill="#2B2B33"/>`];
+    `<path d="M38 44L44 47M62 44L56 47" fill="none" stroke="#2B2B33" stroke-width="2.3" stroke-linecap="round"/><circle cx="41.5" cy="48" r="2.4" fill="#2B2B33"/><circle cx="58.5" cy="48" r="2.4" fill="#2B2B33"/>`,
+    `<ellipse cx="41" cy="46" rx="5.2" ry="6.6" fill="#fff" stroke="#2B2B33" stroke-width="1.2"/><ellipse cx="59" cy="46" rx="5.2" ry="6.6" fill="#fff" stroke="#2B2B33" stroke-width="1.2"/><ellipse cx="41" cy="47" rx="3.5" ry="5" fill="#2B3A8F"/><ellipse cx="59" cy="47" rx="3.5" ry="5" fill="#2B3A8F"/><circle cx="41" cy="48" r="1.7" fill="#0b0b18"/><circle cx="59" cy="48" r="1.7" fill="#0b0b18"/><circle cx="39.3" cy="44.2" r="1.7" fill="#fff"/><circle cx="57.3" cy="44.2" r="1.7" fill="#fff"/>`,
+    `<path d="M34.5 46.5Q41 40.5 47.5 45Q41 49.5 34.5 46.5ZM65.5 46.5Q59 40.5 52.5 45Q59 49.5 65.5 46.5Z" fill="#fff" stroke="#2B2B33" stroke-width="1.3" stroke-linejoin="round"/><circle cx="42" cy="45.4" r="2.2" fill="#2B2B33"/><circle cx="58" cy="45.4" r="2.2" fill="#2B2B33"/><path d="M33 40L47 43M67 40L53 43" stroke="#2B2B33" stroke-width="2.4" stroke-linecap="round"/>`,
+    `<circle cx="41" cy="47" r="3.3" fill="#2B2B33"/><circle cx="59" cy="47" r="3.3" fill="#2B2B33"/><circle cx="40" cy="45.8" r="1.1" fill="#fff"/><circle cx="58" cy="45.8" r="1.1" fill="#fff"/><path d="M33.5 39.5L47 43.5M66.5 39.5L53 43.5" stroke="#1d1d26" stroke-width="3.2" stroke-linecap="round"/>`,
+    `<path d="M35.5 47.5Q41 41 46.5 47.5Z" fill="#fff" stroke="#2B2B33" stroke-width="1.3" stroke-linejoin="round"/><path d="M53.5 47.5Q59 41 64.5 47.5Z" fill="#fff" stroke="#2B2B33" stroke-width="1.3" stroke-linejoin="round"/><circle cx="41" cy="46.2" r="2" fill="#2B2B33"/><circle cx="59" cy="46.2" r="2" fill="#2B2B33"/><path d="M34.5 44.5Q41 40 47.5 44.5M52.5 44.5Q59 40 65.5 44.5" fill="none" stroke="#2B2B33" stroke-width="1.8" stroke-linecap="round"/>`];
   const eyes=EY[ey%EY.length];
-  return `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs><clipPath id="c${i}"><circle cx="50" cy="50" r="50"/></clipPath></defs><g clip-path="url(#c${i})"><rect width="100" height="100" fill="${B}"/>${back}<path d="M12 100C14 80 32 73 50 73S86 80 88 100Z" fill="${T}"/><rect x="42" y="60" width="16" height="18" rx="6" fill="${S}"/><rect x="42" y="60" width="16" height="18" rx="6" fill="#000" opacity=".12"/><circle cx="29" cy="48" r="4.5" fill="${S}"/><circle cx="71" cy="48" r="4.5" fill="${S}"/><ellipse cx="50" cy="46" rx="21" ry="24" fill="${S}"/>${beard}<circle cx="35" cy="56" r="4" fill="#FF6B6B" opacity=".25"/><circle cx="65" cy="56" r="4" fill="#FF6B6B" opacity=".25"/><path d="M50 49q-2.5 6 1 7" fill="none" stroke="#000" stroke-opacity=".25" stroke-width="1.6" stroke-linecap="round"/>${mouth}${eyes}<path d="M35.5 39.5Q41 36.5 46.5 39.5M53.5 39.5Q59 36.5 64.5 39.5" fill="none" stroke="${H==='#E8E3D8'?'#9A9488':H}" stroke-width="2.3" stroke-linecap="round"/>${glasses}${front}</g></svg>`;
+  if(gl===3)post+=`<path d="M33 35L45 57" stroke="#B5524B" stroke-width="2" stroke-linecap="round"/><path d="M35.5 40l3.5-2M38 45.5l3.5-2M40.5 51l3.5-2" stroke="#B5524B" stroke-width="1.3" stroke-linecap="round"/>`;
+  if(gl===4)post+=`<path d="M25 35C40 28 60 28 75 35L75 42C60 35 40 35 25 42Z" fill="#2a2f4a"/><rect x="41" y="29" width="18" height="12" rx="2.5" fill="#B8C4D8" stroke="#6b7690" stroke-width="1.3"/><path d="M50 31.2l1.4 3 3.2.4-2.4 2.2.7 3.1-2.9-1.6-2.9 1.6.7-3.1-2.4-2.2 3.2-.4Z" fill="#2a2f4a"/>`;
+  if(gl===5)post+=`<path d="M25 40C25 14 75 14 75 40C66 32 34 32 25 40Z" fill="#D94F4F"/><circle cx="38" cy="26" r="1.6" fill="#fff" opacity=".8"/><circle cx="50" cy="22" r="1.6" fill="#fff" opacity=".8"/><circle cx="62" cy="26" r="1.6" fill="#fff" opacity=".8"/><path d="M72 36L86 30L82 44Z" fill="#D94F4F"/>`;
+  if(gl===6)post+=`<path d="M24 40L76 54" stroke="#15151C" stroke-width="1.8"/><ellipse cx="59" cy="46.5" rx="7.2" ry="6.4" fill="#15151C"/>`;
+  if(gl===7)post+=`<path d="M35 52L39 59M41 52L44 59M65 52L61 59M59 52L56 59" stroke="#D94F4F" stroke-width="1.7" stroke-linecap="round"/>`;
+  if(gl===8)post+=`<path d="M24 46C21 10 79 10 76 46" fill="none" stroke="#2B2F3A" stroke-width="4" stroke-linecap="round"/><rect x="18" y="41" width="10" height="17" rx="4.5" fill="#E8537A"/><rect x="72" y="41" width="10" height="17" rx="4.5" fill="#E8537A"/>`;
+  if(gl===9)pre+=`<ellipse cx="50" cy="46" rx="44" ry="50" fill="${H}" opacity=".16"/><ellipse cx="50" cy="46" rx="38" ry="44" fill="none" stroke="${H}" stroke-width="5" opacity=".4"/><ellipse cx="50" cy="46" rx="32" ry="38" fill="none" stroke="#fff" stroke-width="2" opacity=".45"/>`;
+  return `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs><clipPath id="c${i}"><circle cx="50" cy="50" r="50"/></clipPath></defs><g clip-path="url(#c${i})"><rect width="100" height="100" fill="${B}"/>${pre}${back}<path d="M12 100C14 80 32 73 50 73S86 80 88 100Z" fill="${T}"/><rect x="42" y="60" width="16" height="18" rx="6" fill="${S}"/><rect x="42" y="60" width="16" height="18" rx="6" fill="#000" opacity=".12"/><circle cx="29" cy="48" r="4.5" fill="${S}"/><circle cx="71" cy="48" r="4.5" fill="${S}"/><ellipse cx="50" cy="46" rx="21" ry="24" fill="${S}"/>${beard}<circle cx="35" cy="56" r="4" fill="#FF6B6B" opacity=".25"/><circle cx="65" cy="56" r="4" fill="#FF6B6B" opacity=".25"/><path d="M50 49q-2.5 6 1 7" fill="none" stroke="#000" stroke-opacity=".25" stroke-width="1.6" stroke-linecap="round"/>${mouth}${eyes}<path d="M35.5 39.5Q41 36.5 46.5 39.5M53.5 39.5Q59 36.5 64.5 39.5" fill="none" stroke="${H==='#E8E3D8'||H==='#FFFFFF'?'#9A9488':H}" stroke-width="2.3" stroke-linecap="round"/>${glasses}${front}${post}</g></svg>`;
 }
 
-const AVATARS=Array.from({length:24},(_,i)=>'a'+i);
+const AVATARS=Array.from({length:36},(_,i)=>'a'+i);
 const AV_RE=/^c\d{1,2}(-\d{1,2}){8}$/;
 const validAv=a=>typeof a==='string'&&(AVATARS.includes(a)||AV_RE.test(a));
 function avSVGa(a){
-  if(AV_RE.test(a)){const n=a.slice(1).split('-').map(Number);return avDraw([n[0],n[1],n[2],AV_STY[n[3]%AV_STY.length],n[4],n[5]%3,n[6]%3,n[7],n[8]],a);}
+  if(AV_RE.test(a)){const n=a.slice(1).split('-').map(Number);return avDraw([n[0],n[1],n[2],AV_STY[n[3]%AV_STY.length],n[4],n[5]%AV_GLN,n[6]%3,n[7],n[8]],a);}
   return avSVG(+a.slice(1));
 }
 
