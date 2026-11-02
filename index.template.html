@@ -3861,6 +3861,8 @@ function openAvEditor(start,onSave){
   const rnd=()=>{v=[Math.random()*AV_BG.length,Math.random()*AV_SKIN.length,Math.random()*AV_HAIR.length,Math.random()*AV_STY.length,Math.random()*AV_SHIRT.length,Math.random()<.45?1+Math.floor(Math.random()*9):0,Math.random()<.2?1+Math.floor(Math.random()*2):0,Math.random()*6,Math.random()*9].map(Math.floor);draw();};
   const close=()=>ov.remove();
   ov.append(h('div',{class:'pfp'},h('h2',null,'🎨 Créer mon avatar'),prev,
+    h('div',{class:'aed-l'},'Ou choisis une photo'),
+    h('div',{class:'avpick',style:'justify-content:center'},...Array.from({length:6},(_,i)=>{const b=h('button',{type:'button',class:'avb','aria-label':'Photo '+(i+1)});b.innerHTML=avSVGa('p'+i);b.addEventListener('click',()=>{close();onSave('p'+i);});return b;})),
     h('div',{class:'aed-act'},h('button',{class:'btn sm',type:'button',onclick:rnd},'🎲 Au hasard')),rows,
     h('div',{class:'aed-act'},h('button',{class:'btn',type:'button',onclick:close},'Annuler'),
       h('button',{class:'btn primary',type:'button',onclick:()=>{const a=avStr(v);close();onSave(a);}},'Valider'))));
