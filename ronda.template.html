@@ -388,6 +388,7 @@ const gp=n=>'game/rd_state_'+n;
 const isSpec=()=>!S||!S.players.some(p=>p.id===uid);
 const hostId=()=>{if(mode==='solo')return uid;if(!S)return (roomPlayers(ROOM)[0]||{}).id;const on=new Set(roomPlayers(ROOM).map(p=>p.id));return(S.players.find(p=>on.has(p.id))||S.players[0]).id;};
 const isHost=()=>hostId()===uid;
+const isAdmin=()=>mySlug==='hitch';const isHostUI=()=>isHost()||isAdmin();
 function banner(text,color){const d=h('div',{class:'fxban',style:'--g:'+(color||'#FFE066')},text);document.body.append(d);setTimeout(()=>d.remove(),2300);}
 function popAt(el,text){const r=el?el.getBoundingClientRect():{left:innerWidth/2,top:innerHeight/2,width:0,height:0};const d=h('div',{class:'pop',style:'left:'+(r.left+r.width/2)+'px;top:'+(r.top+r.height/2)+'px'},text);document.body.append(d);setTimeout(()=>d.remove(),1500);}
 const seatEl=id=>document.querySelector('[data-seat="'+CSS.escape(id)+'"]');
@@ -559,7 +560,7 @@ function renderPicker(){
 }
 function renderLobby(){
   const ps=roomPlayers(ROOM);
-  const host=ps[0]&&ps[0].id===uid;
+  const host=(ps[0]&&ps[0].id===uid)||(isAdmin()&&ps.some(p=>p.id===uid));
   const can=host&&ps.length>=2&&ps.slice(0,4).every(p=>p.ready||p.id===uid);
   return[renderTop('Table '+ROOM,h('button',{class:'btn sm',type:'button',onclick:leaveRoom},'↩ Quitter la table')),
     h('div',{class:'panel'},h('h2',null,'Salle d\'attente · Table '+ROOM),
@@ -616,7 +617,7 @@ function renderGame(){
     h('button',{class:'btn sm',type:'button',onclick:()=>{pick=null;render();}},'Annuler'))):null;
   const oldPick=$('rdpick');if(oldPick)oldPick.remove();
   if(pickEl)setTimeout(()=>document.body.append(pickEl),0);
-  return[renderTop('Table '+(ROOM||'solo'),h('div',{class:'row'},mode==='online'&&isHost()?h('button',{class:'btn sm',type:'button',onclick:endGameHost},'■ Terminer'):null,h('button',{class:'btn sm',type:'button',onclick:leaveRoom},'↩ Quitter'))),
+  return[renderTop('Table '+(ROOM||'solo'),h('div',{class:'row'},mode==='online'&&isHostUI()?h('button',{class:'btn sm',type:'button',onclick:endGameHost},'■ Terminer'):null,h('button',{class:'btn sm',type:'button',onclick:leaveRoom},'↩ Quitter'))),
     h('div',{class:'felt'},
       h('div',{class:'opps'},opps.map(seat)),
       mid,
@@ -641,7 +642,7 @@ function handOverlays(){
 function showEnd(){
   const s=S,w=s.rank[0],pos=s.rank.indexOf(uid);
   const rows=s.rank.map((id,i)=>{const p=s.players.find(x=>x.id===id);return h('div',{class:'ovr'+(i===0?' best':'')},avEl(p),h('b',null,p.name+(id===uid?' (toi)':'')),h('span',{class:'p'},MEDAL[i]));});
-  const host=isHost();
+  const host=isHostUI();
   const ov=h('div',{class:'ov',id:'rdov'},h('div',{class:'ovc'},h('h3',null,pos===0?'🏆 Victoire !':(pos<0?nameOf(s,w)+' gagne':nameOf(s,w)+' gagne — tu finis '+MEDAL[pos])),...rows,
     h('div',{class:'row',style:'justify-content:center'},
       host?h('button',{class:'btn primary',type:'button',onclick:rematch},'🔁 Revanche'):h('span',{class:'muted',style:'color:rgba(255,255,255,.75)'},'En attente de l\'hôte…'),
@@ -650,7 +651,7 @@ function showEnd(){
   document.body.append(ov);Snd.play(pos===0?'win':'lose');
 }
 function rematch(){
-  if(!S||!isHost())return;closeOv();prevTop='';botKey='';
+  if(!S||!isHostUI())return;closeOv();prevTop='';botKey='';
   const ps=S.players.map(p=>({id:p.id,name:p.name,bot:p.bot,av:p.av}));
   commit(rdNew(ps));
 }

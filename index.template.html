@@ -2775,7 +2775,7 @@ function recapFx(s){
     if(rem<=0){
       clearInterval(recapTm);recapTm=null;
       const o=$('recapov');if(o){o.classList.add('out');setTimeout(()=>o.remove(),380);}
-      if(local&&local.phase==='roundEnd'&&local.round===r0&&canWrite&&amHost())nextRound();
+      if(local&&local.phase==='roundEnd'&&local.round===r0&&canWrite&&amHost0())nextRound();
     }
   },100);
 }
@@ -2871,7 +2871,8 @@ const isAdmin=()=>devOn?true:!!(prof&&prof.slug===ADMIN_SLUG);
 const adminHere=()=>activeRoster().some(p=>p.pf===ADMIN_SLUG);
 /* seul l'admin lance la partie et choisit les modes ; s'il est absent de la salle, les joueurs gardent la main */
 const canCtl=()=>isAdmin()||!adminHere();
-const amHost=()=>{if(devOn)return true;const r=activeRoster();return !!(r[0]&&r[0].id===uid)||!!canEdit;};
+const amHost0=()=>{if(devOn)return true;const r=activeRoster();return !!(r[0]&&r[0].id===uid)||!!canEdit;};
+const amHost=()=>amHost0()||isAdmin();
 function setPause(on){
   if(!local||local.phase!=='playing'||!canWrite||!amHost())return;
   const s=CLONE(local);s.paused=!!on;logp(s,on?'Partie mise en pause':'La partie reprend');s.rev++;commit(s);

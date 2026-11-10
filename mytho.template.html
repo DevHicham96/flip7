@@ -556,6 +556,7 @@ const MAXP=8;
 const isSpec=()=>!S||!S.players.some(p=>p.id===uid);
 const hostId=()=>{if(mode==='solo')return uid;if(!S)return (roomPlayers(ROOM)[0]||{}).id;const on=new Set(roomPlayers(ROOM).map(p=>p.id));return(S.players.find(p=>on.has(p.id))||S.players[0]).id;};
 const isHost=()=>hostId()===uid;
+const isAdmin=()=>mySlug==='hitch';const isHostUI=()=>isHost()||isAdmin();
 function banner(text,color){const d=h('div',{class:'fxban',style:'--g:'+(color||'#FFE066')},text);document.body.append(d);setTimeout(()=>d.remove(),2300);}
 function makeDbFromSdk(F,fs){
   const ws=x=>({exists:x.exists(),data:()=>x.data()});
@@ -760,7 +761,7 @@ function renderPicker(){
 }
 function renderLobby(){
   const ps=roomPlayers(ROOM);
-  const host=ps[0]&&ps[0].id===uid;
+  const host=(ps[0]&&ps[0].id===uid)||(isAdmin()&&ps.some(p=>p.id===uid));
   const can=host&&ps.length>=3&&ps.slice(0,MAXP).every(p=>p.ready||p.id===uid);
   return[renderTop('Table '+ROOM,h('button',{class:'btn sm',type:'button',onclick:leaveRoom},'↩ Quitter la table')),
     h('div',{class:'panel'},h('h2',null,'Salle d\'attente · Table '+ROOM),
@@ -814,7 +815,7 @@ function renderGame(){
   const lastLog=s.log.slice(-2).reverse().join(' · ');
   const me=spec?null:s.players[meIdx];
   const thBtn=h('button',{class:'btn sm',type:'button',onclick:()=>{const i=THEMES.findIndex(t=>t[0]===tableTheme);tableTheme=THEMES[(i+1)%THEMES.length][0];lsSet('mytable',tableTheme);render();}},'🎨 '+(THEMES.find(t=>t[0]===tableTheme)||THEMES[0])[1].replace(/^\S+ /,''));
-  return[renderTop('Table '+(ROOM||'solo'),h('div',{class:'row'},thBtn,mode==='online'&&isHost()?h('button',{class:'btn sm',type:'button',onclick:endGameHost},'■ Terminer'):null,h('button',{class:'btn sm',type:'button',onclick:leaveRoom},'↩ Quitter'))),
+  return[renderTop('Table '+(ROOM||'solo'),h('div',{class:'row'},thBtn,mode==='online'&&isHostUI()?h('button',{class:'btn sm',type:'button',onclick:endGameHost},'■ Terminer'):null,h('button',{class:'btn sm',type:'button',onclick:leaveRoom},'↩ Quitter'))),
     h('div',{class:'felt t-'+tableTheme},
       h('div',{class:'opps'},opps.map(seat)),
       mid,outEl,
@@ -862,7 +863,7 @@ function showEnd(){
   if($('rdov'))return;
   const s=S,w=s.win,order=mtRank(s);
   const rows=order.map((id,i)=>{const p=s.players.find(x=>x.id===id);return h('div',{class:'ovr'+(id===w?' best':'')},avEl(p),h('b',null,p.name+(id===uid?' (toi)':'')),h('span',{class:'p'},id===w?'🏆':s.hands[id].length+' 🂠'));});
-  const host=isHost();
+  const host=isHostUI();
   const ov=h('div',{class:'ov',id:'rdov'},h('div',{class:'ovc'},h('h3',null,w===uid?'🏆 Victoire !':nameOf(s,w)+' gagne !'),...rows,
     h('div',{class:'row',style:'justify-content:center'},
       host?h('button',{class:'btn primary',type:'button',onclick:rematch},'🔁 Revanche'):h('span',{class:'muted',style:'color:rgba(255,255,255,.75)'},'En attente de l\'hôte…'),
@@ -871,7 +872,7 @@ function showEnd(){
   document.body.append(ov);Snd.play(w===uid?'win':'lose');if(w===uid)confetti();
 }
 function rematch(){
-  if(!S||!isHost())return;closeOv();botKey='';lockKey='';
+  if(!S||!isHostUI())return;closeOv();botKey='';lockKey='';
   commit(mtNew(S.players.map(p=>({id:p.id,name:p.name,bot:p.bot,av:p.av}))));
 }
 /* ---- discussion (même collection « chat » que Flip7) : toujours présente ---- */

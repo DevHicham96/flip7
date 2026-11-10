@@ -850,6 +850,7 @@ const gp=n=>'game/lg_state_'+n;
 const isSpec=()=>!S||!S.players.some(p=>p.id===uid);
 const hostId=()=>{if(mode==='solo')return uid;if(!S)return (roomPlayers(ROOM)[0]||{}).id;const on=new Set(roomPlayers(ROOM).map(p=>p.id));return(S.players.find(p=>on.has(p.id))||S.players[0]).id;};
 const isHost=()=>hostId()===uid;
+const isAdmin=()=>mySlug==='hitch';const isHostUI=()=>isHost()||isAdmin();
 function banner(text,color){const d=h('div',{class:'fxban',style:'--g:'+(color||'#FFE066')},text);document.body.append(d);setTimeout(()=>d.remove(),2300);}
 function confetti(){
   if(REDUCE)return;const cols=['#FFE066','#FF8A3D','#7CE7B0','#4D8DF7','#ff5a5f','#c28bff'];
@@ -1158,7 +1159,7 @@ function renderGame(){
     const mineWon=!spec&&(s.winner==='lovers'?s.lov.includes(me):((s.roles[me]==='wolf')!==w));
     body.push(h('div',{class:'panel dk endp'},h('h2',null,w?'🧑‍🌾 Le village a gagné !':(s.winner==='lovers'?'💘 Les amoureux ont gagné !':'🐺 Les loups ont gagné !')),
       !spec?h('p',{class:'bigtxt'},mineWon?'Tu as gagné ! 🎉':'Perdu… 😅'):null,
-      h('div',{class:'row ctr'},(mode==='solo'||isHost())?h('button',{class:'btn primary',type:'button',onclick:endGameHost},mode==='solo'?'↩ Menu':'🔁 Rejouer'):h('p',{class:'muted'},'L\'hôte peut relancer une partie…'),h('button',{class:'btn',type:'button',onclick:leaveRoom},'Quitter'))));
+      h('div',{class:'row ctr'},(mode==='solo'||isHostUI())?h('button',{class:'btn primary',type:'button',onclick:endGameHost},mode==='solo'?'↩ Menu':'🔁 Rejouer'):h('p',{class:'muted'},'L\'hôte peut relancer une partie…'),h('button',{class:'btn',type:'button',onclick:leaveRoom},'Quitter'))));
   }
   out.push(...body);
   /* joueurs (si le plateau n'est pas déjà le sélecteur) */

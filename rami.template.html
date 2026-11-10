@@ -533,6 +533,7 @@ const MAXP=5;
 const isSpec=()=>!S||!S.players.some(p=>p.id===uid);
 const hostId=()=>{if(mode==='solo')return uid;if(!S)return (roomPlayers(ROOM)[0]||{}).id;const on=new Set(roomPlayers(ROOM).map(p=>p.id));return(S.players.find(p=>on.has(p.id))||S.players[0]).id;};
 const isHost=()=>hostId()===uid;
+const isAdmin=()=>mySlug==='hitch';const isHostUI=()=>isHost()||isAdmin();
 function banner(text,color){const d=h('div',{class:'fxban',style:'--g:'+(color||'#FFE066')},text);document.body.append(d);setTimeout(()=>d.remove(),2300);}
 /* ---- Firebase ---- */
 function makeDbFromSdk(F,fs){
@@ -725,7 +726,7 @@ function renderPicker(){
 }
 function renderLobby(){
   const ps=roomPlayers(ROOM);
-  const host=ps[0]&&ps[0].id===uid;
+  const host=(ps[0]&&ps[0].id===uid)||(isAdmin()&&ps.some(p=>p.id===uid));
   const can=host&&ps.length>=2&&ps.slice(0,MAXP).every(p=>p.ready||p.id===uid);
   return[renderTop('Table '+ROOM,h('button',{class:'btn sm',type:'button',onclick:leaveRoom},'↩ Quitter la table')),
     h('div',{class:'panel'},h('h2',null,'Salle d\'attente · Table '+ROOM),
@@ -796,7 +797,7 @@ function renderGame(){
   const sortBtn=h('button',{class:'btn sm',type:'button',onclick:()=>setSort(sortMode==='suit'?'rank':'suit')},sortMode==='suit'?'↕ Par valeur':'↕ Par couleur');
   const lastLog=s.log.slice(-2).reverse().join(' · ');
   const me=spec?null:s.players[meIdx];
-  return[renderTop('Table '+(ROOM||'solo'),h('div',{class:'row'},mode==='online'&&isHost()?h('button',{class:'btn sm',type:'button',onclick:endGameHost},'■ Terminer'):null,h('button',{class:'btn sm',type:'button',onclick:leaveRoom},'↩ Quitter'))),
+  return[renderTop('Table '+(ROOM||'solo'),h('div',{class:'row'},mode==='online'&&isHostUI()?h('button',{class:'btn sm',type:'button',onclick:endGameHost},'■ Terminer'):null,h('button',{class:'btn sm',type:'button',onclick:leaveRoom},'↩ Quitter'))),
     h('div',{class:'felt'},
       h('div',{class:'hdr'},'Manche '+s.round+' · objectif '+s.target+' pts'),
       h('div',{class:'opps'},opps.map(seat)),
@@ -822,7 +823,7 @@ function showEnd(){
   const s=S,over=s.phase==='gameEnd',w=s.res.w;
   const order=over?rdRank(s):s.players.map(p=>p.id);
   const rows=order.map((id,i)=>{const p=s.players.find(x=>x.id===id);return h('div',{class:'ovr'+((over?i===0:id===w)?' best':'')},avEl(p),h('div',null,h('b',null,p.name+(id===uid?' (toi)':'')),h('small',null,id===w?'a fini la manche':'+'+s.res.pts[id]+' pts')),h('span',{class:'p'},over?MEDAL[i]+' '+s.scores[id]:String(s.scores[id])));});
-  const host=isHost(),win=over?rdRank(s)[0]:w;
+  const host=isHostUI(),win=over?rdRank(s)[0]:w;
   const ov=h('div',{class:'ov',id:'rdov'},h('div',{class:'ovc'},
     h('h3',null,over?(win===uid?'🏆 Victoire !':nameOf(s,win)+' gagne la partie'):(w===uid?'🎉 Manche gagnée !':nameOf(s,w)+' gagne la manche')),
     h('p',{style:'text-align:center;opacity:.75;font-size:13px'},over?'Le moins de points gagne · objectif '+s.target:'Manche '+s.round+' terminée · objectif '+s.target),
@@ -833,9 +834,9 @@ function showEnd(){
       h('button',{class:'btn',type:'button',onclick:()=>{closeOv();leaveRoom();}},'Quitter'))));
   document.body.append(ov);Snd.play(win===uid?'win':'lose');
 }
-function nextRound(){if(!S||!isHost()||S.phase!=='roundEnd')return;closeOv();botKey='';commit(rdNext(S));}
+function nextRound(){if(!S||!isHostUI()||S.phase!=='roundEnd')return;closeOv();botKey='';commit(rdNext(S));}
 function rematch(){
-  if(!S||!isHost())return;closeOv();botKey='';
+  if(!S||!isHostUI())return;closeOv();botKey='';
   commit(rdNew(S.players.map(p=>({id:p.id,name:p.name,bot:p.bot,av:p.av})),S.target));
 }
 /* ---- discussion (même collection « chat » que Flip7) ---- */

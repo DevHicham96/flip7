@@ -3268,6 +3268,7 @@ const gp=n=>'game/qz_state_'+n;
 const isSpec=()=>!S||!S.players.some(p=>p.id===uid);
 const hostId=()=>{if(mode==='solo')return uid;if(!S)return (roomPlayers(ROOM)[0]||{}).id;const on=new Set(roomPlayers(ROOM).map(p=>p.id));return(S.players.find(p=>on.has(p.id))||S.players[0]).id;};
 const isHost=()=>hostId()===uid;
+const isAdmin=()=>mySlug==='hitch';const isHostUI=()=>isHost()||isAdmin();
 function banner(text,color){const d=h('div',{class:'fxban',style:'--g:'+(color||'#FFE066')},text);document.body.append(d);setTimeout(()=>d.remove(),2300);}
 function confetti(){
   if(REDUCE)return;const cols=['#FFE066','#FF8A3D','#7CE7B0','#4D8DF7','#ff5a5f','#c28bff'];
@@ -3515,7 +3516,7 @@ function renderGame(){
     const msg=spec?null:(mine<0?h('div',{class:'rmsg bad'},'⏱ Temps écoulé'):ok?h('div',{class:'rmsg ok'},'✔ Bonne réponse ! ',h('b',null,'+'+gain),st>=2?h('span',null,' 🔥 série de '+st):null):h('div',{class:'rmsg bad'},'✖ Raté… la bonne réponse : '+q.o[0]));
     view.push(qcard,h('div',{class:'ansg'},opts),msg,
       h('div',{class:'panel lbp'},h('h2',null,'Classement'),board(s,5,true)),
-      h('div',{class:'qfoot'},h('span',{id:'rcount',class:'muted'}),(mode==='solo'||isHost())?h('button',{class:'btn primary',type:'button',onclick:doNext},s.qi+1>=s.qs.length?'🏆 Résultats':'Question suivante ▶'):null));
+      h('div',{class:'qfoot'},h('span',{id:'rcount',class:'muted'}),(mode==='solo'||isHostUI())?h('button',{class:'btn primary',type:'button',onclick:doNext},s.qi+1>=s.qs.length?'🏆 Résultats':'Question suivante ▶'):null));
   }
   return view;
 }
@@ -3530,7 +3531,7 @@ function renderEnd(){
       h('div',{class:'podium'},pod),
       h('ol',{class:'lb'},rk.map((id,i)=>{const p=P(id);return h('li',{class:id===uid?'me':''},h('i',null,String(i+1)),avEl(p,'sm'),h('b',null,p.name),h('span',{class:'pts'},String(s.scores[id]||0)));})),
       h('div',{class:'row ctr'},
-        (mode==='solo'||isHost())?h('button',{class:'btn primary',type:'button',onclick:endGameHost},mode==='solo'?'↩ Menu':'🔁 Rejouer'):h('p',{class:'muted'},'L\'hôte peut relancer une partie…'),
+        (mode==='solo'||isHostUI())?h('button',{class:'btn primary',type:'button',onclick:endGameHost},mode==='solo'?'↩ Menu':'🔁 Rejouer'):h('p',{class:'muted'},'L\'hôte peut relancer une partie…'),
         h('button',{class:'btn',type:'button',onclick:leaveRoom},'Quitter')))];
 }
 /* ---- démarrage ---- */
