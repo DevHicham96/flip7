@@ -980,6 +980,16 @@ h2{color:#8FE8FF;text-shadow:0 0 16px rgba(61,214,245,.45)}
 .hub-p b{background:rgba(255,255,255,.14)}
 .hub-p.on{background:linear-gradient(#35DCF5,#2B86EE);color:#031325;border-color:#9AEBFF;box-shadow:0 0 16px rgba(45,212,240,.5)}.hub-p.on b{background:rgba(3,19,37,.2)}
 .hub-go{border:1px solid #9AEBFF;background:linear-gradient(#35DCF5,#2B86EE);color:#031325;text-shadow:none;box-shadow:0 0 18px rgba(45,212,240,.45),0 4px 0 #17609a}
+.dn-ov{position:fixed;inset:0;z-index:160;display:grid;place-items:center;padding:14px;background:rgba(3,5,20,.72);backdrop-filter:blur(4px);animation:rcin .25s both}
+.dn-box{width:min(440px,100%);display:grid;gap:10px;padding:18px;border-radius:20px;background:linear-gradient(rgba(34,46,130,.95),rgba(14,20,66,.97));border:1px solid rgba(154,235,255,.55);color:#EAF0FF;box-shadow:0 0 40px rgba(61,214,245,.25);text-align:center}
+.dn-box h3{margin:0;font-size:22px;color:#8FE8FF}.dn-box p{margin:0;color:#BFD0FF;font-size:14px}
+.dn-amt{justify-self:center;display:flex;align-items:center;gap:10px;border:2px solid rgba(120,160,255,.55);background:rgba(6,10,38,.85);border-radius:14px;padding:8px 20px;font:800 34px var(--f-display);color:#fff;cursor:not-allowed;user-select:none}
+.dn-amt small{font:600 12px var(--f-body);color:#FFB020}
+.dn-amt.shake{animation:dnsh .45s}@keyframes dnsh{20%,60%{transform:translateX(-8px)}40%,80%{transform:translateX(8px)}}
+.dn-zone{position:relative;height:150px;border:2px dashed rgba(120,160,255,.45);border-radius:14px;overflow:hidden;background:rgba(6,10,38,.45)}
+.dn-btn{position:absolute;left:50%;top:50%;margin:-22px 0 0 -62px;width:124px;height:44px;border:1px solid #9AEBFF;background:linear-gradient(#35F58C,#17A85A);color:#03210f;font:800 16px var(--f-body);border-radius:12px;cursor:pointer;box-shadow:0 3px 0 #0b6b38;transition:left .18s cubic-bezier(.3,1.6,.5,1),top .18s cubic-bezier(.3,1.6,.5,1),transform .18s}
+.dn-cnt{font-size:13px;color:#FFB020;min-height:18px}
+.dn-fine{font-size:11px!important;opacity:.8}
 .hub-back{position:fixed;left:12px;top:12px;z-index:3;border:1px solid rgba(120,160,255,.45);background:rgba(120,160,255,.16);color:#DDE6FF;font:800 14px var(--f-body);padding:8px 14px;border-radius:99px;cursor:pointer}
 #home{position:fixed;inset:0;z-index:140;display:grid;grid-template-rows:auto minmax(0,1fr);gap:10px;padding:12px 12px 36px;overflow:hidden;color:#EAF0FF;animation:rcin .3s both}
 .hm-top{position:relative;z-index:1;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
@@ -3535,6 +3545,42 @@ async function homeSend(ev){
   try{await db.collection('chat').add({t:now,id:uid,name:name.slice(0,16),text,room:-2});}
   catch(e){inp.value=text;say('Message non envoyé.');}
 }
+
+function openDon(){
+  if($('donov'))return;
+  let n=0;
+  const amt=h('div',{class:'dn-amt',title:'Montant non négociable',onclick:()=>{amt.classList.remove('shake');void amt.offsetWidth;amt.classList.add('shake');say(['Montant fixé par Hitch : 500 € 😈','Non négociable. 500 €. Point.','Tu as cru pouvoir changer le montant ? 😂'][Math.floor(Math.random()*3)]);}},'500 €',h('small',null,'🔒 fixe'));
+  const cnt=h('div',{class:'dn-cnt',role:'status'},'');
+  const btn=h('button',{class:'dn-btn',type:'button'},'Donner 💸');
+  const zone=h('div',{class:'dn-zone'},btn);
+  const lines=['Trop lent ! 😜','Raté ! 🏃','Presque… 😏','Haha non 😂','Il court vite, le bouton ! 💨','Tu peux courir 🐢'];
+  function dodge(px,py){
+    const zr=zone.getBoundingClientRect(),w=btn.offsetWidth,hh=btn.offsetHeight;
+    let best=null,bd=-1;
+    for(let i=0;i<14;i++){
+      const x=Math.random()*(zr.width-w),y=Math.random()*(zr.height-hh);
+      const cx=zr.left+x+w/2,cy=zr.top+y+hh/2,d=px==null?Math.random():Math.hypot(cx-px,cy-py);
+      if(d>bd){bd=d;best=[x,y];}
+    }
+    btn.style.margin='0';btn.style.left=best[0]+'px';btn.style.top=best[1]+'px';
+    n++;btn.style.transform='scale('+Math.max(.6,1-n*.02)+') rotate('+((Math.random()*16-8))+'deg)';
+    cnt.textContent=lines[n%lines.length]+'  ·  '+n+' esquive'+(n>1?'s':'');
+  }
+  zone.addEventListener('pointermove',e=>{
+    const r=btn.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2;
+    if(Math.hypot(e.clientX-cx,e.clientY-cy)<Math.max(r.width,r.height)*0.9)dodge(e.clientX,e.clientY);
+  });
+  btn.addEventListener('pointerdown',e=>{e.preventDefault();dodge(e.clientX,e.clientY);});
+  btn.addEventListener('touchstart',e=>{e.preventDefault();const t=e.touches[0];dodge(t.clientX,t.clientY);},{passive:false});
+  btn.addEventListener('click',e=>{if(e.detail>0)return;say('🎉 Merci ! Mais c\'était pour rire : rien n\'a été débité 😂');});
+  const close=()=>{const o=$('donov');if(o)o.remove();};
+  const ov=h('div',{class:'dn-ov',id:'donov',role:'dialog','aria-label':'Faire un don'},
+    h('div',{class:'dn-box'},h('h3',null,'💝 Soutenir Hitch'),h('p',null,'Ton don paiera les serveurs… et surtout le café ☕'),amt,zone,cnt,
+      h('button',{class:'hm-btn',type:'button',onclick:close,style:'justify-self:center'},'Non merci'),
+      h('p',{class:'dn-fine'},'😂 C\'est une blague : aucun vrai paiement n\'existe ici.')));
+  ov.addEventListener('click',e=>{if(e.target===ov)close();});
+  document.body.append(ov);
+}
 function hideHome(){const o=$('home');if(o)o.remove();}
 function showHome(){
   if($('home'))return;hideHub();
@@ -3545,6 +3591,7 @@ function showHome(){
     h('div',{class:'hm-top'},h('div',{html:logo}),
       h('div',{class:'hm-hi'},h('h2',null,nm?'Salut '+nm+' !':'Bienvenue !'),h('small',null,'Ton équipage, la discussion, et les jeux juste à côté.')),
       h('button',{class:'hm-play',type:'button',onclick:()=>{hideHome();showHub();}},'🎮 JOUER'),
+      h('button',{class:'hm-btn',type:'button',onclick:openDon,title:'Faire un don (blague)'},'💝 Don'),
       prof?h('button',{class:'hm-btn',id:'hm-fr',type:'button',onclick:()=>{const b=$('fr-btn');if(b)b.click();}},'💬 Messages'):null,
       prof?h('button',{class:'hm-me',type:'button',onclick:()=>openProf(),title:'Mon profil'},avEl('span','hm-av',myAv,(nm[0]||'?').toUpperCase(),'background:hsl('+hue(prof.slug)+' 45% 38%)'),nm):null,
       (prof||lsGet('f7guest'))?lo:null),
