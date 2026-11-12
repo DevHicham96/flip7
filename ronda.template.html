@@ -659,7 +659,8 @@ function rematch(){
 /* ---- discussion (même collection « chat » que Flip7) ---- */
 const REACT_L={wizz:'📳 Wizz',toc:'🚪 Toc toc',congrats:'🎉 Congratz',merde:'💩 MERDE',haha:'🤣 Hahaha',go:'📣 GO GO GO',rage:'🤬 Fou de rage',tomato:'🍅 une tomate',clap:'👏 Applaudir',cry:'😭 Pleurer',fire:'🔥 En feu',boom:'🎆 Feu d\'artifice',point:'🫵 Pointer du doigt',emo:'💬 un emoji',sad:'🎺 Trombone triste',horn:'📯 Corne de brume',drum:'🥁 Roulement'};
 const BADW=['putain','connard','connasse','salope','pute','encule','enculer','fdp','ntm','nique','niquer','batard','pd','bite','couille','couilles','foutre','salaud','enfoire','petasse','tapette'];
-const cleanText=t=>String(t).replace(/[\p{L}\p{N}]+/gu,w=>{const n=w.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');return BADW.includes(n)?'*'.repeat(w.length):w;});
+const cleanText=t=>(window.ATGIF&&ATGIF.is(t))?ATGIF.el(t):cleanText0(t);
+const cleanText0=t=>String(t).replace(/[\p{L}\p{N}]+/gu,w=>{const n=w.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');return BADW.includes(n)?'*'.repeat(w.length):w;});
 let chatOpen=false,chatMsgs=[],unread=0,chatInit=false,chatUnsub=null,lastSeenT=0;
 function chatBox(){
   let b=$('rdchat');if(b)return b;

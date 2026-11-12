@@ -2165,6 +2165,7 @@ function renderBar(){
 function applyChatFilter(){chat=chatAll.filter(m=>m.t>(chatMark.t||0)&&!(chatMark.hide||[]).includes(m.did)).slice(0,80);}
 const BADW=['putain','connard','connasse','salope','pute','encule','enculer','fdp','ntm','nique','niquer','batard','pd','bite','couille','couilles','foutre','salaud','enfoire','petasse','tapette','bougnoule','youpin','negre','negro','merdeux','abruti','debile','ordure','pourriture'];
 function cleanText(t){
+  if(window.ATGIF&&ATGIF.is(t))return ATGIF.el(t);
   return String(t).replace(/[\p{L}\p{N}]+/gu,w=>{const n=w.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');return BADW.includes(n)?'*'.repeat(w.length):w;});
 }
 function renderChat(){
@@ -3627,7 +3628,7 @@ function notifyRoom(msgs){
   msgs.forEach(m=>{
     if(!m.did||FR.chatSeen.has(m.did))return;FR.chatSeen.add(m.did);
     if(m.id===uid||m.react||!m.text||Date.now()-m.t>60000)return;
-    desk('💬 '+m.name+' · Salle '+ROOM,m.text,'room');
+    desk('💬 '+m.name+' · Salle '+ROOM,window.ATGIF?ATGIF.prev(m.text):m.text,'room');
   });
 }
 const unreadFrom=sl=>FR.pm.filter(m=>prof&&m.to===prof.slug&&m.from===sl&&m.t>(FR.readT[sl]||0)).length;
@@ -3657,8 +3658,8 @@ function incomingPm(m){
   const viewing=FR.open&&FR.thread===m.from&&!document.hidden;
   if(viewing)return;
   Snd.play('pm');
-  if(!document.hidden)say('💬 '+m.fn+' : '+m.text.slice(0,60));
-  desk('💬 '+m.fn,m.text,'pm-'+m.from);
+  if(!document.hidden)say('💬 '+m.fn+' : '+(window.ATGIF?ATGIF.prev(m.text):m.text).slice(0,60));
+  desk('💬 '+m.fn,window.ATGIF?ATGIF.prev(m.text):m.text,'pm-'+m.from);
 }
 async function sendPm(to,text){
   text=String(text||'').trim().slice(0,300);
@@ -3712,7 +3713,7 @@ function renderFr(){
     const sl=FR.thread,inf=FR.info[sl]||{name:sl},stt=presState(sl);
     const msgs=FR.pm.filter(m=>(m.from===sl&&m.to===prof.slug)||(m.from===prof.slug&&m.to===sl));
     if(!document.hidden)markRead(sl);
-    const ul=h('ul',{class:'dm-list',id:'dm-list'},msgs.length?msgs.map(m=>h('li',{class:m.from===prof.slug?'me':''},m.text,h('small',null,hhmm(m.t)))):h('li',{style:'align-self:center;background:none;color:var(--ink-2)'},'Aucun message. Dites bonjour !'));
+    const ul=h('ul',{class:'dm-list',id:'dm-list'},msgs.length?msgs.map(m=>h('li',{class:m.from===prof.slug?'me':''},(window.ATGIF&&ATGIF.is(m.text))?ATGIF.el(m.text):m.text,h('small',null,hhmm(m.t)))):h('li',{style:'align-self:center;background:none;color:var(--ink-2)'},'Aucun message. Dites bonjour !'));
     const inp=h('input',{id:'dm-in',maxlength:'300',placeholder:'Message privé…',autocomplete:'off','aria-label':'Message privé'});inp.value=FR.draft;
     inp.addEventListener('input',()=>{FR.draft=inp.value;});
     const form=h('form',{class:'dm-form',autocomplete:'off'},inp,h('button',{class:'btn primary',type:'submit'},'Envoyer'));
