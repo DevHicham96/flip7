@@ -523,6 +523,13 @@ const Snd=(()=>{
 })();
 /* ---- état ---- */
 const NAME_K='f7name';
+function atPres(g){
+  if(!db||!mySlug)return;
+  let nm=myName||mySlug,av=myAv,la=Date.now();
+  ['pointerdown','keydown','touchstart'].forEach(e=>addEventListener(e,()=>{la=Date.now();},{passive:true}));
+  const beat=()=>{try{db.doc('game/pres_'+mySlug).set({name:nm,av,t:Date.now(),st:(document.hidden||Date.now()-la>180000)?'away':'on',room:ROOM||0,g}).catch(()=>{});}catch(e){}};
+  Promise.resolve().then(()=>db.doc('game/prof_'+mySlug).get()).then(sn=>{if(sn&&sn.exists){const d=sn.data()||{};if(d.name)nm=String(d.name).slice(0,16);if(d.av)av=d.av;}}).catch(()=>{}).then(()=>{beat();setInterval(beat,25000);document.addEventListener('visibilitychange',beat);});
+}
 let db=null,uid=null,myName=lsGet(NAME_K)||'',mySlug=lsGet('f7prof')||'',ROOM=0,mode=null /* null|'online'|'solo' */;
 let S=null,roster=[],stateUnsub=null,lobUnsub=null,hb=null,setup={bots:2,target:1000},myReady=false,chain=Promise.resolve(),lastFxc=-1,lastGid=null,lastTurnKey='',botKey='';
 let sel=new Set(),staged=[],sortMode=lsGet('rmsort')||'suit',ovKey='';
@@ -902,6 +909,7 @@ async function boot(){
   render();
   if(window.F7_FIREBASE){
     try{db=await loadFirebase(window.F7_FIREBASE);}catch(e){db=null;}
+    try{atPres('rami');}catch(e){}
     if(db){
       lobUnsub=db.collection('lobby').onSnapshot(sn=>{
         roster=sn.docs.filter(d=>d.id.startsWith('rm_')).map(d=>{const v=d.data()||{};return{id:d.id.slice(3),name:String(v.name||'?').slice(0,16),t:+v.t||0,seen:+v.seen||0,room:+v.room||0,ready:!!v.ready,pf:String(v.pf||''),av:v.av};});

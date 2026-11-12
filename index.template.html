@@ -1017,7 +1017,7 @@ li:hover>.rxrow .rxadd,li:focus-within>.rxrow .rxadd,.rxadd.on{opacity:1}
 .hm-row:hover{background:rgba(120,160,255,.2)}.hm-row.off{opacity:.62}
 .hm-av{position:relative;flex:none;width:40px;height:40px;border-radius:50%;display:grid;place-items:center;overflow:hidden;font-weight:800;color:#fff;border:2px solid rgba(154,235,255,.5)}.hm-av svg{width:100%;height:100%;display:block}
 .hm-nm{flex:1;min-width:0}.hm-nm b{display:block;font-size:15px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.hm-nm small{color:#B3C0F0;font-size:12px}
-.hm-dot{flex:none;width:11px;height:11px;border-radius:50%;background:#6b7490}.hm-dot.on{background:#3DE08A;box-shadow:0 0 10px #3DE08A}.hm-dot.away{background:#FFB020;box-shadow:0 0 8px #FFB020}
+.hm-dot{flex:none;width:11px;height:11px;border-radius:50%;background:#6b7490}.hm-dot.on{background:#3DE08A;box-shadow:0 0 10px #3DE08A}.hm-dot.game{background:#8A7CFF;box-shadow:0 0 10px #8A7CFF}.hm-dot.away{background:#FFB020;box-shadow:0 0 8px #FFB020}
 .hm-msgs li{background:rgba(120,160,255,.1);border-radius:10px;padding:5px 10px;font-size:14px;overflow-wrap:anywhere}.hm-msgs li.me{border:1px solid #35DCF5;background:rgba(53,220,245,.12)}.hm-msgs li b{color:#8FE8FF}.hm-msgs li i{float:right;font-style:normal;color:#8d9bd0;font-size:11px;margin-left:8px}
 .hm-form{display:flex;gap:8px;margin-top:8px}.hm-form input{flex:1;min-width:0;min-height:42px;border-radius:12px;border:2px solid rgba(110,150,255,.5);background:rgba(6,10,38,.85);color:#fff;padding:0 12px;font:500 15px var(--f-body)}.hm-form input:focus{outline:0;border-color:#35DCF5}
 .hm-empty{color:#B3C0F0;text-align:center;padding:14px;font-size:14px}
@@ -3578,18 +3578,21 @@ async function dirReg(){
   }catch(e){}
 }
 function agoTxt(t){if(!t)return 'Hors ligne';const m=Math.max(1,Math.round((Date.now()-t)/60000));return 'Vu '+(m<60?'il y a '+m+' min':m<1440?'il y a '+Math.round(m/60)+' h':'il y a '+Math.round(m/1440)+' j');}
+const GAMEN={flip7:'Flip 7',ronda:'Ronda',rami:'Rami',mytho:'Mytho',quiz:'Quiz',loupgarou:'Loup-Garou',skyjo:'Skyjo'};
 function homeRefresh(){
   const o=$('home');if(!o)return;
-  const rows=Object.keys(FR.dir||{}).map(sl=>{const i=FR.info[sl]||{},d=FR.dir[sl]||{};return{sl,name:i.name||d.n||sl,av:i.av||d.a||'',st:presState(sl),t:(FR.pres[sl]||{}).t||0};});
+  const rows=Object.keys(FR.dir||{}).map(sl=>{const i=FR.info[sl]||{},d=FR.dir[sl]||{};return{sl,name:i.name||d.n||sl,av:i.av||d.a||'',st:presState(sl),t:(FR.pres[sl]||{}).t||0,g:String((FR.pres[sl]||{}).g||'')};});
   const me=prof&&prof.slug;
   if(me){const r=rows.find(x=>x.sl===me);if(r){r.st='on';r.name=prof.name;r.av=myAv;}else rows.push({sl:me,name:prof.name,av:myAv,st:'on',t:Date.now()});}
-  const ord={on:0,away:1,off:2};
+  rows.forEach(r=>{if(r.st==='on'&&GAMEN[r.g])r.st='game';});
+  if(me){const r=rows.find(x=>x.sl===me);if(r){const g=(ssGet('f7game')==='flip7'&&!hubWanted)?'flip7':'';r.st=g?'game':'on';r.g=g;}}
+  const ord={game:0,on:1,away:2,off:3};
   rows.sort((a,b)=>ord[a.st]-ord[b.st]||b.t-a.t||a.name.localeCompare(b.name));
-  const nOn=rows.filter(r=>r.st==='on').length;
+  const nOn=rows.filter(r=>r.st==='on'||r.st==='game').length;
   $('hm-cnt').textContent=nOn+' en ligne · '+rows.length+' membre'+(rows.length>1?'s':'');
   $('hm-mem').replaceChildren(...(rows.length?rows.map(r=>h('li',null,h('button',{type:'button',class:'hm-row '+r.st,onclick:()=>openProfileOf({pf:r.sl,name:r.name,av:r.av})},
     avEl('span','hm-av',r.av,(r.name[0]||'?').toUpperCase(),'background:hsl('+hue(r.sl)+' 45% 38%)'),
-    h('span',{class:'hm-nm'},h('b',null,r.name+(r.sl===me?' (toi)':'')),h('small',null,r.st==='on'?'En ligne':r.st==='away'?'Absent (AFK)':agoTxt(r.t))),
+    h('span',{class:'hm-nm'},h('b',null,r.name+(r.sl===me?' (toi)':'')),h('small',null,r.st==='game'?'🎮 En jeu · '+GAMEN[r.g]:r.st==='on'?'En ligne':r.st==='away'?'Absent (AFK)'+(GAMEN[r.g]?' · '+GAMEN[r.g]:''):agoTxt(r.t))),
     h('span',{class:'hm-dot '+r.st})))):[h('li',{class:'hm-empty'},'Personne pour l\'instant…')]));
   const ul=$('hm-chat');
   const sig=HALL.docs.map(m=>m.did).join(',')+'|'+JSON.stringify(RXM)+'|'+RXOPEN+'|'+uid;
@@ -3716,7 +3719,7 @@ const ST_L={on:'En ligne',away:'Absent (AFK)',off:'Hors ligne'};
 function presBeat(off){
   if(!prof||!db||devOn)return;
   const st=off===true?'off':((document.hidden||Date.now()-lastAct>180000)?'away':'on');
-  try{db.doc('game/pres_'+prof.slug).set({name:prof.name,av:myAv,t:off===true?0:Date.now(),st,room:ROOM||0}).catch(()=>{});}catch(e){}
+  try{db.doc('game/pres_'+prof.slug).set({name:prof.name,av:myAv,t:off===true?0:Date.now(),st,room:ROOM||0,g:(ssGet('f7game')==='flip7'&&!hubWanted)?'flip7':''}).catch(()=>{});}catch(e){}
 }
 function startPresence(){if(presTm)clearInterval(presTm);presBeat();presTm=setInterval(presBeat,25000);}
 function stopPresence(){presBeat(true);if(presTm){clearInterval(presTm);presTm=null;}}
