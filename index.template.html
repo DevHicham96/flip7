@@ -3518,8 +3518,8 @@ function rxToggle(did,k){
   if(had)delete by[uid];else by[uid]=name.slice(0,16);
   RXOPEN=null;rxRefresh();
   const ref=db.doc('chat/rx_'+did+'_'+uid+'_'+k);
-  (had?ref.delete():ref.set({rx:1,to:did,k,id:uid,name:name.slice(0,16),t:Date.now(),room:-3})).catch(()=>{
-    if(had)by[uid]=name;else delete by[uid];rxRefresh();say('Réaction non envoyée.');
+  (had?ref.delete():ref.set({rx:1,to:did,k,id:uid,name:name.slice(0,16),text:'',t:Date.now(),room:-3})).catch(e=>{
+    if(had)by[uid]=name;else delete by[uid];rxRefresh();say('Réaction refusée : '+String((e&&(e.code||e.message))||'erreur').slice(0,60));
   });
 }
 function rxEl(did){
