@@ -538,6 +538,7 @@ details ul{margin:8px 0 0;padding-left:20px;display:grid;gap:4px}
 .card.act.aD{background:linear-gradient(#8A97A6,#5B6878)}
 .card.act.aT{background:linear-gradient(#4CC27F,#1F9456)}
 .card.act.aW{background:linear-gradient(#35C7C7,#12939F)}
+.card.act.aB{background:linear-gradient(#6A2C8C,#2A0E45)}.card.aB .ic{color:#fff}
 .card.aJ .ic,.card.aD .ic,.card.aT .ic,.card.aW .ic{color:#fff}
 .card.aQ .ic{color:#6A2E00}
 .card .lb-s.sm{font-size:16cqw}
@@ -649,6 +650,17 @@ body[data-tb="pool"] .felt::after{opacity:.8;background:url("data:image/svg+xml,
 .tbwrap{position:relative;display:inline-block}
 .tbpop{max-height:calc(100vh - 90px);overflow:auto;position:absolute;right:0;top:calc(100% + 6px);z-index:60;background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:0 10px 30px rgba(0,0,0,.3);padding:8px;display:grid;gap:4px;min-width:200px}
 .tbpop[hidden]{display:none}
+.top{position:relative;z-index:70}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:6px 0}
+.opt{position:relative;display:flex;align-items:center;gap:12px;border:2px solid var(--line);background:var(--card);color:var(--ink);border-radius:12px;padding:10px 12px;cursor:pointer;min-height:60px}
+.opt input{position:absolute;opacity:0;pointer-events:none}
+.opt .bx{flex:none;width:30px;height:30px;border-radius:8px;border:3px solid var(--ink-2);display:grid;place-items:center;font-size:20px;line-height:1;color:transparent;background:rgba(255,255,255,.08)}
+.opt input:checked+.bx{background:#2FB67C;border-color:#2FB67C;color:#fff}.opt input:checked+.bx::before{content:'✓';font-weight:900}
+.opt:has(input:checked){border-color:#2FB67C;box-shadow:0 0 0 1px #2FB67C}
+.opt:has(input:disabled){opacity:.55;cursor:not-allowed}
+.opt .ot b{display:block}.opt .ot small{color:var(--ink-2);font-size:12px}
+.opt:has(input:focus-visible){outline:3px solid #35DCF5;outline-offset:2px}
+@media (max-width:560px){.opts{grid-template-columns:1fr}}
 .netfix{position:fixed;right:10px;bottom:8px;z-index:250}.netfix .tbpop{top:auto;bottom:calc(100% + 8px);right:0;max-width:calc(100vw - 20px)}
 .tbo{display:flex;align-items:center;gap:10px;border:2px solid transparent;background:transparent;color:var(--ink);font:600 14px var(--f-body);border-radius:10px;padding:6px 8px;cursor:pointer;text-align:left}
 .tbo:hover{background:var(--card)}
@@ -1115,12 +1127,13 @@ h2{color:#8FE8FF;text-shadow:0 0 16px rgba(61,214,245,.45)}
       <input id="nm" name="pseudo" maxlength="16" placeholder="Votre pseudo" aria-label="Votre pseudo" required>
       <button class="btn primary" id="joinbtn" type="submit" disabled>Rejoindre</button>
     </form>
-    <div class="mode" id="mode-box" role="radiogroup" aria-label="Mode de jeu">
-      <button type="button" class="mode-b" data-m="normal" role="radio"><b>Mode normal</b><small>Les règles classiques</small></button>
-      <button type="button" class="mode-b" data-m="venge" role="radio"><b>Mode Vengeance</b><small>Vol, échange, malus…</small></button>
+    <div class="avlbl" style="margin-top:8px">Options de la partie</div>
+    <div class="opts" id="opts">
+      <label class="opt" id="o-venge"><input type="checkbox" id="c-venge"><span class="bx" aria-hidden="true"></span><span class="ot"><b>🔥 Mode Vengeance</b><small id="s-venge">Désactivé : règles classiques</small></span></label>
+      <label class="opt" id="o-bl"><input type="checkbox" id="c-bl"><span class="bx" aria-hidden="true"></span><span class="ot"><b>😈 Carte Bad Luck</b><small id="s-bl">Disponible en mode Vengeance</small></span></label>
+      <label class="opt" id="o-team"><input type="checkbox" id="c-team"><span class="bx" aria-hidden="true"></span><span class="ot"><b>👥 Équipes de 2</b><small id="team-s">Désactivé</small></span></label>
+      <label class="opt" id="o-jk"><input type="checkbox" id="c-jk"><span class="bx" aria-hidden="true"></span><span class="ot"><b>🃏 Joker</b><small id="jk-s">Activé</small></span></label>
     </div>
-    <div class="mode" style="margin-top:6px"><button type="button" class="mode-b" id="team-b" role="switch" aria-checked="false"><b>👥 Équipes de 2</b><small id="team-s">Désactivé</small></button>
-      <button type="button" class="mode-b" id="jk-b" role="switch" aria-checked="true"><b>🃏 Joker</b><small id="jk-s">Activé</small></button></div>
     <div class="avlbl" style="margin-top:8px">Score à atteindre</div>
     <div class="tgrow" id="tg-box" role="radiogroup" aria-label="Score à atteindre">
       <button type="button" class="mode-b tg-b" data-t="100" role="radio"><b>100</b></button><button type="button" class="mode-b tg-b" data-t="200" role="radio"><b>200</b></button><button type="button" class="mode-b tg-b" data-t="300" role="radio"><b>300</b></button><button type="button" class="mode-b tg-b" data-t="400" role="radio"><b>400</b></button>
@@ -1171,14 +1184,15 @@ function buildDeckN(){
   for(let i=0;i<3;i++)d.push('aF','a3','aS');
   return d;
 }
-function buildDeckV(){
+function buildDeckV(bl){
   const d=[],cn={1:1,2:2,3:3,4:4,5:5,6:6,7:6,8:8,9:9,10:10,11:11,12:12,13:12};
   Object.keys(cn).forEach(v=>{for(let i=0;i<cn[v];i++)d.push('n'+v);});
   d.push('z0','u7','l13','m-2','m-4','m-6','m-8','m-10','md2');
   for(let i=0;i<2;i++)d.push('aJ','aQ','aD','aT','aW');
+  if(bl)d.push('aB','aB');
   return d;
 }
-function buildDeck(mode,joker){const d=mode==='venge'?buildDeckV():buildDeckN();if(joker)d.push('aK');return d;}
+function buildDeck(mode,joker,bl){const d=mode==='venge'?buildDeckV(bl):buildDeckN();if(joker)d.push('aK');return d;}
 const TG=s=>s&&s.target||200;
 function shuffle(a){
   a=a.slice();
@@ -1198,7 +1212,7 @@ function scoreHand(h,f7){
   h.cards.forEach(c=>{if(c[0]==='m'&&(c[1]==='+'||c[1]==='-'))base+=parseInt(c.slice(1),10);});
   return Math.max(0,base)+(f7?15:0);
 }
-const CL={aF:'Stop',a3:'Trois à la suite',aS:'Seconde Chance',aJ:'Encore une !',aQ:'Quatre à la suite',aD:'Défausse',aT:'Vol',aW:'Échange',aK:'Joker',z0:'Le Zéro',u7:'7 maudit',l13:'13 chanceux',md2:'÷2',mx2:'×2'};
+const CL={aF:'Stop',a3:'Trois à la suite',aS:'Seconde Chance',aJ:'Encore une !',aQ:'Quatre à la suite',aD:'Défausse',aT:'Vol',aW:'Échange',aK:'Joker',aB:'Bad Luck',z0:'Le Zéro',u7:'7 maudit',l13:'13 chanceux',md2:'÷2',mx2:'×2'};
 function cardLabel(c){
   if(CL[c])return CL[c];
   if(c[0]==='n')return c.slice(1);
@@ -1256,7 +1270,7 @@ function flip7(s,pid){
   if(s.last)s.last.res='f7';
   endRound(s);
 }
-const KIND={aF:'freeze',a3:'flip3',aJ:'jom',aQ:'flip4',aD:'discard',aT:'steal',aW:'swap',aK:'joker'};
+const KIND={aF:'freeze',a3:'flip3',aJ:'jom',aQ:'flip4',aD:'discard',aT:'steal',aW:'swap',aK:'joker',aB:'badluck'};
 const CARDKIND=k=>k==='discard'||k==='steal'||k==='swap';
 const tokPid=t=>t.slice(0,t.lastIndexOf('|'));
 const tokIdx=t=>+t.slice(t.lastIndexOf('|')+1);
@@ -1324,6 +1338,9 @@ function applyTarget(s,kind,by,tid,card,first){
   if(kind==='freeze'){
     s.hands[tid].status='frozen';s.discard.push(card);fx(s,{k:'freeze',by,to:tid});
     logp(s,by===tid?nb+' se gèle et encaisse':nb+' gèle '+nt+' qui encaisse');
+  }else if(kind==='badluck'){
+    s.hands[tid].bl=1;s.discard.push(card);fx(s,{k:'badluck',by,to:tid});
+    logp(s,by===tid?nb+' se porte la poisse : 80 % de doublons ce tour':nb+' jette Bad Luck sur '+nt+' : 80 % de doublons ce tour');
   }else if(kind==='flip3'||kind==='flip4'){
     const n=kind==='flip3'?3:4,lb=kind==='flip3'?'Trois à la suite':'Quatre à la suite';
     s.discard.push(card);fx(s,{k:kind,by,to:tid});
@@ -1349,9 +1366,18 @@ function openTarget(s,kind,by,card){
   }
   s.pending={kind,by,options:opts,card};
 }
+function dupFromDeck(s,h){
+  const own=new Set(numsOf(h));if(!own.size)return -1;
+  const ix=[];s.deck.forEach((c,i)=>{if(isNum(c)&&c!=='u7'&&own.has(numVal(c)))ix.push(i);});
+  return ix.length?ix[Math.floor(Math.random()*ix.length)]:-1;
+}
 function drawCard(s,pid,task){
-  const c=takeCard(s),h=s.hands[pid],nm=nameOf(s,pid);
+  let c=takeCard(s);const h=s.hands[pid],nm=nameOf(s,pid);
   if(!c){logp(s,'Plus de cartes : fin de manche');endRound(s);return;}
+  if(h.bl&&h.status==='active'&&Math.random()<0.8){
+    const i=dupFromDeck(s,h);
+    if(i>=0){const c2=s.deck.splice(i,1)[0];s.deck.push(c);c=c2;fx(s,{k:'cursed',to:pid});}
+  }
   s.last={pid,card:c,res:'ok'};fx(s,{k:'draw',to:pid,card:c});
   if(isNum(c)){
     const r=receive(s,pid,c),lb=cardLabel(c);
@@ -1440,7 +1466,7 @@ const winnerIds=s=>s.tm&&s.winTeam!=null?teamMembers(s,s.winTeam).map(p=>p.id):(
 function newGameState(players,mode,teams,opt){
   opt=opt||{};
   const s={v:1,rev:1,mode:mode==='venge'?'venge':'normal',phase:'playing',round:0,players:players.map(p=>({id:p.id,name:p.name,av:p.av||'',pf:p.pf||'',w:p.w||0})),scores:{},
-    deck:shuffle(buildDeck(mode,!!opt.joker)),discard:[],target:[100,200,300,400].includes(opt.target)?opt.target:200,joker:!!opt.joker,hands:{},turn:0,stack:[],pending:null,log:[],flip7By:null,lastRound:null,last:null,winner:null,gid:Date.now().toString(36)+Math.random().toString(36).slice(2,6)};
+    deck:shuffle(buildDeck(mode,!!opt.joker,!!opt.bl&&mode==='venge')),bl:!!opt.bl&&mode==='venge',discard:[],target:[100,200,300,400].includes(opt.target)?opt.target:200,joker:!!opt.joker,hands:{},turn:0,stack:[],pending:null,log:[],flip7By:null,lastRound:null,last:null,winner:null,gid:Date.now().toString(36)+Math.random().toString(36).slice(2,6)};
   s.players.forEach(p=>{s.scores[p.id]=0;});
   if(teams&&teamOk(players.length)){s.tm={};s.tn=players.length/2;s.players.forEach((p,i)=>{s.tm[p.id]=i%s.tn;});s.winTeam=null;}
   if(players.length>1)openingDraw(s);
@@ -1556,7 +1582,7 @@ let ROOM=(()=>{const n=parseInt(lsGet('f7room')||'0',10);return n>=1&&n<=NROOMS?
 let prof=null,profUnsub=null,roomStates={},cd=null,cdEnd=0,cdKey=null,cdTm=null,cdLast=-1,autoDone=false;
 const gp=k=>'game/'+k+'_'+ROOM;
 let pendingWrites=0,chain=Promise.resolve(),logOpen=false,confirmNew=false;
-let chat=[],chatAll=[],chatMark={t:0,hide:[]},modeSel='normal',teamSel=false,targetSel=200,jokerSel=true,chatClr=false;
+let chat=[],chatAll=[],chatMark={t:0,hide:[]},modeSel='normal',teamSel=false,targetSel=200,jokerSel=true,badSel=true,chatClr=false;
 let drag=null,lastKey;
 
 function lsGet(k){try{return localStorage.getItem(k);}catch(e){return null;}}
@@ -1667,8 +1693,8 @@ const allReady=()=>{const p=activeRoster().slice(0,8);return p.length>=2&&p.ever
 const NCOL=['#D32F3A','#8C8782','#E8CF2A','#D32F3A','#52A9CC','#3E9B3E','#8E2C9A','#B8605A','#8FCB6A','#EE8A2A','#D32F3A','#4B63C8','#6E6468','#1E9AA8'];
 const NWORD=['ZÉRO','UN','DEUX','TROIS','QUATRE','CINQ','SIX','SEPT','HUIT','NEUF','DIX','ONZE','DOUZE','TREIZE'];
 const JK_SVG='<svg viewBox="0 0 100 100"><path d="M20 50C8 40 6 20 12 8c10 6 22 16 26 30C41 24 45 14 50 4c5 10 9 20 12 34 4-14 16-24 26-30 6 12 4 32-8 42Z" fill="#7B3FD6" stroke="#2a1458" stroke-width="2.6" stroke-linejoin="round"/><path d="M20 50c20-7 40-7 60 0l-3 9c-18-6-36-6-54 0Z" fill="#F7C93B" stroke="#2a1458" stroke-width="2.6" stroke-linejoin="round"/><path d="M30 38l5 6 5-6-5-6zM60 38l5 6 5-6-5-6zM45 26l5 6 5-6-5-6z" fill="#F7C93B" opacity=".9"/><g fill="#F7C93B" stroke="#2a1458" stroke-width="2"><circle cx="12" cy="8" r="5"/><circle cx="50" cy="4" r="5"/><circle cx="88" cy="8" r="5"/></g><ellipse cx="50" cy="76" rx="25" ry="22" fill="#FFE3C2" stroke="#2a1458" stroke-width="2.6"/><circle cx="38" cy="72" r="3.2" fill="#2a1458"/><circle cx="62" cy="72" r="3.2" fill="#2a1458"/><circle cx="33" cy="82" r="4.5" fill="#FF6B6B" opacity=".4"/><circle cx="67" cy="82" r="4.5" fill="#FF6B6B" opacity=".4"/><path d="M36 82q14 14 28 0" fill="#fff" stroke="#2a1458" stroke-width="2.4" stroke-linejoin="round"/><path d="M32 63q6-5 12-2M56 61q6-3 12 2" fill="none" stroke="#2a1458" stroke-width="2.2" stroke-linecap="round"/></svg>';
-const ACT={aF:['🔒','Stop','Stop'],a3:['⚡','Trois à la suite','×3'],aS:['♥','Seconde Chance','Chance'],aJ:['➕','Encore une !','+1'],aQ:['④','Quatre à la suite','×4'],aD:['🗑','Défausse','Jeter'],aT:['✋','Vol','Vol'],aW:['⇄','Échange','Troc'],aK:['🃏','Joker','Joker']};
-const HELP={aK:'Une seule carte dans le paquet. Choisissez un joueur : vous échangez vos points totaux avec les siens (ou ne l\'utilisez pas).',aF:'Ciblez un joueur : il encaisse ses points et sort de la manche.',a3:'Ciblez un joueur : il pioche 3 cartes à la suite.',aS:'Gardez-la : elle vous sauve d\'un doublon.',aJ:'La cible pioche une dernière carte, puis doit rester.',aQ:'La cible pioche 4 cartes à la suite.',aD:'Retirez une carte de la ligne d\'un joueur.',aT:'Prenez une carte de la ligne d\'un joueur encore en jeu.',aW:'Échangez deux cartes de deux joueurs différents.',z0:'Votre score de manche tombe à 0, sauf Flip 7. Compte parmi les 7 nombres.',u7:'Défausse toutes vos autres cartes et ne garde que le 7.',l13:'Vous pouvez avoir deux 13 sans être éliminé.',md2:'Divise le total de vos nombres par 2 (arrondi inférieur).',mx2:'Double le total de vos cartes numéro.'};
+const ACT={aF:['🔒','Stop','Stop'],a3:['⚡','Trois à la suite','×3'],aS:['♥','Seconde Chance','Chance'],aJ:['➕','Encore une !','+1'],aQ:['④','Quatre à la suite','×4'],aD:['🗑','Défausse','Jeter'],aT:['✋','Vol','Vol'],aW:['⇄','Échange','Troc'],aK:['🃏','Joker','Joker'],aB:['😈','Bad Luck','80 %']};
+const HELP={aB:'Mode Vengeance. Donnez-la à un joueur : pendant toute la manche, chacune de ses cartes a 80 % de chances d\'être un doublon.',aK:'Une seule carte dans le paquet. Choisissez un joueur : vous échangez vos points totaux avec les siens (ou ne l\'utilisez pas).',aF:'Ciblez un joueur : il encaisse ses points et sort de la manche.',a3:'Ciblez un joueur : il pioche 3 cartes à la suite.',aS:'Gardez-la : elle vous sauve d\'un doublon.',aJ:'La cible pioche une dernière carte, puis doit rester.',aQ:'La cible pioche 4 cartes à la suite.',aD:'Retirez une carte de la ligne d\'un joueur.',aT:'Prenez une carte de la ligne d\'un joueur encore en jeu.',aW:'Échangez deux cartes de deux joueurs différents.',z0:'Votre score de manche tombe à 0, sauf Flip 7. Compte parmi les 7 nombres.',u7:'Défausse toutes vos autres cartes et ne garde que le 7.',l13:'Vous pouvez avoir deux 13 sans être éliminé.',md2:'Divise le total de vos nombres par 2 (arrondi inférieur).',mx2:'Double le total de vos cartes numéro.'};
 function cardHelp(c){
   if(HELP[c])return HELP[c];
   if(c[0]==='m')return c[1]==='-'?'Retire '+c.slice(2)+' de votre score (jamais sous 0).':'Ajoute '+c.slice(2)+' à votre score.';
@@ -1760,13 +1786,15 @@ function renderLobby(){
   $('lobby-hint').textContent=hint;
   const canMode=!!(me&&canWrite&&!cdOn()&&canCtl());
   {const dv=$('dev-btn');if(dv)dv.hidden=!isAdmin();}
-  document.querySelectorAll('.mode-b').forEach(b=>{const on=b.dataset.m===modeSel;b.classList.toggle('on',on);b.setAttribute('aria-checked',on?'true':'false');b.disabled=!canMode;});
-  {const jb=$('jk-b');if(jb){jb.classList.toggle('on',jokerSel);jb.setAttribute('aria-checked',jokerSel?'true':'false');jb.disabled=!canMode;$('jk-s').textContent=jokerSel?'1 carte Joker : échange vos points avec ceux d\'un joueur':'Désactivé';}
+  {const cv=$('c-venge'),cb=$('c-bl'),ct=$('c-team'),cj=$('c-jk'),vg=modeSel==='venge';
+   cv.checked=vg;cv.disabled=!canMode;$('s-venge').textContent=vg?'Activé : Vol, Échange, malus, 7 maudit…':'Désactivé : règles classiques';
+   cb.checked=vg&&badSel;cb.disabled=!canMode||!vg;$('s-bl').textContent=!vg?'Disponible en mode Vengeance':badSel?'Activée : 2 cartes, 80 % de doublons pour la cible':'Désactivée';
+   ct.checked=teamSel;ct.disabled=!canMode;cj.checked=jokerSel;cj.disabled=!canMode;}
+  {$('jk-s').textContent=jokerSel?'Activé : échange vos points avec ceux d\'un joueur':'Désactivé';
    document.querySelectorAll('.tg-b').forEach(b=>{const on=+b.dataset.t===targetSel;b.classList.toggle('on',on);b.setAttribute('aria-checked',on?'true':'false');b.disabled=!canMode;});}
-  {const tb=$('team-b');if(tb){tb.classList.toggle('on',teamSel);tb.setAttribute('aria-checked',teamSel?'true':'false');tb.disabled=!canMode;
-    const n=Math.min(r.length,8);$('team-s').textContent=!teamSel?'Désactivé':teamOk(n)?(n/2)+' équipes de 2 · les scores s\'additionnent':'Il faut 4, 6 ou 8 joueurs (actuellement '+n+')';}}
+  {const n=Math.min(r.length,8);$('team-s').textContent=!teamSel?'Désactivé':teamOk(n)?'Activé : '+(n/2)+' équipes de 2, scores additionnés':'Il faut 4, 6 ou 8 joueurs (actuellement '+n+')';}
   $('mode-desc').textContent=modeSel==='venge'
-    ?'Flip 7 with a Vengeance : cartes Vol, Échange, Défausse, Encore une !, Quatre à la suite, malus −2 à −10 et ÷2, Zéro, 7 maudit et 13 chanceux.'
+    ?'Flip 7 with a Vengeance : cartes Vol, Échange, Défausse, Encore une !, Quatre à la suite, malus −2 à −10 et ÷2, Zéro, 7 maudit et 13 chanceux'+(badSel?' et Bad Luck (80 % de doublons).':'.')
     :'Règles classiques : Stop, Trois à la suite et Seconde Chance.';
   const act=$('lobby-actions');act.replaceChildren();
   if(me&&canWrite){
@@ -1815,7 +1843,7 @@ function seatEl(s,p,pos,mine,canPick){
   const tI=s.tm?s.tm[p.id]:null;
   const nmT=(tI!=null?TEAM_COL[tI].e+' ':'')+p.name+(mine?' (vous)':'');
   const nmEl=()=>{const d=h('div',{class:'nm',title:'Voir le profil de '+p.name,style:'cursor:pointer'},nmT,rkb(p));d.addEventListener('click',ev=>{ev.stopPropagation();openProfileOf(p);});return d;};
-  const stEl=h('span',{class:'st '+st[1]+(hd.status==='active'&&!isF7?' act':'')},st[0]);
+  const stEl=h('span',{class:'st '+st[1]+(hd.status==='active'&&!isF7?' act':'')},st[0],hd.bl?h('span',{class:'blk',title:'Malchance : 80 % de doublons ce tour'},' 😈'):null);
   const ptsEl=h('span',{class:'pts'},hd.status==='bust'?'0':'+'+pts);
   const scEl=h('span',{class:'score',title:s.tm?'Score perso · équipe '+teamTotal(s,s.tm[p.id])+' / '+TG(s):'Total sur '+TG(s)},String(total));
   const ht=s.tm?teamTotal(s,s.tm[p.id]):total,T0=TG(s),heat=ht>=T0*.975?3:ht>=T0*.9?2:ht>=T0*.75?1:0;
@@ -1936,7 +1964,7 @@ function animateDraw(s){
 /* ---------- mode développeur (local, rien n'est écrit dans la base) ---------- */
 const DEVCARDS={
   normal:[['Nombres',['n0','n1','n2','n3','n4','n5','n6','n7','n8','n9','n10','n11','n12']],['Bonus',['m+2','m+4','m+6','m+8','m+10','mx2']],['Actions',['aF','a3','aS','aK']]],
-  venge:[['Nombres',['n1','n2','n3','n4','n5','n6','n7','n8','n9','n10','n11','n12','n13']],['Spéciaux',['z0','u7','l13']],['Bonus / malus',['m-2','m-4','m-6','m-8','m-10','md2']],['Actions',['aJ','aQ','aD','aT','aW','aK']]]
+  venge:[['Nombres',['n1','n2','n3','n4','n5','n6','n7','n8','n9','n10','n11','n12','n13']],['Spéciaux',['z0','u7','l13']],['Bonus / malus',['m-2','m-4','m-6','m-8','m-10','md2']],['Actions',['aJ','aQ','aD','aT','aW','aK','aB']]]
 };
 function devPlayers(n){return [...Array(n)].map((_,i)=>({id:i===0?'dev0':'bot'+i,name:i===0?'Moi':'Bot '+i,av:AVATARS[(i*5+2)%AVATARS.length]}));}
 function startDev(mode,n){
@@ -1998,7 +2026,12 @@ function devPanelEl(s){
     pal.flat(),
     h('div',{class:'dev-row'},btn('Fin de manche forcée',devEndRound),btn('Voir le podium',devPodium),btn('🎉 Animation Flip 7',()=>celebrateFlip7(local,actor())),btn('Minuteur : '+(devTimer?'ON':'OFF'),()=>{devTimer=!devTimer;tRev=null;renderAll();},devTimer),btn('Manche suivante',nextRound)));
 }
-let podNode=null,podKey='';
+let podNode=null,podKey='',f7Hold=0,f7HoldTm=null;
+function podHold(s){
+  if(fxSeen!==undefined&&(s.fxc||0)!==fxSeen&&(s.fx||[]).some(e=>e.k==='flip7')){f7Hold=Date.now()+8500;clearTimeout(f7HoldTm);f7HoldTm=setTimeout(podRelease,8600);}
+  return Date.now()<f7Hold;
+}
+function podRelease(){if(!f7Hold)return;f7Hold=0;clearTimeout(f7HoldTm);if(local&&local.phase==='gameEnd'){renderGame();Snd.play('win');}}
 function podiumEl(s){
   const key=s.round+':'+s.winner;
   if(podNode&&podKey===key)return podNode;
@@ -2061,7 +2094,7 @@ function renderGame(){
     parts=[m>0?h('div',{class:'ropp'+(m===1?' one':'')},oSeats):null,cen,bot];
   }
   const felt=h('div',{class:'felt '+(wide?'wide':'narrow')},parts.filter(Boolean));
-  if(s.phase==='gameEnd'){
+  if(s.phase==='gameEnd'&&!podHold(s)){
     const end=h('div',{class:'endwrap'},podiumEl(s),
       h('div',{class:'pend'},
         h('button',{class:'btn',type:'button',onclick:()=>openRk('cur')},'🏆 Classement & historique'),
@@ -2070,7 +2103,7 @@ function renderGame(){
     return;
   }
   const kids=[
-    s.phase==='gameEnd'?podiumEl(s):null,
+    null,
     h('div',{class:'round'},h('span',{class:'r'},'Manche '+s.round,s.mode==='venge'?h('span',{class:'tagm'},'Vengeance'):null),h('span',{class:'muted'},s.tm?[...Array(s.tn)].map((_,t)=>TEAM_COL[t].e+' '+teamTotal(s,t)).join(' · ')+' · '+TG(s)+' pour gagner':'Premier à '+TG(s)+' points')),
     felt,
     h('div',{class:'status-line',role:'status'},lastLine)
@@ -2094,7 +2127,7 @@ function renderGame(){
   animateDraw(s);
   applyDealHide();
 }
-const KDESC={freeze:'Stop : le joueur choisi encaisse ses points et sort de la manche.',flip3:'Trois à la suite : le joueur choisi doit piocher 3 cartes d\'affilée.',flip4:'Quatre à la suite : le joueur choisi doit piocher 4 cartes d\'affilée.',second:'Seconde Chance : à donner à un joueur qui n\'en a pas, elle le sauve d\'un doublon.',jom:'Encore une ! : le joueur choisi pioche une dernière carte, puis doit rester.',discard:'Défausse : vous pouvez jeter n\'importe quelle carte de la table.',steal:'Vol : volez une carte posée devant un autre joueur.',swap:'Échange : choisissez deux cartes de joueurs différents, elles sont échangées.',joker:'Joker : vous échangez vos points totaux avec ceux du joueur choisi.'};
+const KDESC={freeze:'Stop : le joueur choisi encaisse ses points et sort de la manche.',flip3:'Trois à la suite : le joueur choisi doit piocher 3 cartes d\'affilée.',badluck:'Bad Luck : le joueur choisi a 80 % de chances de piocher un doublon à chaque carte pendant toute la manche.',flip4:'Quatre à la suite : le joueur choisi doit piocher 4 cartes d\'affilée.',second:'Seconde Chance : à donner à un joueur qui n\'en a pas, elle le sauve d\'un doublon.',jom:'Encore une ! : le joueur choisi pioche une dernière carte, puis doit rester.',discard:'Défausse : vous pouvez jeter n\'importe quelle carte de la table.',steal:'Vol : volez une carte posée devant un autre joueur.',swap:'Échange : choisissez deux cartes de joueurs différents, elles sont échangées.',joker:'Joker : vous échangez vos points totaux avec ceux du joueur choisi.'};
 function renderBar(){
   const bar=$('bar'),inn=$('bar-in');
   const s=local;
@@ -2112,7 +2145,7 @@ function renderBar(){
       const pd=s.pending;
       if(pd.by===actor()){
         const Q={freeze:'Stop : qui encaisse et sort de la manche ?',flip3:'Trois à la suite : qui pioche 3 cartes ?',second:'Seconde Chance en double : à qui la donner ?',
-          jom:'Encore une ! : qui pioche une dernière carte puis reste ?',joker:'🃏 Joker : avec qui échanger vos points ?',flip4:'Quatre à la suite : qui pioche 4 cartes ?',mod:'Bonus / malus : sur quel joueur le poser ?',
+          jom:'Encore une ! : qui pioche une dernière carte puis reste ?',joker:'🃏 Joker : avec qui échanger vos points ?',badluck:'😈 Bad Luck : qui maudire (80 % de doublons ce tour) ?',flip4:'Quatre à la suite : qui pioche 4 cartes ?',mod:'Bonus / malus : sur quel joueur le poser ?',
           discard:'Défausse : touchez la carte à retirer',steal:'Vol : touchez la carte à voler',swap:pd.first?'Échange : touchez la 2e carte (chez un autre joueur)':'Échange : touchez la 1re carte'};
         kids.push(h('div',{class:'bar-msg'},Q[pd.kind]||'Choisissez une cible'));
         if(KDESC[pd.kind])kids.push(h('div',{class:'bar-sub'},KDESC[pd.kind]));
@@ -2326,6 +2359,7 @@ const Snd=(()=>{
     },
     pm:t=>{tone(988,t,.14,{type:'sine',v:.16});tone(1319,t+.12,.28,{type:'sine',v:.16});tone(1976,t+.12,.2,{type:'sine',v:.05});},
     tension:t=>{[0,.34].forEach(d=>{tone(62,t+d,.2,{type:'sine',to:38,v:.55});noise(t+d,.08,{ft:'lowpass',f:300,v:.2});});[0,1,2,3,4].forEach(i=>tone(440*Math.pow(1.19,i),t+.7+i*.09,.3,{type:'sawtooth',v:.07,to:440*Math.pow(1.19,i)*1.02}));},
+    badluck:t=>{[392,370,349,330,311,262].forEach((f,i)=>tone(f,t+i*.11,.3,{type:'sawtooth',v:.11}));noise(t,.5,{ft:'lowpass',f:500,fto:150,v:.16,a:.1});},
     joker:t=>{noise(t,.5,{ft:'bandpass',f:500,fto:6000,v:.14,q:.8,a:.3});[392,523,659,784,1047,1319].forEach((f,i)=>tone(f,t+.12+i*.07,.3,{type:'triangle',v:.13}));[880,740,622,523].forEach((f,i)=>tone(f,t+.62+i*.12,.12,{type:'sawtooth',to:f*.85,v:.09}));},
     recap:t=>{[392,523,659].forEach((f,i)=>tone(f,t+i*.09,.25,{type:'triangle',v:.12}));tone(1047,t+.3,.35,{type:'sine',v:.1});},
     clap:t=>{for(let i=0;i<34;i++){const d=i*.045+Math.random()*.03;noise(t+d,.05,{f:1800+Math.random()*2600,fto:900,v:.07+Math.random()*.06,q:.7,a:.002});}},
@@ -2543,6 +2577,11 @@ function doFx(s,ev){
       Snd.play('discard');shake(to,6);glow(to,'rgba(154,163,181,.9)');ring(c.x,c.y,'#9AA3B5');
       fxOut('pop huge',lb,c.x,c.y,2600,{'--g':'#9AA3B5'});setTimeout(()=>fxOut('pop big',"🗑️",c.x,c.y+10,1500,{'--g':'#9AA3B5'}),500);
       banner('🗑️ '+nameOf(s,ev.by)+' défausse '+lb+' de '+nm,'#9AA3B5');sparks(c.x,c.y,['🗑️','💨','✖️'],8,100);}break;
+    case 'badluck':
+      Snd.play('badluck');shake(to,8);glow(to,'rgba(150,60,200,.9)');ring(c.x,c.y,'#B03CE0');
+      fxOut('pop big',"😈",c.x,c.y,1800,{'--g':'#B03CE0'});banner('😈 BAD LUCK ! '+nm+' : 80 % de doublons','#B03CE0');sparks(c.x,c.y,['😈','💀','🍀'],14,120);break;
+    case 'cursed':
+      glow(to,'rgba(150,60,200,.7)');fxOut('pop big',"😈 doublon !",c.x,c.y-20,1400,{'--g':'#B03CE0'});break;
     case 'stay':stayFx(s,to,ev.pts||0);break;
     case 'flip7':celebrateFlip7(s,to);break;
   }
@@ -2707,7 +2746,7 @@ function celebrateFlip7(s,pid){
   const cards=[1,2,3,4,5,6,7].map(n=>h('span',{class:'f7c',style:'--i:'+n+';--cc:'+NCOL[n]},String(n)));
   ov.append(h('div',{class:'f7rays'}),...conf,
     h('div',{class:'f7box'},av,h('div',{class:'f7t'},'FLIP 7 !'),h('div',{class:'f7n'},nm),h('div',{class:'f7p'},'+15 points'),h('div',{class:'f7cs'},cards),h('div',{class:'f7h'},'Touchez pour continuer')));
-  const kill=()=>{ov.classList.add('out');setTimeout(()=>ov.remove(),400);};
+  const kill=()=>{ov.classList.add('out');setTimeout(()=>ov.remove(),400);podRelease();};
   ov.addEventListener('click',kill);setTimeout(kill,5200);
   document.body.append(ov);
   Snd.play('flip7');
@@ -2850,7 +2889,7 @@ function fxWatch(){
   }
   if(s.phase==='playing'&&lastRound!==s.round){lastRound=s.round;setTimeout(()=>focusFx(local),500);}
   if(!!s.paused!==lastPaused){lastPaused=!!s.paused;Snd.play(s.paused?'pause':'resume');}
-  if(s.phase==='gameEnd'&&lastPhase!=='gameEnd')setTimeout(()=>Snd.play('win'),700);
+  if(s.phase==='gameEnd'&&lastPhase!=='gameEnd'&&!(f7Hold>Date.now()))setTimeout(()=>Snd.play('win'),700);
   if(s.phase==='roundEnd'&&lastPhase==='playing'){const r=s.round;setTimeout(()=>{if(local&&local.phase==='roundEnd'&&local.round===r)recapFx(local);},1500);}
   if(s.phase!=='roundEnd'&&recapKey!==null)recapHide();
   lastPhase=s.phase;
@@ -2998,7 +3037,7 @@ function renderRooms(){
   }));
 }
 function resetRoomView(){
-  local=null;lastSnap=null;hist=[];chat=[];chatAll=[];chatMark={t:0,hide:[]};modeSel='normal';teamSel=false;targetSel=200;jokerSel=true;podNode=null;podKey='';lastKey=undefined;histKey=null;
+  local=null;lastSnap=null;hist=[];chat=[];chatAll=[];chatMark={t:0,hide:[]};modeSel='normal';teamSel=false;targetSel=200;jokerSel=true;badSel=true;podNode=null;podKey='';lastKey=undefined;histKey=null;
   cd=null;cdKey=null;cdEnd=0;rkOpen=false;confirmNew=false;fxSeen=undefined;lastActorId=undefined;lastPhase=undefined;lastRound=null;tRev=null;
   clearInterval(cdTm);cdTm=null;$('cdov').hidden=true;$('rk').hidden=true;
 }
@@ -3840,9 +3879,9 @@ function act(kind,arg){
 function startGame(){
   const r=activeRoster();
   if(r.length<2||(phase()!=='lobby'))return;
-  commit(newGameState(r.slice(0,8),modeSel,teamSel&&teamOk(Math.min(r.length,8)),{target:targetSel,joker:jokerSel}));
+  commit(newGameState(r.slice(0,8),modeSel,teamSel&&teamOk(Math.min(r.length,8)),{target:targetSel,joker:jokerSel,bl:badSel}));
 }
-function saveModeDoc(){db.doc(gp('mode')).set({mode:modeSel,teams:teamSel,target:targetSel,joker:jokerSel}).catch(()=>say('Mode non enregistré.'));}
+function saveModeDoc(){db.doc(gp('mode')).set({mode:modeSel,teams:teamSel,target:targetSel,joker:jokerSel,bl:badSel}).catch(()=>say('Mode non enregistré.'));}
 function setMode(m){
   if(!canCtl())return;
   if(!db||!canWrite||phase()!=='lobby')return;
@@ -3857,6 +3896,11 @@ function setTarget(t){
   if(!canCtl())return;
   if(!db||!canWrite||phase()!=='lobby')return;
   targetSel=t;renderLobby();saveModeDoc();
+}
+function setBad(v){
+  if(!canCtl())return;
+  if(!db||!canWrite||phase()!=='lobby')return;
+  badSel=!!v;renderLobby();saveModeDoc();
 }
 function setJoker(v){
   if(!canCtl())return;
@@ -4081,8 +4125,8 @@ function attach(){
   sub(db.doc(gp('mode')),snap=>{
     const m=snap.exists&&snap.data()&&snap.data().mode==='venge'?'venge':'normal';
     const dd=snap.exists&&snap.data()?snap.data():{};
-    const tm=!!dd.teams,tg=[100,200,300,400].includes(dd.target)?dd.target:200,jk=dd.joker!==false;
-    if(m!==modeSel||tm!==teamSel||tg!==targetSel||jk!==jokerSel){modeSel=m;teamSel=tm;targetSel=tg;jokerSel=jk;renderAll();}
+    const tm=!!dd.teams,tg=[100,200,300,400].includes(dd.target)?dd.target:200,jk=dd.joker!==false,bl=dd.bl!==false;
+    if(m!==modeSel||tm!==teamSel||tg!==targetSel||jk!==jokerSel||bl!==badSel){modeSel=m;teamSel=tm;targetSel=tg;jokerSel=jk;badSel=bl;renderAll();}
   },()=>{});
   sub(db.doc(gp('cd')),snap=>{cdSync(snap.exists?snap.data():null);},()=>{});
   sub(db.doc(gp('chatclr')),snap=>{const d=snap.exists?snap.data():null;chatMark={t:d&&+d.t||0,hide:d&&Array.isArray(d.hide)?d.hide.slice(-150):[]};applyChatFilter();renderChat();},()=>{});
@@ -4105,7 +4149,10 @@ async function boot(){
   renderAll();
   $('nm').value=lsGet('f7name')||'';
   $('joinform').addEventListener('submit',ev=>{ev.preventDefault();join($('nm').value);});
-  document.querySelectorAll('.mode-b').forEach(b=>b.addEventListener('click',()=>setMode(b.dataset.m)));
+  $('c-venge').addEventListener('change',e=>setMode(e.target.checked?'venge':'normal'));
+  $('c-bl').addEventListener('change',e=>setBad(e.target.checked));
+  $('c-team').addEventListener('change',e=>setTeams(e.target.checked));
+  $('c-jk').addEventListener('change',e=>setJoker(e.target.checked));
   $('fs-btn').addEventListener('click',toggleFs);
   $('rk-btn').addEventListener('click',()=>openRk('cur'));
   $('room-btn').addEventListener('click',leaveRoom);
@@ -4138,8 +4185,6 @@ async function boot(){
   attach();
   initFriends();
   initPhone();
-  $('team-b').addEventListener('click',()=>setTeams(!teamSel));
-  $('jk-b').addEventListener('click',()=>setJoker(!jokerSel));
   document.querySelectorAll('.tg-b').forEach(b=>b.addEventListener('click',()=>setTarget(+b.dataset.t)));
   $('chat-form').addEventListener('submit',sendChat);
   $('chat-clr').addEventListener('click',clearChat);
