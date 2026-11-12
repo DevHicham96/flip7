@@ -2189,11 +2189,14 @@ function cleanText(t){
 function renderChat(){
   const box=$('chat');box.hidden=!db||!ROOM;
   const ul=$('chat-list');
-  const near=ul.scrollHeight-ul.scrollTop-ul.clientHeight<60;
   const msgs=chat.slice().sort((a,b)=>a.t-b.t);
   const cb=$('chat-clr');cb.hidden=!(canWrite&&chat.length);if(!chatClr)cb.textContent='🗑 Vider';
+  const sig=msgs.map(m=>m.did).join(',')+'|'+JSON.stringify(RXM)+'|'+RXOPEN+'|'+uid+'|'+(canWrite&&amHost());
+  if(ul.dataset.sig===sig&&ul.childNodes.length)return;
+  ul.dataset.sig=sig;
+  const near=ul.scrollHeight-ul.scrollTop-ul.clientHeight<60,st=ul.scrollTop;
   ul.replaceChildren(...msgs.map(m=>m.react&&REACTS[m.react]?h('li',{class:'rx'},m.name+' a envoyé '+REACTS[m.react].e+' '+REACTS[m.react].l):h('li',{class:m.id===uid?'me':''},h('b',null,m.name+' : '),cleanText(m.text),(canWrite&&amHost()&&m.did)?h('button',{class:'cx',type:'button',title:'Masquer ce message','aria-label':'Masquer ce message',onclick:()=>hideMsg(m.did)},'✕'):null,rxEl(m.did))));
-  if(near)ul.scrollTop=ul.scrollHeight;
+  ul.scrollTop=near?ul.scrollHeight:st;
 }
 async function hideMsg(did){
   if(!db||!ROOM)return;
@@ -3588,9 +3591,13 @@ function homeRefresh(){
     avEl('span','hm-av',r.av,(r.name[0]||'?').toUpperCase(),'background:hsl('+hue(r.sl)+' 45% 38%)'),
     h('span',{class:'hm-nm'},h('b',null,r.name+(r.sl===me?' (toi)':'')),h('small',null,r.st==='on'?'En ligne':r.st==='away'?'Absent (AFK)':agoTxt(r.t))),
     h('span',{class:'hm-dot '+r.st})))):[h('li',{class:'hm-empty'},'Personne pour l\'instant…')]));
-  const ul=$('hm-chat'),near=ul.scrollHeight-ul.scrollTop-ul.clientHeight<80;
+  const ul=$('hm-chat');
+  const sig=HALL.docs.map(m=>m.did).join(',')+'|'+JSON.stringify(RXM)+'|'+RXOPEN+'|'+uid;
+  if(ul.dataset.sig===sig&&ul.childNodes.length){}else{
+  ul.dataset.sig=sig;
+  const near=ul.scrollHeight-ul.scrollTop-ul.clientHeight<80,st=ul.scrollTop;
   ul.replaceChildren(...(HALL.docs.length?HALL.docs.map(m=>h('li',{class:m.id===uid?'me':''},h('i',null,new Date(m.t).toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'})),h('b',null,m.name+' : '),cleanText(m.text),rxEl(m.did))):[h('li',{class:'hm-empty'},'Aucun message. Dis bonjour à l\'équipage 👋')]));
-  if(near)ul.scrollTop=ul.scrollHeight;
+  ul.scrollTop=near?ul.scrollHeight:st;}
   const bd=$('hm-fr');if(bd){const n=unreadAll();bd.replaceChildren('💬 Messages',n?h('b',null,String(n)):'');}
 }
 async function homeSend(ev){
