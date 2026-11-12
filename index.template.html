@@ -3533,8 +3533,26 @@ const HALL={docs:[]};
 function hallFrom(docs){
   rxFrom(docs);
   HALL.docs=docs.map(x=>{const v=x.data()||{};return{did:x.id,room:typeof v.room==='number'?v.room:0,t:typeof v.t==='number'?v.t:0,id:String(v.id||''),name:String(v.name||'?').slice(0,16),text:String(v.text||'').slice(0,200)};}).filter(m=>m.room===-2&&m.text).sort((a,b)=>a.t-b.t).slice(-80);
+  hallNotify();
   homeRefresh();
 }
+const HN={init:false,seen:new Set(),n:0,t0:document.title};
+function hallNotify(){
+  const first=!HN.init;HN.init=true;
+  HALL.docs.forEach(m=>{
+    if(HN.seen.has(m.did))return;HN.seen.add(m.did);
+    if(first||m.id===uid||Date.now()-m.t>60000)return;
+    const viewing=$('home')&&!document.hidden&&document.hasFocus();
+    if(viewing)return;
+    const tx=window.ATGIF?ATGIF.prev(m.text):m.text;
+    try{Snd.play('pm');}catch(e){}
+    if(!document.hidden)say('📢 '+m.name+' (général) : '+tx.slice(0,60));
+    desk('📢 '+m.name+' · Discussion générale',tx,'hall');
+    if(document.hidden||!document.hasFocus()){HN.n++;document.title='('+HN.n+') '+HN.t0;}
+  });
+}
+const hnClear=()=>{if(HN.n){HN.n=0;document.title=HN.t0;}};
+window.addEventListener('focus',hnClear);document.addEventListener('visibilitychange',()=>{if(!document.hidden)hnClear();});
 function dirSub(){
   if(!db||FR.dirSub)return;FR.dirSub=1;FR.dir={};
   sub(db.doc('game/directory'),sn=>{
@@ -3579,6 +3597,7 @@ async function homeSend(ev){
   ev.preventDefault();
   const inp=$('hm-in'),text=inp.value.trim().slice(0,200);
   if(!text||!db)return;
+  askNotif();
   const name=(prof&&prof.name)||lsGet('f7name')||'';
   if(!name){say('Connecte-toi pour écrire.');return;}
   const now=Date.now();if(now-(homeSend.t||0)<700)return;homeSend.t=now;
