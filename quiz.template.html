@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Quiz · questions pour tous</title><link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%233b2fb5'/%3E%3Ctext x='32' y='47' font-size='42' font-weight='700' font-family='Arial,sans-serif' text-anchor='middle' fill='%23ffd23f'%3EQ%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&family=Poppins:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&family=Montserrat:wght@500;700;800;900&family=Poppins:wght@400;500;600;700&display=swap">
 <style>:root{--bg1:#1a1464;--bg2:#4a1fb8;--pur:#6c3df0;--pur2:#3a1d9c;--yel:#FFD23F;--yel2:#F5A800;--ink:#1f1650;--ink2:#6a5fa8;--card:#fff;--blue:#3B82F6;--f-display:'Baloo 2','Fredoka',system-ui,sans-serif;--f-body:'Poppins',system-ui,-apple-system,'Segoe UI',sans-serif}
 *{box-sizing:border-box}[hidden]{display:none!important}
 html{background:#1a1464}
@@ -145,6 +145,56 @@ input.t:focus{outline:0;border-color:var(--pur)}
 .ans.good{overflow:visible}.ans{overflow:visible}
 .qchat{width:min(320px,calc(100vw - 28px))}.qc-pop{width:100%}.qc-fab{justify-self:end}
 #ch-form,.qc-pop *{min-width:0}
+
+/* ===== Thème « Plateau TV » ===== */
+:root{--bg1:#050830;--bg2:#101a6b;--pur:#f5c542;--pur2:#0a1050;--ink:#fff;--ink2:#a9b6ff;--yel:#f5c542;--yel2:#c28f0a;--f-display:'Montserrat','Baloo 2',system-ui,sans-serif;--f-body:'Montserrat','Poppins',system-ui,sans-serif}
+html{background:#050830}
+body{background:radial-gradient(120% 60% at 50% -10%,#3a52d9 0%,#101a6b 40%,#050830 100%);background-attachment:fixed}
+body::before,body::after{top:-40px;bottom:auto;width:200px;height:540px;border:0;border-radius:0;background:linear-gradient(#ffffff3a,transparent);filter:blur(18px);opacity:1;box-shadow:none;transform-origin:top}
+body::before{left:-30px;right:auto;transform:rotate(-22deg)}body::after{right:-30px;left:auto;transform:rotate(22deg)}
+.top{background:rgba(10,16,80,.6);border:2px solid #f5c54266}
+.brand{color:#f5c542}.brand small{color:#a9b6ff}
+.btn{background:#fff;color:#0a1050;box-shadow:0 5px 0 #7d8dff}.btn:active:not(:disabled){box-shadow:0 1px 0 #7d8dff}.btn.sm{box-shadow:0 3px 0 #7d8dff}
+.btn.primary{background:linear-gradient(#f9d65c,#e8a50b);color:#1a1200;box-shadow:0 5px 0 #8f6a05}.btn.primary:active:not(:disabled){box-shadow:0 1px 0 #8f6a05}
+.panel{background:linear-gradient(#151f8c,#0a1050);color:#fff;border:3px solid #f5c542;box-shadow:0 0 0 3px #0a1050,0 0 34px rgba(245,197,66,.22),0 18px 30px rgba(0,0,10,.5)}
+.panel h2,.bigtxt{color:#f5c542}
+.rcard,.cat,.pl,.rules,.lb li,.seg,input.t{background:rgba(255,255,255,.07);border-color:rgba(125,141,255,.55);color:#fff}
+.rcard b{color:#f5c542}.rcard:hover:not(:disabled){border-color:#f5c542}
+.st{background:rgba(125,141,255,.3);color:#dfe4ff}.st.free{background:#1f7a52;color:#fff}
+.seg button{color:#dfe4ff}.seg button.on{background:#f5c542;color:#0a1050}
+.cat.on{background:linear-gradient(#f9d65c,#e8a50b);border-color:#fff3b0;color:#1a1200;box-shadow:0 0 18px rgba(245,197,66,.55)}
+input.t{color:#fff}input.t::placeholder{color:#8f9cdc}input.t:focus{border-color:#f5c542}
+.rules b{color:#f5c542}
+.qhead .qn{background:linear-gradient(#f9d65c,#e8a50b);color:#1a1200;box-shadow:0 0 14px rgba(245,197,66,.5)}
+.qhead .qcat{background:#0b1255;border:2px solid #f5c542;color:#f5c542;font-weight:800}
+.qhead .qs{background:#0b1255;border:2px solid #5d70ff}
+.tbwrap{background:#1a2480;border:2px solid #5d70ff;height:18px}
+.tbar{background:linear-gradient(90deg,#c28f0a,#f9d65c);box-shadow:0 0 14px rgba(245,197,66,.6)}
+.tnum{min-width:56px;height:56px;border-radius:50%;display:grid;place-items:center;padding:0;font-size:26px;color:#0a1050;background:radial-gradient(#fff3b0,#f5c542);box-shadow:0 0 22px rgba(245,197,66,.7)}
+.qcard{background:linear-gradient(#1b2a9e,#0c1666);color:#fff;border:0;border-top:4px solid #f5c542;border-bottom:4px solid #f5c542;border-radius:0;box-shadow:none;padding:clamp(22px,4vw,36px) clamp(26px,5vw,46px);clip-path:polygon(22px 0,calc(100% - 22px) 0,100% 50%,calc(100% - 22px) 100%,22px 100%,0 50%)}
+.qcard h2{color:#fff}
+.ans{background:linear-gradient(#16208a,#0a1255);color:#fff;border:2px solid #5d70ff;border-radius:40px;box-shadow:0 0 14px rgba(93,112,255,.35),0 5px 0 #050830}
+.ans i,.ans.a0 i,.ans.a1 i,.ans.a2 i,.ans.a3 i{background:#f5c542;color:#0a1050}
+.ans:hover:not(:disabled){border-color:#fff;box-shadow:0 0 20px rgba(125,141,255,.7),0 5px 0 #050830}
+.ans:active:not(:disabled){box-shadow:0 1px 0 #050830}
+.ans.chosen{background:linear-gradient(#2433b8,#121c80);outline:0;border-color:#fff;box-shadow:0 0 22px rgba(255,255,255,.55)}
+.ans.dim{opacity:.4}
+.ans.good{background:linear-gradient(#f9d65c,#e8a50b);color:#1a1200;outline:0;border-color:#fff3b0;box-shadow:0 0 30px rgba(245,197,66,.85)}
+.ans.good i{background:#1a1200;color:#f5c542}
+.ans em{background:rgba(245,197,66,.25);color:#f5c542}.ans.good em{background:#1a1200;color:#f5c542}
+.ans u{color:#1a1200;background:#f5c542}
+.lb li.me{background:rgba(245,197,66,.22);box-shadow:inset 0 0 0 3px #f5c542}
+.lb li i,.lb .pts{color:#f5c542}.lb em{color:#7ef0b3}
+.pod{color:#fff}.pod span{color:#f5c542}
+.qc-pop{background:#0a1050;color:#fff;border:2px solid #f5c542;box-shadow:0 0 24px rgba(245,197,66,.3),0 18px 34px rgba(0,0,0,.5)}
+.qc-h{background:#14228f;color:#f5c542}
+#ch-list .mt{background:rgba(255,255,255,.12);color:#fff}#ch-list li.me .mt{background:#f5c542;color:#1a1200}
+#ch-in{background:rgba(255,255,255,.08);border-color:#5d70ff;color:#fff}.ch-send{background:#f5c542;color:#1a1200}
+.qc-e,#ch-form{border-color:rgba(125,141,255,.3)}.qc-e button:hover{background:rgba(255,255,255,.12)}
+.ch-toast{background:#0a1050;color:#fff;border:2px solid #f5c542;box-shadow:0 0 16px rgba(245,197,66,.3)}.ch-toast b{color:#f5c542}
+.gload{background:radial-gradient(120% 60% at 50% -10%,#3a52d9 0%,#101a6b 40%,#050830 100%)}
+.gload .lg-fan i:nth-child(1),.gload i:nth-child(1){background:#1b2a9e}.gload i:nth-child(2){background:#2433b8}.gload i:nth-child(4){background:#e8a50b}
+@media (max-width:560px){.qcard{padding:22px 30px;clip-path:polygon(14px 0,calc(100% - 14px) 0,100% 50%,calc(100% - 14px) 100%,14px 100%,0 50%)}.ans{border-radius:28px}}
 </style></head><body><div class="gload qz" id="gload" role="status" aria-live="polite"><div class="lg-cloud c1"></div><div class="lg-cloud c2"></div><div class="lg-fan" aria-hidden="true"><i>?</i><i>A</i><i>B</i><i>C</i><i>!</i></div><div class="lg-sign">Loading<b>.</b><b>.</b><b>.</b></div><div class="lg-bar" aria-hidden="true"></div></div><div id="app"></div>
 <script>
 //---------------------------------------------------------------------
@@ -3945,7 +3995,7 @@ function renderPicker(){
       h('p',{class:'muted'},'Une question pour tout le monde, 4 réponses, une seule est bonne. Plus tu réponds vite, plus tu marques de points. Les bonnes séries donnent des bonus !'),
       h('div',{class:'rules'},
         h('div',null,h('b',null,'Rejoindre'),' : choisis une table, ou scanne le QR code de l\'hôte avec ton téléphone.'),
-        h('div',null,h('b',null,'Catégories'),' : 8 thèmes (informatique, culture G, sciences, sport, histoire, économie, géopolitique, archéologie). Coche ceux que tu veux mélanger ; les questions déjà vues reviennent en dernier.'),
+        h('div',null,h('b',null,'Catégories'),' : 16 thèmes (informatique, sciences, sport, histoire, cinéma, musique, jeux vidéo, cuisine, animaux, mangas, mythologie…). Coche ceux que tu veux mélanger ; les questions déjà vues reviennent en dernier.'),
         h('div',null,h('b',null,'Points'),' : jusqu\'à 1000 par question + bonus de série (jusqu\'à +250).')),
       pendingJoin?null:h('div',{class:'stack'},h('p',{class:'muted'},'Ton pseudo :'),nm)),
     h('div',{class:'panel'},h('h2',null,'Jouer en ligne'),h('div',{class:'rooms'},rooms),
