@@ -908,6 +908,7 @@ h2{color:#E8632B;text-shadow:0 2px 0 rgba(255,246,210,.9),0 3px 0 rgba(120,60,10
 .hub-m{display:flex;gap:6px;flex-wrap:wrap;justify-content:center}.hub-m i{font:700 12px var(--f-body);font-style:normal;background:rgba(122,82,36,.14);color:#7A5224;border-radius:99px;padding:2px 10px}
 .hub-c.lg .hub-art span{display:grid;place-items:center;width:78px;height:78px;border-radius:50%;font-size:40px;background:radial-gradient(#4a3ec0,#0e0a3a);border:3px solid #ffd76a;box-shadow:0 6px 0 rgba(0,0,0,.3)}.hub-c.lg .hub-art span:first-child{transform:translateX(8px)}.hub-c.lg .hub-art span:last-child{transform:translateX(-8px)}
 .gload.sk{background:linear-gradient(160deg,#053a4e,#2aa69a)}.gload.sk .lg-fan i{font:800 26px 'Unbounded',system-ui,sans-serif;color:#fff;background:#13396e}.gload.sk .lg-fan i:nth-child(1){background:#4b57d6}.gload.sk .lg-fan i:nth-child(2){background:#38a3e0}.gload.sk .lg-fan i:nth-child(3){background:#1f9a52}.gload.sk .lg-fan i:nth-child(4){background:#e0a800}.gload.sk .lg-fan i:nth-child(5){background:#d1303f}
+.hub-c.kt .hub-art span{display:grid;place-items:center;width:78px;height:78px;border-radius:22px;font-size:44px;background:linear-gradient(160deg,#ffe97a,#ff8a1f);border:3px solid #fff;box-shadow:0 6px 0 rgba(0,0,0,.3)}.hub-c.kt .hub-art span:first-child{transform:rotate(-8deg) translateX(8px)}.hub-c.kt .hub-art span:last-child{background:linear-gradient(160deg,#fff,#cfc4ff);transform:rotate(7deg) translateX(-8px)}
 .hub-c.sk .hub-art span{display:grid;place-items:center;width:62px;height:84px;border-radius:10px;border:3px solid #fff;color:#fff;font:800 32px var(--f-display);box-shadow:0 6px 0 rgba(0,0,0,.28)}.hub-c.sk .hub-art span:first-child{background:linear-gradient(#5b6cf0,#3b3fb0);transform:rotate(-9deg) translateX(10px)}.hub-c.sk .hub-art span:last-child{background:linear-gradient(#fb7185,#d1303f);transform:rotate(9deg) translateX(-10px)}
 /* hub compact : tout visible sans scroller */
 .hub-c.rd .hub-art img{width:58px!important}.hub-art{align-items:center}
@@ -3582,7 +3583,7 @@ async function dirReg(){
   }catch(e){}
 }
 function agoTxt(t){if(!t)return 'Hors ligne';const m=Math.max(1,Math.round((Date.now()-t)/60000));return 'Vu '+(m<60?'il y a '+m+' min':m<1440?'il y a '+Math.round(m/60)+' h':'il y a '+Math.round(m/1440)+' j');}
-const GAMEN={flip7:'Flip 7',ronda:'Ronda',rami:'Rami',mytho:'Mytho',quiz:'Quiz',loupgarou:'Loup-Garou',skyjo:'Skyjo'};
+const GAMEN={flip7:'Flip 7',ronda:'Ronda',rami:'Rami',mytho:'Mytho',quiz:'Quiz',loupgarou:'Loup-Garou',skyjo:'Skyjo',kart:'Kart Rush'};
 function homeRefresh(){
   const o=$('home');if(!o)return;
   const rows=Object.keys(FR.dir||{}).map(sl=>{const i=FR.info[sl]||{},d=FR.dir[sl]||{};return{sl,name:i.name||d.n||sl,av:i.av||d.a||'',st:presState(sl),t:(FR.pres[sl]||{}).t||0,g:String((FR.pres[sl]||{}).g||'')};});
@@ -3683,10 +3684,10 @@ function showHub(){
   if($('hub'))return;hideHome();
   const nm=(prof&&prof.name)||lsGet('f7name')||'';
   const logo=(document.querySelector('.logo')||{outerHTML:'<b>FLIP 7</b>'}).outerHTML;
-  const LOAD={flip7:'f7',rami:'rm',mytho:'my',quiz:'qz',loup:'lg',ronda:'rd',skyjo:'sk'},URL={skyjo:'skyjo.html',rami:'rami.html',mytho:'mytho.html',quiz:'quiz.html',loup:'loupgarou.html',ronda:'ronda.html'};
+  const LOAD={flip7:'f7',rami:'rm',mytho:'my',quiz:'qz',loup:'lg',ronda:'rd',skyjo:'sk'},URL={kart:'kart.html',skyjo:'skyjo.html',rami:'rami.html',mytho:'mytho.html',quiz:'quiz.html',loup:'loupgarou.html',ronda:'ronda.html'};
   const choose=g=>{hubWanted=false;showLoader(LOAD[g]||'rd');if(g==='flip7'){ssSet('f7game','flip7');try{history.replaceState(null,'',location.pathname);}catch(e){}setTimeout(()=>{hideHub();endLoader();},250);}else setTimeout(()=>{location.href=URL[g];},250);};
-  const TYPES=[['all','🎮 Tous'],['cartes','🃏 Cartes'],['bluff','🎭 Bluff & déduction'],['quiz','🧠 Quiz & culture']];
-  const TN={cartes:'🃏 Cartes',bluff:'🎭 Bluff',quiz:'🧠 Quiz'};
+  const TYPES=[['all','🎮 Tous'],['cartes','🃏 Cartes'],['bluff','🎭 Bluff & déduction'],['quiz','🧠 Quiz & culture'],['course','🏎️ Course']];
+  const TN={cartes:'🃏 Cartes',bluff:'🎭 Bluff',quiz:'🧠 Quiz',course:'🏎️ Course'};
   const GAMES=[
     {id:'flip7',cls:'f7',t:'cartes',title:'Flip 7',sub:'Pioche, tente ta chance et évite les doublons.',pl:'2–8 joueurs',dur:'~15 min',art:logo},
     {id:'ronda',cls:'rd',t:'cartes',title:'Ronda',sub:'Le jeu de cartes marocain : ramasse, annonce, marque.',pl:'2–4 joueurs',dur:'~15 min',art:'<img src="'+HUB_IMG2+'" alt=""><img src="'+HUB_IMG+'" alt="">'},
@@ -3694,6 +3695,7 @@ function showHub(){
     {id:'mytho',cls:'my',t:'bluff',title:'Mytho',sub:'Pose, mens, et repère les menteurs.',pl:'3–8 joueurs',dur:'~15 min',art:'<span>🤥</span><span>🫵</span>'},
     {id:'loup',cls:'lg',t:'bluff',title:'Loup-Garou',sub:'Rôles secrets, nuit et jour : qui est le loup ?',pl:'4–16 joueurs',dur:'~30 min',art:'<span>🐺</span><span>🌙</span>'},
     {id:'skyjo',cls:'sk',t:'cartes',title:'Skyjo',sub:'Le moins de points gagne : retourne, échange, évite les gros chiffres.',pl:'2–8 joueurs',dur:'~20 min',art:'<span>-2</span><span>12</span>'},
+    {id:'kart',cls:'kt',t:'course',title:'Kart Rush',sub:'Course de karts 3D : drift, objets, en ligne.',pl:'1–6 joueurs',dur:'~5 min',art:'<span>🏎️</span><span>🏁</span>'},
     {id:'quiz',cls:'qz',t:'quiz',title:'Quiz',sub:'8 thèmes, des questions pour tous, scanne le QR.',pl:'1–30 joueurs',dur:'~10 min',art:'<span>❓</span><span>🏆</span>'}
   ];
   let flt=ssGet('hubf')||'all';if(!TYPES.some(t=>t[0]===flt))flt='all';
