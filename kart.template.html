@@ -821,7 +821,7 @@ function drive(k,inp,dt){
   const gy=edgeY(P[k.idx].y,k.lat);
   {let hr=-1;for(const q of RAMPS){const dx=k.pos.x-q.x0,dz=k.pos.z-q.z0,d=dx*q.fx+dz*q.fz,l=dx*q.rx+dz*q.rz;if(Math.abs(d)<RL/2+.3&&Math.abs(l)<RW/2){hr=Math.max(0,(d+RL/2)/RL)*RH;k.rmp=1;break;}}
    if(!k.air){if(hr>=0)k.ay=hr;else if(k.rmp){k.rmp=0;if(f>14){k.air=1;k.vy=f*RH/RL+6.5;k.at=0;if(k.isP){toast('🚀 SAUT !');beep(520,.25,'square',.08);kick=Math.max(kick||0,.5);}}else k.ay=0;}else k.ay=Math.max(0,(k.ay||0)-dt*8);}
-   if(k.air){k.vy-=26*dt;k.ay+=k.vy*dt;k.at+=dt;if(k.ay<=0&&k.vy<0){k.ay=0;k.air=0;k.rmp=0;burst(k.pos.x,k.pos.y+.4,k.pos.z,0xe8dcc0,14,7);if(k.isP){shake=Math.max(shake,.4);beep(140,.15,'sine',.12);}}}}
+   if(k.air){k.vy-=26*dt;k.ay+=k.vy*dt;k.at+=dt;if(k.ay<=0&&k.vy<0){k.ay=0;k.air=0;k.rmp=0;burst(k.pos.x,k.pos.y+.4,k.pos.z,0xe8dcc0,Q.bloom?30:14,9);burst(k.pos.x,k.pos.y+.3,k.pos.z,0xffd24a,Q.bloom?10:4,12);if(k.isP){shake=Math.max(shake,.4);beep(140,.15,'sine',.12);}}}}
   k.pos.y+=(gy+(k.ay||0)-k.pos.y)*Math.min(1,dt*(k.air?40:16));
   for(const pi of PADS){if(Math.abs(((k.idx-pi+M*1.5)%M)-M/2)<5&&Math.abs(k.lat)<5.5&&k.boost<1.1){k.boost=1.2;if(k.isP){toast('⚡ TURBO !');beep(700,.3,'square',.08);}}}
   if(!k.item&&k.roll<=0)for(const b of boxes){if(!b.alive)continue;const dx=b.m.position.x-k.pos.x,dz=b.m.position.z-k.pos.z;if(dx*dx+dz*dz<7.5){b.alive=false;b.m.visible=false;b.t=5;k.roll=.95;if(k.isP){beep(880,.12,'triangle');}burst(b.m.position.x,b.m.position.y,b.m.position.z,0x7cf0ff,10,6);}}
@@ -832,6 +832,11 @@ function drive(k,inp,dt){
     emit(rxp-fx*.8+rx*s*.34,k.pos.y+.9,rzp-fz*.8+rz*s*.34,-fx*30+(Math.random()-.5)*6,(Math.random()-.5)*3,-fz*30+(Math.random()-.5)*6,0x9fdcff,.22);
     if(Math.random()<.5)emit(rxp+rx*s*.34,k.pos.y+.9,rzp+rz*s*.34,-fx*22+rx*(Math.random()-.5)*14,Math.random()*5,-fz*22+rz*(Math.random()-.5)*14,0xffe24a,.5);}
   if(off&&Math.abs(f)>15&&Math.random()<.7)emit(rxp+(Math.random()-.5)*2,k.pos.y+.3,rzp+(Math.random()-.5)*2,(Math.random()-.5)*3,2+Math.random()*3,(Math.random()-.5)*3,0x9c8a5a,.5);
+  const fq=Q.bloom?(Q.ms?1:.6):.35,sp2=Math.abs(f);
+  if(k.drift&&Math.random()<fq){for(const s of[-1,1]){emit(rxp+rx*s*1,k.pos.y+.25,rzp+rz*s*1,-k.driftDir*rx*2+(Math.random()-.5)*2,1+Math.random()*2.5,-k.driftDir*rz*2+(Math.random()-.5)*2,0xb8b2c8,.7+Math.random()*.4);if(Math.random()<.5)emit(rxp+rx*s*1,k.pos.y+.15,rzp+rz*s*1,-k.driftDir*rx*9+(Math.random()-.5)*6,3+Math.random()*5,-k.driftDir*rz*9+(Math.random()-.5)*6,0xffb02a,.25);}}
+  if(k.air&&Math.random()<fq){emit(rxp+rx*.7,k.pos.y+.6,rzp+rz*.7,-fx*6,.5,-fz*6,0x9fdcff,.5);emit(rxp-rx*.7,k.pos.y+.6,rzp-rz*.7,-fx*6,.5,-fz*6,0x9fdcff,.5);}
+  if(!k.air&&!off&&sp2>38&&Math.random()<.3*fq)emit(rxp+(Math.random()-.5)*1.6,k.pos.y+.2,rzp+(Math.random()-.5)*1.6,(Math.random()-.5)*2,1+Math.random()*1.5,(Math.random()-.5)*2,0xd8d4e4,.45);
+  if(k.boost>1&&Math.random()<.6*fq)emit(rxp+(Math.random()-.5)*.6,k.pos.y+1,rzp+(Math.random()-.5)*.6,-fx*18,Math.random()*2,-fz*18,Math.random()<.5?0xff7a1f:0xffd24a,.4);
   k.wr+=f*dt/.5;
 }
 function pickItem(k){const pos=rankOf(k),fr=(pos-1)/5,w={turbo:40-16*fr,oil:24-14*fr,bomb:15+12*fr,rocket:14+28*fr,strike:4+22*fr};let s=w.turbo+w.oil+w.rocket+w.bomb+w.strike,r=Math.random()*s;if((r-=w.strike)<0)return'strike';if((r-=w.turbo)<0)return'turbo';if((r-=w.oil)<0)return'oil';if((r-=w.bomb)<0)return'bomb';return'rocket';}
