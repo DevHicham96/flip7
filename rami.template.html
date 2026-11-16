@@ -227,6 +227,32 @@ input.t::placeholder{color:#a89a72}
 #ch-list li{background:rgba(255,255,255,.08);border-color:rgba(212,164,55,.35);color:#f6ecd0}
 .gload.rm,.gload{background:radial-gradient(120% 80% at 50% 0%,#17694a,#06150f)}
 @media (prefers-reduced-motion:reduce){html::before,body::before,body::after,.felt::after{animation:none}}
+
+/* ===== Rami : table adaptative (tient dans tous les écrans) ===== */
+.wrap .mehand .pc{--cw:calc(var(--k,1)*clamp(40px,calc((100vw - 60px)/7.4),66px))}
+.wrap .center .pc{--cw:calc(var(--k,1)*clamp(52px,14vw,76px))}
+.wrap .meld .pc{--cw:calc(var(--k,1)*clamp(30px,8.4vw,42px))}
+.wrap .hnd .pc{--cw:calc(var(--k,1)*clamp(18px,5vw,26px))}
+@media (max-width:560px){.wrap .center .pc{--cw:calc(var(--k,1)*clamp(48px,15vw,66px))}.wrap .hnd .pc{--cw:calc(var(--k,1)*20px)}}
+body.compact{padding:6px 8px 6px}
+body.compact .wrap{gap:6px}
+body.compact .top{padding:4px 8px;gap:6px;border-radius:12px}
+body.compact .top .brand{font-size:15px}body.compact .brand small{display:none}
+body.compact .top .btn.sm{min-height:30px;font-size:12px;padding:0 9px;box-shadow:0 2px 0 #8a6212}
+body.compact .pchip{min-height:30px;font-size:12px}
+body.compact .felt{padding:8px 8px 8px;gap:5px}
+body.compact .hdr,body.compact .logline{display:none}
+body.compact .status{min-height:0;font-size:14px}
+body.compact .center{padding:2px;min-height:0}
+body.compact .melds{min-height:0}
+body.compact .acts{gap:6px}body.compact .acts .btn{min-height:36px;font-size:13px;padding:0 12px}
+body.compact .mehand{padding-top:8px;min-height:0;gap:5px}
+body.compact .dwrap small{font-size:12px}
+body.ingame .wrap{max-width:min(1560px,100%)}
+body.tiny .top .brand,body.tiny .melds .empty,body.tiny .dwrap small,body.tiny .felt>.row{display:none}
+body.tiny .status{font-size:12px}
+body.tiny .felt>.opps:last-child{display:none}
+body.tiny .top{padding:3px 6px}
 </style></head><body><div class="gload rm" id="gload" role="status" aria-live="polite"><div class="lg-cloud c1"></div><div class="lg-cloud c2"></div><div class="lg-fan" aria-hidden="true"><i>♠</i><i>♥</i><i>🃏</i><i>♦</i><i>♣</i></div><div class="lg-sign">Loading<b>.</b><b>.</b><b>.</b></div><div class="lg-bar" aria-hidden="true"></div></div><div id="app"></div>
 <script>
 /*ENGINE_START*/
@@ -657,6 +683,21 @@ function fxRun(){
     fxFly(e.card,true,e.by!==uid,sr,pileR,pileEl);
   }
 }
+
+/* ---- ajustement automatique à l'écran ---- */
+function fitGame(){
+  const inGame=!!(S&&mode&&!(mode==='online'&&!S)&&document.querySelector('.felt'));
+  const root=document.querySelector('#app .wrap');
+  document.body.classList.toggle('compact',inGame&&(innerHeight<900||innerWidth<560));
+  document.body.classList.toggle('ingame',inGame);document.body.classList.toggle('tiny',inGame&&innerHeight<520);
+  if(!root)return;
+  if(!inGame){root.style.removeProperty('--k');return;}
+  let lo=.35,hi=1.7,best=lo;
+  const de=document.documentElement;
+  for(let i=0;i<8;i++){const m=(lo+hi)/2;root.style.setProperty('--k',m.toFixed(3));if(de.scrollHeight<=innerHeight+1&&de.scrollWidth<=innerWidth+1){best=m;lo=m;}else hi=m;}
+  root.style.setProperty('--k',best.toFixed(3));
+}
+let fitT=0;addEventListener('resize',()=>{clearTimeout(fitT);fitT=setTimeout(()=>{try{fitGame();}catch(e){}},80);});
 /* ---- état ---- */
 const NAME_K='f7name';
 function atPres(g){
@@ -837,6 +878,7 @@ function render(){
   const keep=document.activeElement&&document.activeElement.id==='nm-in'?{v:document.activeElement.value,s:document.activeElement.selectionStart}:null;
   app.replaceChildren(h('div',{class:'wrap'},view));
   if(keep){const i=$('nm-in');if(i){i.focus();i.value=keep.v;try{i.setSelectionRange(keep.s,keep.s);}catch(e){}}}
+  try{fitGame();}catch(e){}
   try{fxRun();}catch(e){}
   if(S&&mode==='solo')botStep();
   handOverlays();
