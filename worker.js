@@ -33,7 +33,7 @@ export class KartHub{
       const old=a.room;ws.serializeAttachment(Object.assign({},a,{room:0,t:0}));this.roomUpdate(old);this.roomsUpdate();
     }else if(m.k==='start'){
       const ms=this.members(a.room).slice(0,MAXP);if(!a.room||!ms.length||ms[0].id!==a.id)return;
-      const rid=Date.now();this.sendAll(this.inRoom(a.room),{k:'ctl',c:{rid,room:a.room,players:ms.map(p=>({id:p.id,name:p.name,spec:p.spec})),nb:Math.max(0,MAXP-ms.length)}});
+      const rid=Date.now();this.sendAll(this.inRoom(a.room),{k:'ctl',c:{rid,room:a.room,players:ms.map(p=>({id:p.id,name:p.name,spec:p.spec})),nb:0}});
     }else if(m.k==='chat'&&a.room){
       const t=String(m.t||'').replace(/\s+/g,' ').trim().slice(0,120);if(!t)return;
       const now=Date.now();if(a.lc&&now-a.lc<700)return;ws.serializeAttachment(Object.assign({},a,{lc:now}));
