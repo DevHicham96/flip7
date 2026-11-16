@@ -104,6 +104,8 @@ html,body{margin:0;height:100%;overflow:hidden;background:#12082e;font-family:'N
 .btns{display:grid;gap:10px;width:min(340px,92vw)}
 .btns .btn{font-size:22px;padding:10px 18px}
 .rooms{display:grid;gap:8px}
+.chat{display:grid;gap:6px;text-align:left;width:100%}.cls{height:130px;overflow-y:auto;background:rgba(0,0,0,.3);border-radius:12px;padding:8px 10px;font:600 14px Nunito,sans-serif;color:#fff;display:flex;flex-direction:column;gap:3px}
+.cl b{color:#ffe24a}.cl.me b{color:#7cf0ff}.cl{word-break:break-word}.clr{display:flex;gap:6px}.clr input{flex:1;min-width:0;font:700 15px Nunito,sans-serif;border-radius:12px;border:2px solid rgba(255,255,255,.4);background:rgba(255,255,255,.12);color:#fff;padding:8px 10px}.clr .btn{padding:8px 14px;font-size:15px}
 .rm{pointer-events:auto;touch-action:manipulation;text-align:left;font:700 15px 'Nunito',sans-serif;color:#fff;background:rgba(255,255,255,.12);border:2px solid rgba(255,255,255,.3);border-radius:14px;padding:10px 14px;cursor:pointer;display:grid;gap:2px}
 .rm b{font:400 20px 'Lilita One',sans-serif;color:#ffe24a}.rm:disabled{opacity:.5}
 .pl{display:flex;gap:10px;align-items:center;background:rgba(255,255,255,.1);border-radius:12px;padding:8px 14px;font:400 20px 'Lilita One',sans-serif}.pl u{width:16px;height:16px;border-radius:50%;border:2px solid #fff;text-decoration:none}.pl span{flex:1;text-align:left}
@@ -843,7 +845,22 @@ function connect(){
   me.onerror=()=>{if(!wsOk)net.err='Serveur indisponible.';};
   clearInterval(connect.ping);connect.ping=setInterval(()=>{try{if(ws&&ws.readyState===1)ws.send('ping');}catch(e){}},20000);
 }
+const chat={log:[],box:null,list:null,inp:null};
+function chatLine(n,t,me){const d=document.createElement('div');d.className='cl'+(me?' me':'');const b=document.createElement('b');b.textContent=n+' : ';d.appendChild(b);d.appendChild(document.createTextNode(t));return d;}
+function chatBuild(){
+  if(chat.box)return chat.box;
+  const box=document.createElement('div');box.className='chat';
+  const list=document.createElement('div');list.className='cls';
+  const row=document.createElement('div');row.className='clr';
+  const inp=document.createElement('input');inp.maxLength=120;inp.placeholder='Écris un message…';inp.autocomplete='off';
+  const bt=document.createElement('button');bt.type='button';bt.className='btn';bt.textContent='Envoyer';
+  const go=()=>{const t=inp.value.trim();if(!t)return;send({k:'chat',t});inp.value='';};
+  bt.addEventListener('click',go);inp.addEventListener('keydown',e=>{e.stopPropagation();if(e.key==='Enter')go();});inp.addEventListener('keyup',e=>e.stopPropagation());
+  row.append(inp,bt);box.append(list,row);Object.assign(chat,{box,list,inp});return box;
+}
+function chatShow(){chatBuild();chat.list.replaceChildren(...chat.log.map(l=>chatLine(l.n,l.t,l.me)));chat.list.scrollTop=1e9;}
 function onMsg(m){
+  if(m.k==='chat'){chat.log.push({n:String(m.n||'?').slice(0,16),t:String(m.t||'').slice(0,120),me:m.u===uid});if(chat.log.length>40)chat.log.shift();if(chat.list&&net.room){chat.list.appendChild(chatLine(chat.log[chat.log.length-1].n,chat.log[chat.log.length-1].t,m.u===uid));while(chat.list.children.length>40)chat.list.firstChild.remove();chat.list.scrollTop=1e9;}return;}
   if(m.k==='rooms'){roomsInfo=m.r||{};renderLobby();}
   else if(m.k==='room'){if(m.n===net.room||!net.room){net.room=m.n;roomMembers=(m.members||[]).map(p=>({id:p.id,name:String(p.name||'?').slice(0,16),t:p.t,spec:p.spec}));const mine=roomMembers.find(p=>p.id===uid);if(mine)net.t=mine.t;renderLobby();}}
   else if(m.k==='ctl'){const c=m.c;if(c&&Array.isArray(c.players)&&c.players.some(p=>p.id===uid)&&(state==='lobby'||state==='over'))startNet(c);}
@@ -856,8 +873,8 @@ function isHost(){
   const hs=net.humans.filter(id=>id===uid||roomMembers.some(p=>p.id===id));
   return(hs[0]||uid)===uid;
 }
-function joinRoom(n){if(!wsOk||mySpec.n.trim().length<2)return;net.room=n;roomMembers=[];send({k:'join',room:n});renderLobby();}
-function leaveRoom(keepUi){send({k:'leave'});net.room=0;net.rid=0;roomMembers=[];if(!keepUi)renderLobby();}
+function joinRoom(n){if(!wsOk||mySpec.n.trim().length<2)return;chat.log=[];net.room=n;roomMembers=[];send({k:'join',room:n});renderLobby();}
+function leaveRoom(keepUi){send({k:'leave'});chat.log=[];net.room=0;net.rid=0;roomMembers=[];if(!keepUi)renderLobby();}
 function hostStart(){send({k:'start'});}
 const hsh=s=>{let x=0;for(let i=0;i<s.length;i++)x=(x*31+s.charCodeAt(i))|0;return x;};
 function startNet(c){
@@ -938,10 +955,11 @@ function renderLobby(){
     const ps=roomMembers,host=ps[0]&&ps[0].id===uid;
     kids.push(el('div',{class:'ctr'},'Salon '+net.room+' · les bots complètent jusqu\'à 6 karts'));
     kids.push(el('div',{class:'res'},ps.map((p,i)=>el('div',{class:'pl'},el('u',{style:'background:'+hx(sanSpec(p.spec).col)}),el('span',null,p.name+(p.id===uid?' (toi)':'')),i===0?'👑':''))));
+    kids.push(chatBuild());
     kids.push(host?el('div',null,el('button',{class:'btn',type:'button',onclick:hostStart},'▶ Lancer la course')):el('div',{class:'ctr'},'⏳ En attente de l\'hôte…'));
     kids.push(el('div',null,el('button',{class:'btn alt',type:'button',onclick:()=>leaveRoom()},'🚪 Quitter le salon')));
   }
-  card.replaceChildren(...kids);
+  card.replaceChildren(...kids);if(net.room)chatShow();
 }
 let endTimer=null;
 function fillResults(){const r=rankList(),box=$('res');box.replaceChildren(...r.map((k,i)=>el('div',{class:k.isP?'me':''},el('i',null,i+1),el('u',{style:'background:'+hx(k.spec.col)}),el('span',null,k.spec.n),el('em',null,k.fin?k.finT.toFixed(1)+' s':'en course'))));}
