@@ -894,7 +894,7 @@ h2{color:#E8632B;text-shadow:0 2px 0 rgba(255,246,210,.9),0 3px 0 rgba(120,60,10
 .hub-c.rd .hub-art img{width:84px;height:auto;filter:drop-shadow(0 6px 4px rgba(0,0,0,.35))}.hub-c.rd .hub-art img:first-child{transform:rotate(-9deg) translateX(10px)}.hub-c.rd .hub-art img:last-child{transform:rotate(8deg) translateX(-10px)}
 .hub-c.rm .hub-art span{display:grid;place-items:center;width:62px;height:88px;border-radius:9px;background:#fffdf6;border:1px solid #b9a77c;box-shadow:0 6px 4px rgba(0,0,0,.3);font:800 30px var(--f-display);color:#1b1b1b;line-height:1}.hub-c.rm .hub-art span:first-child{transform:rotate(-10deg) translateX(10px);color:#c8232c}.hub-c.rm .hub-art span:last-child{transform:rotate(9deg) translateX(-10px)}
 
-.gload.lg{background:linear-gradient(170deg,#060a22,#2a1466)}.gload.lg .lg-fan i{background:linear-gradient(#3b2f95,#150f55);border-color:#ffd76a;font-size:30px}
+.gload.kt{background:linear-gradient(170deg,#0b0630,#2a1466 55%,#7a3cff)}.gload.lg{background:linear-gradient(170deg,#060a22,#2a1466)}.gload.lg .lg-fan i{background:linear-gradient(#3b2f95,#150f55);border-color:#ffd76a;font-size:30px}
 .hub-in h2{font-size:clamp(26px,5vw,38px)}
 .hub-fl{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
 .hub-p{border:0;font:800 14px var(--f-body);padding:9px 16px;border-radius:99px;background:rgba(255,255,255,.78);color:#5E3516;cursor:pointer;box-shadow:0 3px 0 rgba(94,53,22,.35);transition:transform .1s}
@@ -3684,7 +3684,7 @@ function showHub(){
   if($('hub'))return;hideHome();
   const nm=(prof&&prof.name)||lsGet('f7name')||'';
   const logo=(document.querySelector('.logo')||{outerHTML:'<b>FLIP 7</b>'}).outerHTML;
-  const LOAD={flip7:'f7',rami:'rm',mytho:'my',quiz:'qz',loup:'lg',ronda:'rd',skyjo:'sk'},URL={kart:'kart.html',skyjo:'skyjo.html',rami:'rami.html',mytho:'mytho.html',quiz:'quiz.html',loup:'loupgarou.html',ronda:'ronda.html'};
+  const LOAD={flip7:'f7',rami:'rm',mytho:'my',quiz:'qz',loup:'lg',ronda:'rd',skyjo:'sk',kart:'kt'},URL={kart:'kart.html',skyjo:'skyjo.html',rami:'rami.html',mytho:'mytho.html',quiz:'quiz.html',loup:'loupgarou.html',ronda:'ronda.html'};
   const choose=g=>{hubWanted=false;showLoader(LOAD[g]||'rd');if(g==='flip7'){ssSet('f7game','flip7');try{history.replaceState(null,'',location.pathname);}catch(e){}setTimeout(()=>{hideHub();endLoader();},250);}else setTimeout(()=>{location.href=URL[g];},250);};
   const TYPES=[['all','🎮 Tous'],['cartes','🃏 Cartes'],['bluff','🎭 Bluff & déduction'],['quiz','🧠 Quiz & culture'],['course','🏎️ Course']];
   const TN={cartes:'🃏 Cartes',bluff:'🎭 Bluff',quiz:'🧠 Quiz',course:'🏎️ Course'};

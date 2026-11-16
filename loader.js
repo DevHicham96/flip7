@@ -39,6 +39,9 @@
 .ldx-root.k-qz{--a:#ffd23f;--a2:#f5a800;--bg:radial-gradient(circle at 20% 15%,rgba(108,61,240,.8),transparent 45%),linear-gradient(160deg,#1a1464,#4a1fb8 70%,#6d2fd6);--p1:#6c3df0;--p2:#3a1d9c;--p3:#1a1464}
 .ldx-root.k-my{--a:#c28bff;--a2:#7c3aed;--bg:linear-gradient(165deg,#1a0f3a,#3b1d78 70%,#5a2a9a);--p1:#7c3aed;--p2:#3b1d78;--p3:#150a30}
 .ldx-root.k-rm{--a:#7CE7B0;--a2:#2f8240;--bg:radial-gradient(ellipse at 50% 40%,#2f8240,#103a1e 80%);--p1:#2f8240;--p2:#14532d;--p3:#06210f}
+.ldx-root.k-kt{--a:#ffe24a;--a2:#ff7a1f;--bg:linear-gradient(170deg,#0b0630,#2a1466 55%,#7a3cff);--p1:#7a3cff;--p2:#2a1466;--p3:#0b0630}
+.ldx-kart{display:grid;place-items:center;height:100%;font-size:64px;position:relative}.ldx-kart span{display:block;animation:ldxkart .5s ease-in-out infinite alternate;filter:drop-shadow(0 6px 8px rgba(0,0,0,.45))}.ldx-kart::before{content:'';position:absolute;left:8%;right:8%;bottom:18%;height:8px;background:repeating-linear-gradient(90deg,#fff 0 14px,transparent 14px 28px);opacity:.5;animation:ldxroad .35s linear infinite}
+@keyframes ldxkart{to{transform:translateY(-6px) rotate(-3deg)}}@keyframes ldxroad{to{background-position:28px 0}}
 .ldx-root.k-rd{--a:#ffb347;--a2:#d4571a;--bg:linear-gradient(170deg,#3a1a0c,#7a3a14 60%,#c26a22);--p1:#d4571a;--p2:#7a3a14;--p3:#2a1206}
 .ldx-root:not(.k-f7) .ldx-planet{opacity:.55}
 .ldx-cards{display:flex;gap:0;justify-content:center;align-items:flex-end;height:100%;width:100%}
@@ -62,9 +65,10 @@ var K={
  qz:{n:'Quiz',s:'Questions pour tous',emb:cards(['❓','💡','🏆','⚡','❓'],['#e5484d','#2c63d6','#f2b632','#7c3aed','#e5484d']),steps:['Chargement de la banque de questions','Mélange des catégories','Réglage du chronomètre','Branchement des buzzers','Prêt à buzzer']},
  my:{n:'Mytho',s:'Le jeu du bluff',emb:cards(['🤥','♠','🫵','♥','🤥'],['#7c3aed','#1b1b1b','#c0262d','#1b1b1b','#7c3aed']),steps:['Préparation du bluff','Mélange des cartes','Entraînement au poker face','Prêt à mentir']},
  rm:{n:'Rami',s:'Le rami traditionnel',emb:cards(['♠','♥','🃏','♦','♣'],['#1b1b1b','#c8232c','#6b3fb0','#c8232c','#1b1b1b']),steps:['Mélange des deux jeux','Distribution des 14 cartes','Préparation de la pioche','Prêt à poser']},
+ kt:{n:'Kart Racers',s:'Prêt à démarrer ?',emb:'<div class="ldx-kart"><span>🏎️</span></div>',stars:1,steps:['Gonflage des pneus','Plein de nitro','Placement sur la grille','Feu rouge… feu vert !']},
  rd:{n:'Ronda',s:'Jeu de cartes marocaines',emb:'🍵',steps:['Préparation du thé à la menthe','Mélange du jeu espagnol','Distribution des cartes','Prêt pour la ronda']}
 };
-var KINDS=['lg','sk','qz','f7','my','rm','rd'];
+var KINDS=['lg','sk','qz','f7','my','rm','kt','rd'];
 function kindOf(el){for(var i=0;i<KINDS.length;i++)if(el.classList.contains(KINDS[i]))return KINDS[i];return 'f7';}
 function build(el){
   var k=kindOf(el),c=K[k];
