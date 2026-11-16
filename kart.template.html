@@ -458,18 +458,14 @@ function hud(){
   karts.slice().reverse().forEach(k=>{const x=__mm.ox+(k.pos.x-__mm.x0)*__mm.s,z=__mm.oz+(k.pos.z-__mm.z0)*__mm.s;mx.fillStyle=hex6(k.spec.col);mx.strokeStyle='#fff';mx.lineWidth=k.isP?3:2;mx.beginPath();mx.arc(x,z,k.isP?7:5,0,7);mx.fill();mx.stroke();});
 }
 function showEnd(){const r=rankList(),box=$('res');box.innerHTML='';r.forEach((k,i)=>{const d=document.createElement('div');if(k.isP)d.className='me';d.innerHTML='<i>'+(i+1)+'</i><u style="background:'+hex6(k.spec.col)+'"></u><span>'+k.spec.n+'</span><em>'+(k.fin?k.finT.toFixed(1)+' s':'en course')+'</em>';box.append(d);});$('end').hidden=false;}
-/* ---------- réseau (Firestore) ---------- */
-const net={room:0,rid:0,t:0,seen:new Set(),humans:[],unsubs:[],ctlUnsub:null,pt:0,wasHost:true,err:''};
-let db=null,uid=ld('f7id','')||'',roster=[];const mySlug=ld('f7prof','')||'';
+/* ---------- réseau (WebSocket Cloudflare Durable Object) ---------- */
+const net={room:0,rid:0,t:0,seen:new Set(),humans:[],pt:0,wasHost:true,err:''};
+let db=null,uid=ld('f7id','')||'',ws=null,wsOk=false,wsTimer=null,roomsInfo={},roomMembers=[];const mySlug=ld('f7prof','')||'';
 if(!uid){uid='g_'+Math.random().toString(36).slice(2,12);sv('f7id',uid);}
 const r1=v=>Math.round(v*10)/10,r2=v=>Math.round(v*100)/100;
 function makeDbFromSdk(F,fs){
-  const ws=x=>({exists:x.exists(),data:()=>x.data()});
-  const wq=x=>({docs:x.docs.map(d=>({id:d.id,data:()=>d.data()}))});
-  return{
-    doc:path=>{const r=F.doc(fs,path);return{get:async()=>ws(await F.getDoc(r)),set:v=>F.setDoc(r,v),delete:()=>F.deleteDoc(r),onSnapshot:(cb,eb)=>F.onSnapshot(r,x=>cb(ws(x)),eb)};},
-    collection:path=>{const c=F.collection(fs,path);return{onSnapshot:(cb,eb)=>F.onSnapshot(c,x=>cb(wq(x)),eb)};}
-  };
+  const ws0=x=>({exists:x.exists(),data:()=>x.data()});
+  return{doc:path=>{const r=F.doc(fs,path);return{get:async()=>ws0(await F.getDoc(r)),set:v=>F.setDoc(r,v)};}};
 }
 async function loadFirebase(cfg){
   const V='10.14.1',B='https://www.gstatic.com/firebasejs/'+V+'/';
@@ -483,58 +479,43 @@ function atPres(g){
   const beat=()=>{try{db.doc('game/pres_'+mySlug).set({name:nm,av,t:Date.now(),st:(document.hidden||Date.now()-la>180000)?'away':'on',room:net.room||0,g}).catch(()=>{});}catch(e){}};
   Promise.resolve().then(()=>db.doc('game/prof_'+mySlug).get()).then(sn=>{if(sn&&sn.exists){const d=sn.data()||{};if(d.name)nm=String(d.name).slice(0,16);if(d.av)av=d.av;}}).catch(()=>{}).then(()=>{beat();setInterval(beat,25000);document.addEventListener('visibilitychange',beat);});
 }
-function netErr(e){if(!net.err){net.err='Connexion refusée ('+((e&&e.code)||'erreur')+')';renderLobby();}}
-const fresh=p=>Date.now()-(p.seen||0)<30000;
-function roomPlayers(n){
-  const l=roster.filter(p=>p.room===n&&fresh(p));
-  if(net.room===n&&!l.some(p=>p.id===uid))l.push({id:uid,name:mySpec.n,t:net.t,seen:Date.now(),room:n,spec:mySpec});
-  return l.sort((a,b)=>a.t-b.t||(a.id<b.id?-1:1));
+const send=o=>{try{if(ws&&ws.readyState===1)ws.send(JSON.stringify(o));}catch(e){}};
+const wsWanted=()=>state==='lobby'||(mode==='online'&&state!=='title');
+function connect(){
+  if(ws&&ws.readyState<2)return;
+  if(!/^https?:$/.test(location.protocol)){net.err='Mode en ligne indisponible hors du site.';renderLobby();return;}
+  try{ws=new WebSocket((location.protocol==='https:'?'wss://':'ws://')+location.host+'/kart-ws');}catch(e){net.err='Connexion impossible.';renderLobby();return;}
+  const me=ws;
+  me.onopen=()=>{wsOk=true;net.err='';send({k:'hi',uid,name:mySpec.n,spec:mySpec});if(net.room)send({k:'join',room:net.room,t:net.t});renderLobby();};
+  me.onmessage=e=>{let m;try{m=JSON.parse(e.data);}catch(_){return;}onMsg(m);};
+  me.onclose=()=>{if(ws===me){ws=null;wsOk=false;}renderLobby();clearTimeout(wsTimer);wsTimer=setTimeout(()=>{if(wsWanted())connect();},2000);};
+  me.onerror=()=>{if(!wsOk)net.err='Serveur indisponible.';};
+  clearInterval(connect.ping);connect.ping=setInterval(()=>{try{if(ws&&ws.readyState===1)ws.send('ping');}catch(e){}},20000);
 }
+function onMsg(m){
+  if(m.k==='rooms'){roomsInfo=m.r||{};renderLobby();}
+  else if(m.k==='room'){if(m.n===net.room||!net.room){net.room=m.n;roomMembers=(m.members||[]).map(p=>({id:p.id,name:String(p.name||'?').slice(0,16),t:p.t,spec:p.spec}));const mine=roomMembers.find(p=>p.id===uid);if(mine)net.t=mine.t;renderLobby();}}
+  else if(m.k==='ctl'){const c=m.c;if(c&&Array.isArray(c.players)&&c.players.some(p=>p.id===uid)&&(state==='lobby'||state==='over'))startNet(c);}
+  else if(m.k==='st'){applyNet(kartById(m.u),m.d);}
+  else if(m.k==='bots'){if(!isHost()&&m.d)(m.d.b||[]).forEach(b=>applyNet(kartById(b.u),Object.assign({rid:m.d.rid},b)));}
+}
+const roomPlayers=n=>net.room===n?roomMembers:[];
 function isHost(){
   if(mode!=='online')return true;
-  const hs=net.humans.filter(id=>id===uid||roster.some(p=>p.id===id&&fresh(p)));
+  const hs=net.humans.filter(id=>id===uid||roomMembers.some(p=>p.id===id));
   return(hs[0]||uid)===uid;
 }
-function beatLobby(){
-  if(!db||!net.room||document.hidden&&state!=='race')return;
-  db.doc('lobby/kt_'+uid).set({name:mySpec.n.slice(0,16),t:net.t,seen:Date.now(),room:net.room,spec:mySpec,pf:mySlug,kt:1}).catch(netErr);
-}
-function joinRoom(n){
-  if(!db||mySpec.n.trim().length<2)return;
-  leaveRoom(true);net.room=n;net.t=Date.now();net.err='';beatLobby();
-  net.ctlUnsub=db.doc('game/kt_ctl_'+n).onSnapshot(sn=>{
-    if(!sn.exists)return;const c=sn.data()||{};
-    if(!c.rid||c.rid===net.rid||Math.abs(Date.now()-c.rid)>15000)return;
-    if(!(state==='lobby'||state==='over'))return;
-    if(Array.isArray(c.players)&&c.players.some(p=>p.id===uid))startNet(c);
-  },()=>{});
-  renderLobby();
-}
-function stopPeers(){net.unsubs.forEach(f=>{try{f();}catch(e){}});net.unsubs=[];}
-function leaveRoom(keepUi){
-  if(net.ctlUnsub){try{net.ctlUnsub();}catch(e){}net.ctlUnsub=null;}
-  stopPeers();
-  if(db&&net.room){db.doc('lobby/kt_'+uid).delete().catch(()=>{});if(net.rid)db.doc('game/kt_'+net.room+'_'+uid).delete().catch(()=>{});}
-  net.room=0;net.rid=0;
-  if(!keepUi)renderLobby();
-}
-function hostStart(){
-  const ps=roomPlayers(net.room).slice(0,6);if(!ps.length||ps[0].id!==uid)return;
-  const rid=Date.now(),c={rid,t:rid,room:net.room,players:ps.map(p=>({id:p.id,name:p.name,spec:p.spec})),nb:Math.max(0,6-ps.length)};
-  db.doc('game/kt_ctl_'+net.room).set(c).catch(netErr);
-  startNet(c);
-}
+function joinRoom(n){if(!wsOk||mySpec.n.trim().length<2)return;net.room=n;roomMembers=[];send({k:'join',room:n});renderLobby();}
+function leaveRoom(keepUi){send({k:'leave'});net.room=0;net.rid=0;roomMembers=[];if(!keepUi)renderLobby();}
+function hostStart(){send({k:'start'});}
 const hsh=s=>{let x=0;for(let i=0;i<s.length;i++)x=(x*31+s.charCodeAt(i))|0;return x;};
 function startNet(c){
   audio();if(AC&&AC.state==='suspended')AC.resume();
-  stopPeers();
   net.rid=c.rid;net.seen=new Set();net.humans=c.players.map(p=>p.id);net.pt=0;
   const L=c.players.map(p=>({uid:p.id,spec:sanSpec(p.spec,p.name),isP:p.id===uid,remote:p.id!==uid}));
   for(let i=0;i<(c.nb|0);i++)L.push({uid:'bot'+i,spec:SPEC[1+i%5],bot:true});
   L.sort((a,b)=>hsh(a.uid+c.rid)-hsh(b.uid+c.rid));
   mode='online';reset(L);net.wasHost=isHost();
-  c.players.forEach(p=>{if(p.id===uid)return;net.unsubs.push(db.doc('game/kt_'+c.room+'_'+p.id).onSnapshot(sn=>{if(sn.exists)applyNet(kartById(p.id),sn.data());},()=>{}));});
-  net.unsubs.push(db.doc('game/kt_'+c.room+'_bots').onSnapshot(sn=>{if(sn.exists&&!isHost()){const d=sn.data()||{};(d.b||[]).forEach(b=>applyNet(kartById(b.u),Object.assign({rid:d.rid},b)));}},()=>{}));
   beginRace();
 }
 function applyNet(k,d){
@@ -547,11 +528,9 @@ function snap(k){
   return{x:r2(k.pos.x),z:r2(k.pos.z),y:r2(k.pos.y),yaw:r2(k.yaw),sp:r1(k.speed),vx:r1(k.vx),vz:r1(k.vz),st:r2(k.st),b:k.boost>0?1:0,sn:k.spin>0?1:0,dr:k.drift?k.driftDir:0,pr:Math.round(k.prog),fn:k.fin?1:0,ft:r2(k.finT),ev:k.evq.map(v=>({id:v.id,k:v.k,x:r2(v.x),z:r2(v.z),yaw:r2(v.yaw),tg:v.tg}))};
 }
 function publish(){
-  if(!db||!net.room||!P0)return;
-  try{
-    db.doc('game/kt_'+net.room+'_'+uid).set(Object.assign({rid:net.rid,t:Date.now()},snap(P0))).catch(netErr);
-    if(isHost()){const bs=karts.filter(k=>k.bot);if(bs.length)db.doc('game/kt_'+net.room+'_bots').set({rid:net.rid,t:Date.now(),b:bs.map(k=>Object.assign({u:k.uid},snap(k)))}).catch(netErr);}
-  }catch(e){}
+  if(!wsOk||!P0)return;
+  send({k:'st',d:Object.assign({rid:net.rid},snap(P0))});
+  if(isHost()){const bs=karts.filter(k=>k.bot);if(bs.length)send({k:'bots',d:{rid:net.rid,b:bs.map(k=>Object.assign({u:k.uid},snap(k)))}});}
 }
 function nearIdx(k){let best=1e18,bi=k.idx;for(let d=-40;d<=40;d++){const i=(k.idx+d+M)%M,p=P[i],dx=k.pos.x-p.x,dz=k.pos.z-p.z,q=dx*dx+dz*dz;if(q<best){best=q;bi=i;}}k.idx=bi;}
 function remoteStep(k,dt){
@@ -587,23 +566,23 @@ function buildPilot(){
   box.append(el('button',{class:'chip',type:'button',onclick:()=>{const pk=a=>a[Math.floor(Math.random()*a.length)];rows.forEach(([k])=>{mySpec[k]=pk(PAL[k]);});mySpec.ears=pk(EARS);saveSpec();mark();refreshPreview();}},'🎲 Aléatoire'));
   mark();
 }
-function showTitle(){state='title';mode='solo';$('title').hidden=false;$('lobby').hidden=true;$('hud').hidden=true;$('end').hidden=true;$('fx').classList.remove('on');resetPreview();}
-function openLobby(){audio();state='lobby';$('lcard').dataset.sig='';$('title').hidden=true;$('lobby').hidden=false;renderLobby();}
+function showTitle(){state='title';mode='solo';clearTimeout(wsTimer);clearInterval(connect.ping);if(ws){try{ws.close();}catch(e){}ws=null;wsOk=false;}net.room=0;roomMembers=[];$('title').hidden=false;$('lobby').hidden=true;$('hud').hidden=true;$('end').hidden=true;$('fx').classList.remove('on');resetPreview();}
+function openLobby(){audio();state='lobby';$('lcard').dataset.sig='';net.err='';connect();$('title').hidden=true;$('lobby').hidden=false;renderLobby();}
 function renderLobby(){
   const box=$('lobby'),card=$('lcard');if(!box||box.hidden)return;
-  const ok=db&&mySpec.n.trim().length>=2;
-  const sig=JSON.stringify([!!db,net.err,net.room,ok,net.room?roomPlayers(net.room).map(p=>[p.id,p.name,sanSpec(p.spec).col]):[1,2,3,4].map(n=>roomPlayers(n).map(p=>p.name))]);
+  const ok=wsOk&&mySpec.n.trim().length>=2;
+  const sig=JSON.stringify([wsOk,net.err,net.room,ok,net.room?roomMembers.map(p=>[p.id,p.name,sanSpec(p.spec).col]):[1,2,3,4].map(n=>(roomsInfo[n]||[]).map(p=>p.name))]);
   if(card.dataset.sig===sig)return;card.dataset.sig=sig;
-  const back=el('button',{class:'btn alt',type:'button',onclick:()=>{leaveRoom(true);showTitle();}},'⬅ Retour');
+  const back=el('button',{class:'btn alt',type:'button',onclick:()=>{showTitle();}},'⬅ Retour');
   const kids=[el('div',{class:'logo',style:'font-size:clamp(32px,8vw,54px)'},'SALON EN LIGNE')];
-  if(net.err)kids.push(el('div',{class:'err'},net.err+' — vérifie les règles Firestore.'));
-  if(!db){kids.push(el('div',{class:'ctr'},'Connexion au serveur impossible pour le moment.'));kids.push(el('div',null,back));}
+  if(net.err)kids.push(el('div',{class:'err'},net.err));
+  if(!wsOk){kids.push(el('div',{class:'ctr'},'Connexion au serveur…'));kids.push(el('div',null,back));}
   else if(!net.room){
     if(!ok)kids.push(el('div',{class:'err'},'Choisis un pseudo (2 lettres min) dans « Mon pilote ».'));
-    kids.push(el('div',{class:'rooms'},[1,2,3,4].map(n=>{const ps=roomPlayers(n);return el('button',{class:'rm',type:'button',disabled:!ok,onclick:()=>joinRoom(n)},el('b',null,'Salon '+n),ps.length?ps.map(p=>p.name).join(', '):'Libre');})));
+    kids.push(el('div',{class:'rooms'},[1,2,3,4].map(n=>{const ps=roomsInfo[n]||[];return el('button',{class:'rm',type:'button',disabled:!ok,onclick:()=>joinRoom(n)},el('b',null,'Salon '+n),ps.length?ps.map(p=>p.name).join(', '):'Libre');})));
     kids.push(el('div',null,back));
   }else{
-    const ps=roomPlayers(net.room),host=ps[0]&&ps[0].id===uid;
+    const ps=roomMembers,host=ps[0]&&ps[0].id===uid;
     kids.push(el('div',{class:'ctr'},'Salon '+net.room+' · les bots complètent jusqu\'à 6 karts'));
     kids.push(el('div',{class:'res'},ps.map((p,i)=>el('div',{class:'pl'},el('u',{style:'background:'+hx(sanSpec(p.spec).col)}),el('span',null,p.name+(p.id===uid?' (toi)':'')),i===0?'👑':''))));
     kids.push(host?el('div',null,el('button',{class:'btn',type:'button',onclick:hostStart},'▶ Lancer la course')):el('div',{class:'ctr'},'⏳ En attente de l\'hôte…'));
@@ -615,8 +594,7 @@ let endTimer=null;
 function fillResults(){const r=rankList(),box=$('res');box.replaceChildren(...r.map((k,i)=>el('div',{class:k.isP?'me':''},el('i',null,i+1),el('u',{style:'background:'+hx(k.spec.col)}),el('span',null,k.spec.n),el('em',null,k.fin?k.finT.toFixed(1)+' s':'en course'))));}
 function showResults(){fillResults();$('end').hidden=false;clearInterval(endTimer);endTimer=setInterval(()=>{if($('end').hidden)clearInterval(endTimer);else fillResults();},700);}
 function backToRoom(){
-  clearInterval(endTimer);$('end').hidden=true;$('hud').hidden=true;stopPeers();
-  if(db&&net.room)db.doc('game/kt_'+net.room+'_'+uid).delete().catch(()=>{});
+  clearInterval(endTimer);$('end').hidden=true;$('hud').hidden=true;
   net.rid=0;mode='solo';state='lobby';$('lcard').dataset.sig='';$('lobby').hidden=false;resetPreview();renderLobby();
 }
 /* ---------- boucle ---------- */
@@ -647,7 +625,7 @@ function update(dt){
       if(!k.fin&&k.prog>=M*LAPS){k.fin=true;k.finT=raceT;if(k.isP&&!finished){finished=true;state='over';toast('🏁 ARRIVÉE !');beep(660,.6,'triangle');setTimeout(showResults,2300);}}
     });
     collide();updObjs(dt);
-    if(mode==='online'){net.pt+=dt;if(net.pt>=.2){net.pt=0;publish();}}
+    if(mode==='online'){net.pt+=dt;if(net.pt>=.1){net.pt=0;publish();}}
   }
   karts.forEach(syncVis);
   partsUpdate(dt);
@@ -681,18 +659,12 @@ $('onl').addEventListener('click',openLobby);
 $('home').addEventListener('click',()=>{location.href='index.html#home';});
 $('again').addEventListener('click',()=>{if(mode==='online')backToRoom();else start();});
 $('hubb').addEventListener('click',()=>{location.href='index.html#jeux';});
-addEventListener('beforeunload',()=>{try{leaveRoom(true);}catch(e){}});
+addEventListener('beforeunload',()=>{try{if(ws)ws.close();}catch(e){}});
 addEventListener('resize',viewOffset);
 async function initNet(){
   if(!window.F7_FIREBASE)return;
   try{db=await loadFirebase(window.F7_FIREBASE);}catch(e){db=null;}
   try{atPres('kart');}catch(e){}
-  if(!db)return;
-  db.collection('lobby').onSnapshot(sn=>{
-    roster=sn.docs.filter(d=>d.id.startsWith('kt_')).map(d=>{const v=d.data()||{};return{id:d.id.slice(3),name:String(v.name||'?').slice(0,16),t:+v.t||0,seen:+v.seen||0,room:+v.room||0,spec:v.spec};});
-    renderLobby();
-  },()=>{});
-  setInterval(beatLobby,8000);setInterval(renderLobby,4000);
 }
 buildPilot();
 showTitle();
