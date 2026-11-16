@@ -186,6 +186,47 @@ input.t{min-height:44px;border-radius:12px;border:2px solid #B88B45;background:#
 .flyc .fb{transform:rotateY(180deg)}
 .flyc .pc{box-shadow:0 14px 26px rgba(0,0,0,.45)}
 @media (prefers-reduced-motion:reduce){.pc.mine.fresh,.pc.land,.pc.dealin{animation:none}}
+
+/* ===== Rami : thème « Salon de casino » (dynamique) ===== */
+html{background:radial-gradient(120% 80% at 50% -10%,#17694a 0%,#0b3526 38%,#041510 80%) fixed #06150f}
+html::after{display:none}
+html::before{content:'';position:fixed;left:50%;top:-12vh;width:130vw;height:80vh;margin-left:-65vw;z-index:-1;pointer-events:none;background:radial-gradient(ellipse at 50% 0%,rgba(255,226,140,.34),rgba(255,226,140,.08) 45%,transparent 70%);animation:lamp 7s ease-in-out infinite}
+@keyframes lamp{50%{opacity:.62;transform:scale(1.06)}}
+body::before{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;background:url("data:image/svg+xml,%3Csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20width=%27360%27%20height=%27360%27%20viewBox=%270%200%20360%20360%27%20font-family=%27Arial%2Csans-serif%27%20font-size=%2746%27%20fill=%27%23ffffff%27%3E%3Ctext%20x=%2730%27%20y=%2770%27%3E%E2%99%A0%3C/text%3E%3Ctext%20x=%27215%27%20y=%2748%27%20fill=%27%23ff8a8a%27%3E%E2%99%A5%3C/text%3E%3Ctext%20x=%27120%27%20y=%27170%27%20fill=%27%23ff8a8a%27%3E%E2%99%A6%3C/text%3E%3Ctext%20x=%27290%27%20y=%27200%27%3E%E2%99%A3%3C/text%3E%3Ctext%20x=%2740%27%20y=%27290%27%20fill=%27%23ff8a8a%27%3E%E2%99%A5%3C/text%3E%3Ctext%20x=%27205%27%20y=%27320%27%3E%E2%99%A0%3C/text%3E%3Ctext%20x=%27300%27%20y=%27330%27%20fill=%27%23ff8a8a%27%3E%E2%99%A6%3C/text%3E%3C/svg%3E") 0 0/340px 340px;opacity:.06;animation:suitdrift 80s linear infinite}
+@keyframes suitdrift{to{background-position:340px 340px}}
+body::after{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(circle,#ffe9a8 0 1.4px,transparent 2px) 0 0/130px 170px,radial-gradient(circle,#fff6d6 0 1px,transparent 1.6px) 60px 80px/190px 140px;opacity:.28;animation:sparkle 40s linear infinite}
+@keyframes sparkle{to{background-position:0 -170px,60px -60px}}
+h2{color:#f5c542;text-shadow:0 2px 0 rgba(0,0,0,.45)}
+.top{background:linear-gradient(#2c1c14,#120a07);box-shadow:0 0 0 2px #d4a437,0 0 0 5px #120a07,0 10px 26px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.12)}
+.brand{color:#f9d65c;text-shadow:0 0 14px rgba(249,214,92,.5),0 3px 0 rgba(0,0,0,.5)}
+.btn{background:linear-gradient(#ffe38a,#d9a82a);border-color:#8a6212;color:#3b2606;box-shadow:0 4px 0 #8a6212,0 6px 14px rgba(0,0,0,.3)}
+.btn:active:not(:disabled){box-shadow:0 1px 0 #8a6212}.btn.sm{box-shadow:0 3px 0 #8a6212}
+.btn.primary{border-color:#ffd978;background:linear-gradient(#ff6a4d,#c21f2a);color:#fff;text-shadow:0 2px 0 rgba(0,0,0,.35);box-shadow:0 4px 0 #6e0f17,0 0 18px rgba(255,90,70,.35),inset 0 2px 0 rgba(255,255,255,.3)}
+.pchip{background:linear-gradient(#ffe38a,#d9a82a);border-color:#8a6212;box-shadow:0 3px 0 #8a6212}
+.panel{background:linear-gradient(#17261f,#0b1410);color:#f6ecd0;border:2px solid #d4a437;box-shadow:0 0 0 5px #0b1410,0 0 30px rgba(212,164,55,.2),0 18px 30px rgba(0,0,0,.5)}
+.muted{color:#cdbb8a}
+.rcard,.pl,.rules,.seg,.seg button{background:rgba(255,255,255,.06);border-color:rgba(212,164,55,.55);color:#f6ecd0}
+.rcard{box-shadow:0 4px 0 rgba(0,0,0,.35)}.rcard:hover{border-color:#f9d65c;box-shadow:0 0 18px rgba(249,214,92,.35),0 4px 0 rgba(0,0,0,.35)}.rcard b{color:#f9d65c}
+.rules b{color:#f9d65c}.rules{color:#cdbb8a}
+.seg button.on{background:linear-gradient(#ffe38a,#d9a82a);color:#3b2606}
+.st{background:rgba(255,255,255,.12);color:#e8dcb0}.st.free{background:rgba(47,182,124,.3);color:#8cf0bd}.st.play{background:rgba(229,72,77,.3);color:#ff9b9f}
+input.t{background:rgba(0,0,0,.35);border-color:rgba(212,164,55,.6);color:#fff7dc;box-shadow:inset 0 2px 6px rgba(0,0,0,.45)}
+input.t::placeholder{color:#a89a72}
+.logline{background:rgba(0,0,0,.35);border-color:rgba(212,164,55,.45);color:#f6ecd0}
+.felt{background:radial-gradient(ellipse at 50% 38%,#20a35e 0%,#12703d 52%,#07401f 100%);box-shadow:0 0 0 8px #2a190f,0 0 0 11px #d4a437,0 0 0 15px #120a07,0 0 70px rgba(46,204,113,.28),0 22px 40px rgba(0,0,0,.55),inset 0 0 60px rgba(0,0,0,.4);overflow:hidden}
+.felt::before{border-color:rgba(249,214,92,.55)}
+.felt::after{content:'';position:absolute;inset:0;pointer-events:none;border-radius:inherit;background:radial-gradient(ellipse at 50% 0%,rgba(255,244,190,.22),transparent 62%),linear-gradient(105deg,transparent 42%,rgba(255,255,255,.09) 50%,transparent 58%);background-size:100% 100%,60% 100%;background-repeat:no-repeat;animation:sweep 9s ease-in-out infinite}
+@keyframes sweep{from{background-position:0 0,-130% 0}to{background-position:0 0,230% 0}}
+.felt>*{position:relative;z-index:1}
+.plate{background:linear-gradient(#3b2415,#1d110a);border-color:#d4a437;box-shadow:0 3px 0 rgba(0,0,0,.45)}
+.plate .sc{color:#f9d65c}
+.seat.turn .plate{box-shadow:0 0 0 3px #ffe066,0 0 22px #ffe066,0 0 46px rgba(255,224,102,.55)}
+.deck.can{filter:drop-shadow(0 0 14px rgba(255,224,102,.65))}
+.status{color:#fff3cc;text-shadow:0 0 12px rgba(0,0,0,.6),0 2px 0 rgba(0,0,0,.45)}
+.rchat{background:linear-gradient(#17261f,#0b1410);border:2px solid #d4a437;color:#f6ecd0}
+#ch-list li{background:rgba(255,255,255,.08);border-color:rgba(212,164,55,.35);color:#f6ecd0}
+.gload.rm,.gload{background:radial-gradient(120% 80% at 50% 0%,#17694a,#06150f)}
+@media (prefers-reduced-motion:reduce){html::before,body::before,body::after,.felt::after{animation:none}}
 </style></head><body><div class="gload rm" id="gload" role="status" aria-live="polite"><div class="lg-cloud c1"></div><div class="lg-cloud c2"></div><div class="lg-fan" aria-hidden="true"><i>♠</i><i>♥</i><i>🃏</i><i>♦</i><i>♣</i></div><div class="lg-sign">Loading<b>.</b><b>.</b><b>.</b></div><div class="lg-bar" aria-hidden="true"></div></div><div id="app"></div>
 <script>
 /*ENGINE_START*/
