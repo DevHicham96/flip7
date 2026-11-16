@@ -233,8 +233,9 @@ input.t::placeholder{color:#a89a72}
 .wrap .meld .pc{--cw:calc(var(--k,1)*clamp(30px,8.4vw,42px))}
 .wrap .hnd .pc{--cw:calc(var(--k,1)*clamp(18px,5vw,26px))}
 @media (max-width:560px){.wrap .center .pc{--cw:calc(var(--k,1)*clamp(48px,15vw,66px))}.wrap .hnd .pc{--cw:calc(var(--k,1)*20px)}}
-body.compact{padding:6px 8px 6px}
-body.compact .wrap{gap:6px}
+body.compact{padding:10px max(16px,env(safe-area-inset-right)) 16px max(16px,env(safe-area-inset-left))}
+body.compact .wrap{gap:16px}
+body.compact .top a.btn{display:none}
 body.compact .top{padding:4px 8px;gap:6px;border-radius:12px}
 body.compact .top .brand{font-size:15px}body.compact .brand small{display:none}
 body.compact .top .btn.sm{min-height:30px;font-size:12px;padding:0 9px;box-shadow:0 2px 0 #8a6212}

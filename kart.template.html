@@ -131,7 +131,7 @@ html,body{margin:0;height:100%;overflow:hidden;background:#12082e;font-family:'N
   <div class="coin" id="coin">🪙 0</div>
   <button class="pzb" id="pz" aria-label="Pause">⏸</button>
 </div>
-<div class="tc" id="tc"><div class="g"><button class="tb" id="bl">◀</button><button class="tb" id="br">▶</button></div><div class="g r"><button class="tb sm" id="bh">🪝</button><button class="tb sm" id="ba">★</button><button class="tb sm" id="bd">DRIFT</button><button class="tb" id="bi">🎁</button></div></div>
+<div class="tc" id="tc"><div class="g"><button class="tb" id="bl">◀</button><button class="tb" id="br">▶</button></div><div class="g r"><button class="tb sm" id="bh">🪝</button><button class="tb sm" id="ba">★</button><button class="tb sm" id="bd">DRIFT</button><button class="tb sm" id="bb">⬇ RECUL</button><button class="tb" id="bi">🎁</button></div></div>
 <div class="ov tt" id="title">
   <div class="tcol l"><img class="logoimg" src="kart/logo.webp" alt="Kart Racers"><div class="by">ATELIER GAMING</div>
   <div class="ctr"><b>←</b> <b>→</b> tourner &nbsp; <b>↑</b> accélérer &nbsp; <b>↓</b> freiner<br><b>Espace</b> objet &nbsp; <b>Maj</b> drift (relâche = turbo)<br>Téléphone : boutons à l'écran, accélération auto<br>Cubes ? : turbo, huile, missile, 💣 bombe (↓ = derrière), ☄️ frappe aérienne · Q capacité · G grappin</div>
@@ -985,11 +985,11 @@ function collide(){
       if(a.isP||b.isP)shake=Math.max(shake,.12);}}
 }
 /* ---------- entrées ---------- */
-const K={},TB={l:0,r:0,d:0};
+const K={},TB={l:0,r:0,d:0,b:0};
 addEventListener('keydown',e=>{K[e.code]=1;if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Space'].includes(e.code))e.preventDefault();if((e.code==='Space'||e.code==='KeyE')&&state==='race'&&!P0.fin)useItem(P0);if(e.code==='KeyQ'&&state==='race'&&!P0.fin)useAbility(P0);if(e.code==='KeyG'&&state==='race'&&!P0.fin)useHook(P0);});
 addEventListener('keyup',e=>{K[e.code]=0;});
 const hold=(id,key)=>{const b=$(id);const on=e=>{e.preventDefault();TB[key]=1;b.classList.add('dn');};const off=e=>{e.preventDefault();TB[key]=0;b.classList.remove('dn');};b.addEventListener('pointerdown',on);['pointerup','pointercancel','pointerleave'].forEach(n=>b.addEventListener(n,off));};
-hold('bl','l');hold('br','r');hold('bd','d');
+hold('bl','l');hold('br','r');hold('bd','d');hold('bb','b');
 $('bi').addEventListener('pointerdown',e=>{e.preventDefault();if(state==='race'&&!P0.fin)useItem(P0);});
 $('ba').addEventListener('pointerdown',e=>{e.preventDefault();if(state==='race'&&!P0.fin)useAbility(P0);});
 $('bh').addEventListener('pointerdown',e=>{e.preventDefault();if(state==='race'&&!P0.fin)useHook(P0);});
@@ -1012,7 +1012,7 @@ function tiltInit(){
     }else{tilt.init=1;addEventListener('deviceorientation',tiltOn);}
   }catch(e){}
 }
-function playerInp(){const l=K.ArrowLeft||K.KeyA||TB.l,r=K.ArrowRight||K.KeyD||TB.r;return{steer:tilt.seen&&!l&&!r?tilt.v:(r?1:0)-(l?1:0),gas:(K.ArrowUp||K.KeyW||touch)?1:0,brake:(K.ArrowDown||K.KeyS)?1:0,drift:(K.ShiftLeft||K.ShiftRight||TB.d)?1:0};}
+function playerInp(){const l=K.ArrowLeft||K.KeyA||TB.l,r=K.ArrowRight||K.KeyD||TB.r;return{steer:tilt.seen&&!l&&!r?tilt.v:(r?1:0)-(l?1:0),gas:((K.ArrowUp||K.KeyW||touch)&&!TB.b)?1:0,brake:(K.ArrowDown||K.KeyS||TB.b)?1:0,drift:(K.ShiftLeft||K.ShiftRight||TB.d)?1:0};}
 /* ---------- visuel karts ---------- */
 function mkWings(){const g=new T3.Group(),wm=toon(0xffffff),gm=toon(0xffd24a);
   for(const s of[1,-1]){const p=new T3.Group();p.position.set(s*.55,1.7,-.35);for(let i=0;i<5;i++){const f=new T3.Mesh(new T3.BoxGeometry(1.0+i*.14,.16,.7),wm);f.position.set(s*(.55+i*.7),i*.2,-i*.1);f.rotation.z=s*.12*i;p.add(f);}g.add(p);}
