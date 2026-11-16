@@ -1173,11 +1173,12 @@ function buildPilot(){
   show();
 }
 function showTitle(){state='title';mode='solo';clearTimeout(wsTimer);clearInterval(connect.ping);if(ws){try{ws.close();}catch(e){}ws=null;wsOk=false;}net.room=0;roomMembers=[];$('title').hidden=false;$('lobby').hidden=true;$('hud').hidden=true;$('end').hidden=true;$('fx').classList.remove('on');resetPreview();}
-function openLobby(){if(MAP.id!=='prairie'){sv('ktm',0);try{sessionStorage.setItem('kto','1');}catch(e){}location.reload();return;}tiltInit();audio();state='lobby';$('lcard').dataset.sig='';net.err='';connect();$('title').hidden=true;$('lobby').hidden=false;renderLobby();}
+const MI=Math.max(0,MAPS.indexOf(MAP)),RB=MI*4;
+function openLobby(){tiltInit();audio();state='lobby';$('lcard').dataset.sig='';net.err='';connect();$('title').hidden=true;$('lobby').hidden=false;renderLobby();}
 function renderLobby(){
   const box=$('lobby'),card=$('lcard');if(!box||box.hidden)return;
   const ok=wsOk&&mySpec.n.trim().length>=2;
-  const sig=JSON.stringify([wsOk,net.err,net.room,ok,net.room?roomMembers.map(p=>[p.id,p.name,sanSpec(p.spec).col]):[1,2,3,4].map(n=>(roomsInfo[n]||[]).map(p=>p.name))]);
+  const sig=JSON.stringify([wsOk,net.err,net.room,ok,net.room?roomMembers.map(p=>[p.id,p.name,sanSpec(p.spec).col]):[1,2,3,4].map(n=>(roomsInfo[n+RB]||[]).map(p=>p.name))]);
   if(card.dataset.sig===sig)return;card.dataset.sig=sig;
   const back=el('button',{class:'btn alt',type:'button',onclick:()=>{showTitle();}},'⬅ Retour');
   const kids=[el('div',{class:'logo',style:'font-size:clamp(32px,8vw,54px)'},'SALON EN LIGNE')];
@@ -1185,11 +1186,13 @@ function renderLobby(){
   if(!wsOk){kids.push(el('div',{class:'ctr'},'Connexion au serveur…'));kids.push(el('div',null,back));}
   else if(!net.room){
     if(!ok)kids.push(el('div',{class:'err'},'Choisis un pseudo (2 lettres min) dans « Mon pilote ».'));
-    kids.push(el('div',{class:'rooms'},[1,2,3,4].map(n=>{const ps=roomsInfo[n]||[];return el('button',{class:'rm',type:'button',disabled:!ok,onclick:()=>joinRoom(n)},el('b',null,'Salon '+n),ps.length?ps.map(p=>p.name).join(', '):'Libre');})));
+    kids.push(el('div',{class:'ctr'},'🗺️ Choisis la carte (les salons sont séparés par carte) :'));
+    kids.push(el('div',{class:'rooms'},MAPS.map((m,i)=>el('button',{class:'rm'+(m===MAP?' on':''),type:'button',style:m===MAP?'outline:3px solid #ffe24a':'',onclick:()=>{if(m===MAP)return;sv('ktm',i);try{sessionStorage.setItem('kto','1');}catch(e){}location.reload();}},el('b',null,m.ic+' '+m.n),m.d))));
+    kids.push(el('div',{class:'rooms'},[1,2,3,4].map(n=>{const ps=roomsInfo[n+RB]||[];return el('button',{class:'rm',type:'button',disabled:!ok,onclick:()=>joinRoom(n+RB)},el('b',null,'Salon '+n),ps.length?ps.map(p=>p.name).join(', '):'Libre');})));
     kids.push(el('div',null,back));
   }else{
     const ps=roomMembers,host=ps[0]&&ps[0].id===uid;
-    kids.push(el('div',{class:'ctr'},'Salon '+net.room+' · les bots complètent jusqu\'à 6 karts'));
+    kids.push(el('div',{class:'ctr'},MAP.n+' · Salon '+(net.room-RB)+' · les bots complètent jusqu\'à 6 karts'));
     kids.push(el('div',{class:'res'},ps.map((p,i)=>el('div',{class:'pl'},el('u',{style:'background:'+hx(sanSpec(p.spec).col)}),el('span',null,p.name+(p.id===uid?' (toi)':'')),i===0?'👑':''))));
     kids.push(chatBuild());
     kids.push(host?el('div',null,el('button',{class:'btn',type:'button',onclick:hostStart},'▶ Lancer la course')):el('div',{class:'ctr'},'⏳ En attente de l\'hôte…'));

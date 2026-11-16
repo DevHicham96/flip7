@@ -1,5 +1,5 @@
 // Atelier Gaming — serveur temps réel de Kart Racers (Cloudflare Durable Object + WebSocket hibernation)
-const ROOMS=[1,2,3,4],MAXP=6;
+const ROOMS=[1,2,3,4,5,6,7,8,9,10,11,12],MAXP=6;
 export class KartHub{
   constructor(ctx,env){this.ctx=ctx;this.env=env;ctx.setWebSocketAutoResponse(new WebSocketRequestResponsePair('ping','pong'));}
   async fetch(req){
