@@ -613,21 +613,43 @@ const PILOTS=[
  {id:6,n:'DJ Shadow',t:'Le pilote mystérieux',col:0x2a1466,sec:0x7cf0ff,helm:0x15101f,shirt:0x15101f,skin:0xd9a77a,ears:'none',st:[3,4,3],win:'wave',ab:{k:'wave',a:1,cd:20,i:'🔊',n:'Onde de basse',d:'Fait déraper les karts proches (Q / ★)'}},
  {id:7,n:'Turbo',t:'Le chien pilote',col:0xff7a1f,sec:0xffffff,helm:0xc77b3a,shirt:0x2f8cff,skin:0xd89a5a,ears:'dog',earc:0x8a4b1f,st:[3,4,3],win:'wave',ab:{k:'sniff',a:1,cd:22,i:'🐕',n:'Flair',d:'Trouve un objet tout de suite (Q / ★)'}},
  {id:8,n:'Princesse Stella',t:'La pilote équilibrée',col:0xff7ac8,sec:0xffd23f,helm:0xffd23f,shirt:0xffa0e0,skin:0xf3c7a0,ears:'crown',st:[3,3,4],win:'spin',ab:{k:'shield',a:1,cd:20,i:'🛡️',n:'Bouclier étoilé',d:'Absorbe un coup pendant 5 s (Q / ★)'}}];
+const KDS=[
+ {zr:-1.55,hr:.95,hc:.6,hn:.62,zf:2.3,w:1.3,pod:[.2,1.5,0,.95],wing:[2.0,1.75,.55],rim:0},
+ {zr:-1.7,hr:.85,hc:.55,hn:.5,zf:2.55,w:1.15,pod:[.15,1.9,0,.9],wing:[1.7,1.55,.5],rim:1},
+ {zr:-1.6,hr:.8,hc:.5,hn:.45,zf:2.75,w:1.0,pod:[.14,1.6,0,.85],wing:[2.3,2.0,.6],rim:2},
+ {zr:-1.5,hr:1.05,hc:.62,hn:.7,zf:2.2,w:1.4,pod:[.25,1.3,0,1.0],wing:[1.6,1.65,.45],rim:3,fend:1},
+ {zr:-1.6,hr:1.2,hc:.68,hn:.9,zf:2.25,w:1.45,pod:[.28,1.5,0,1.12],wing:[1.9,1.9,.5],rim:4,fend:1},
+ {zr:-1.55,hr:.9,hc:.55,hn:.55,zf:2.0,w:1.2,pod:[.2,1.3,0,.9],wing:[2.2,1.95,.6],rim:5,fend:1},
+ {zr:-1.55,hr:.95,hc:.58,hn:.6,zf:2.4,w:1.3,pod:[.22,1.7,0,1.0],wing:[1.9,1.7,.45],rim:6,ang:1},
+ {zr:-1.5,hr:.8,hc:.55,hn:.7,zf:2.1,w:1.3,pod:[.15,1.4,0,.95],wing:[1.4,1.5,.35],rim:7,fend:1},
+ {zr:-1.55,hr:1.15,hc:.6,hn:.75,zf:2.3,w:1.3,pod:[.2,1.5,0,.95],wing:[1.7,1.8,.5],rim:8}];
 /* fusionne les meshes statiques d'un groupe (1 mesh par matériau) : moins d'appels de rendu */
 function makeKart(sp,tag){
   const g=new T3.Group(),body=new T3.Group();body.rotation.order='YXZ';g.add(body);
   const B=(w,h,d)=>new T3.BoxGeometry(w,h,d);
-  const gloss=(c,m,r)=>new T3.MeshStandardMaterial({color:c,metalness:m,roughness:r,envMapIntensity:1.3});
-  const earm=toon(sp.earc||sp.helm),main=gloss(sp.col,.55,.2),sec=gloss(sp.sec,.4,.3),dark=toon(0x2b2d42),chr=gloss(0xd7dbe8,1,.14),skin=toon(sp.skin||0xf3c7a0),shirt=toon(sp.shirt),helm=toon(sp.helm);
+  const gloss=(c,m,r)=>new T3.MeshStandardMaterial({color:c,metalness:m,roughness:r,envMapIntensity:1.0});
+  const earm=toon(sp.earc||sp.helm),main=gloss(sp.col,.28,.22),sec=gloss(sp.sec,.25,.3),dark=toon(0x2b2d42),chr=gloss(0xd7dbe8,1,.14),mainD=(()=>{const m=main.clone();m.side=T3.DoubleSide;return m;})(),skin=toon(sp.skin||0xf3c7a0),shirt=toon(sp.shirt),helm=toon(sp.helm);
   const add=(geo,mat,x,y,z,par)=>{const m=new T3.Mesh(geo,mat);m.position.set(x,y,z);(par||body).add(m);return m;};
-  outline(add(B(1.5,.42,2.7),main,0,.6,0),1.05);
-  const nose=add(new T3.CylinderGeometry(.42,.78,1.2,4),main,0,.58,1.75);nose.rotation.set(Math.PI/2,Math.PI/4,0);nose.scale.set(1,1,.55);outline(nose,1.08);
-  add(new T3.CapsuleGeometry(.14,1.5,4,8),chr,0,.42,2.45).rotation.z=Math.PI/2;
-  [-1,1].forEach(s=>{outline(add(B(.4,.46,1.6),sec,s*.95,.6,-.05),1.07);});
+  const KP=sp.pid|0,KD=KDS[KP]||KDS[0];
+  {const z=KD.zr,pts=[[z,.34],[z,KD.hr],[-1.0,KD.hr],[-.75,KD.hc+.06],[-.5,KD.hc],[.8,KD.hc],[1.15,KD.hn+.08],[KD.zf-.5,KD.hn],[KD.zf-.12,.5],[KD.zf,.4],[KD.zf-.2,.34]];
+   const sh=new T3.Shape();sh.moveTo(pts[0][0],pts[0][1]);for(let i=1;i<pts.length;i++)sh.lineTo(pts[i][0],pts[i][1]);sh.closePath();
+   const bv=KD.ang?.04:.13,gg=new T3.ExtrudeGeometry(sh,{depth:KD.w,bevelEnabled:true,bevelThickness:bv,bevelSize:bv,bevelSegments:KD.ang?1:3,curveSegments:4,steps:1});
+   gg.translate(0,0,-KD.w/2);gg.rotateY(-Math.PI/2);outline(add(gg,main,0,0,0),1.03);}
+  add(new T3.CapsuleGeometry(.14,1.5,4,8),chr,0,.42,KD.zf+.1).rotation.z=Math.PI/2;
+  [-1,1].forEach(s=>{const pd=add(new T3.CapsuleGeometry(KD.pod[0],KD.pod[2],4,8),sec,s*KD.pod[3],.6,-.05);pd.rotation.x=Math.PI/2;pd.scale.set(1,1,1.1);outline(pd,1.08);});
+  // pare-chocs et prises d'air
+  add(B(KD.w*.9,.12,.18),chr,0,.38,KD.zf-.05);
+  [-1,1].forEach(s=>{const vt=add(B(.3,.05,.5),toon(0x14141c),s*.3,KD.hc+.06,-.1);});
+  // suspensions : triangles chromés + ressorts
+  const rod=(ax,ay,az,bx,by,bz,rd)=>{const d=Math.hypot(bx-ax,by-ay,bz-az),m=add(new T3.CylinderGeometry(rd,rd,d,6),chr,(ax+bx)/2,(ay+by)/2,(az+bz)/2);m.quaternion.setFromUnitVectors(new T3.Vector3(0,1,0),new T3.Vector3(bx-ax,by-ay,bz-az).normalize());return m;};
+  [[.98,1.4,.45],[-.98,1.4,.45],[1.05,-1.2,.58],[-1.05,-1.2,.58]].forEach(([wx,wz,wr],i)=>{const q=Math.sign(wx),ix=q*.55;
+    rod(ix,.62,wz-.18,wx*.92,wr,wz,.045);rod(ix,.5,wz+.18,wx*.92,wr,wz,.045);
+    if(i<2){const sp3=add(new T3.CylinderGeometry(.09,.09,.45,8),sec,q*.78,.82,wz);sp3.rotation.z=q*-.35;}});
+  if(KD.fend)[[.98,1.4,.45,.4],[-.98,1.4,.45,.4],[1.05,-1.2,.58,.62],[-1.05,-1.2,.58,.62]].forEach(([wx,wz,wr,ww])=>{const f=add(new T3.CylinderGeometry(wr*1.2,wr*1.2,ww*1.18,14,1,true,0,Math.PI),mainD,wx,wr,wz);f.rotation.z=Math.PI/2;});
   add(B(1.1,.7,.8),dark,0,.95,-1.25);
   {const st=new T3.Mesh(new T3.PlaneGeometry(1.05,.36),new T3.MeshBasicMaterial({map:ADS.sticker}));st.position.set(0,1.0,-1.66);st.rotation.y=Math.PI;body.add(st);}
   [-1,1].forEach(s=>{const e=add(new T3.CylinderGeometry(.16,.2,.7,10),chr,s*.34,.8,-1.75);e.rotation.x=Math.PI/2;});
-  add(B(2,.1,.55),sec,0,1.75,-1.55);[-1,1].forEach(s=>add(B(.1,.8,.1),dark,s*.7,1.35,-1.4));
+  add(B(KD.wing[0],.1,KD.wing[2]),sec,0,KD.wing[1],-1.55);[-1,1].forEach(s=>{add(B(.1,KD.wing[1]-.75,.1),dark,s*.7,(KD.wing[1]+.75)/2,-1.4);add(B(.07,.42,KD.wing[2]+.15),sec,s*KD.wing[0]/2,KD.wing[1]+.12,-1.55);});
   add(B(1.0,.8,.5),dark,0,1.0,-.45);
   const swg=new T3.Group();swg.position.set(0,1.4,.5);swg.rotation.x=-.9;body.add(swg);const swr=new T3.Group();swg.add(swr);
    {const rim=new T3.Mesh(new T3.TorusGeometry(.24,.055,8,16),dark);swr.add(rim);[0,1,2].forEach(i=>{const sk=new T3.Mesh(new T3.BoxGeometry(.46,.05,.05),dark);sk.rotation.z=i*Math.PI/3;swr.add(sk);});const cp=new T3.Mesh(new T3.CylinderGeometry(.09,.09,.07,10),sec);cp.rotation.x=Math.PI/2;swr.add(cp);const mk=new T3.Mesh(new T3.BoxGeometry(.06,.06,.06),new T3.MeshBasicMaterial({color:0xffe24a}));mk.position.set(0,.24,0);swr.add(mk);}
@@ -647,12 +669,26 @@ function makeKart(sp,tag){
    if(N===5)[-1,1].forEach(s=>{const a=add(new T3.CylinderGeometry(.12,.16,1.1,8),S,s*.55,1.45,-1.85);a.rotation.x=-.25;});
    if(N===6)[-1,1].forEach(s=>{add(B(.45,.55,.5),toon(0x15101f),s*1.1,1.0,-1.0);const c=add(new T3.CircleGeometry(.17,12),GL(0x7cf0ff),s*1.35,1.0,-1.0);c.rotation.y=s*Math.PI/2;});
    if(N===7){const t=add(new T3.CapsuleGeometry(.08,.7,4,8),earm,0,1.35,-2.1);t.rotation.x=.9;}
-   if(N===8)add(new T3.TorusGeometry(.55,.07,8,18),GL(0xffd23f),0,1.55,-1.6);
+   if(N===8){add(new T3.TorusGeometry(.55,.07,8,18),GL(0xffd23f),0,1.55,-1.6);[-1,1].forEach(q=>{const f=add(new T3.ConeGeometry(.16,.9,5),GL(0xffd23f),q*.8,1.25,-1.5);f.rotation.set(-.5,0,q*.35);});}
+    if(N===4)[-1,1,0].forEach(q=>add(new T3.CylinderGeometry(.06,.06,.55,6),chr,q*.55,.6,KD.zf+.12));
+    if(N===5){const bl=add(new T3.CylinderGeometry(.28,.34,.5,10),chr,0,1.3,-1.1);add(new T3.ConeGeometry(.3,.4,10),dark,0,1.7,-1.1);}
+    if(N===7)[-.5,.5].forEach(q=>{const rc=add(new T3.TorusGeometry(.62,.045,6,14,Math.PI),chr,q,1.0,-.9);rc.rotation.set(0,0,0);});
+    if(N===6)add(B(1.4,.04,.04),GL(0x7cf0ff),0,KD.hn+.1,KD.zf-.4);
+    if(N===3)[-1,1].forEach(q=>add(new T3.SphereGeometry(.2,8,6),GL(0xff7a1f),q*.55,.8,-1.8));
   }
   const wheels=[];
-  const wheel=(x,z,r,w,front)=>{const st=new T3.Group();st.position.set(x,r,z);body.add(st);const sp2=new T3.Group();st.add(sp2);const t=new T3.Mesh(new T3.CylinderGeometry(r,r,w,18),toon(0x1d1d28));t.rotation.z=Math.PI/2;sp2.add(t);const hub=new T3.Mesh(new T3.CylinderGeometry(r*.55,r*.55,w+.04,12),toon(sp.sec));hub.rotation.z=Math.PI/2;sp2.add(hub);for(let i=0;i<3;i++){const sk=new T3.Mesh(new T3.BoxGeometry(w+.07,r*1.5,r*.12),chr);sk.rotation.x=i*Math.PI/3;sp2.add(sk);}
-    const cap=new T3.Mesh(new T3.CylinderGeometry(r*.2,r*.2,w+.1,8),new T3.MeshBasicMaterial({color:0xffe24a}));cap.rotation.z=Math.PI/2;sp2.add(cap);
-    const tr=new T3.Mesh(new T3.TorusGeometry(r*.97,w*.2,6,18),toon(0x2a2a38));tr.rotation.y=Math.PI/2;sp2.add(tr);
+  const wheel=(x,z,r,w,front)=>{const st=new T3.Group();st.position.set(x,r,z);body.add(st);const sp2=new T3.Group();st.add(sp2);
+    const sgn=Math.sign(x),ox=sgn*w*.5;
+    const prof=[[r*.5,-w/2],[r*.9,-w/2],[r*.99,-w*.33],[r,0],[r*.99,w*.33],[r*.9,w/2],[r*.5,w/2]].map(a=>new T3.Vector2(a[0],a[1]));
+    const t=new T3.Mesh(new T3.LatheGeometry(prof,20),toon(0x1d1d28,{side:T3.DoubleSide}));t.rotation.z=Math.PI/2;sp2.add(t);
+    const tb=toon(0x12121a);for(let i=0;i<14;i++){const a=i*Math.PI*2/14,bk=new T3.Mesh(new T3.BoxGeometry(w*.8,r*.1,r*.2),tb);bk.position.set(0,Math.cos(a)*r*1.0,Math.sin(a)*r*1.0);bk.rotation.x=a;sp2.add(bk);}
+    const RSP=[[5,.13],[10,.07],[6,.1],[8,.06],[5,.2],[6,.1],[10,.07],[5,.2],[8,.09]][KD.rim];
+    const dsk=new T3.Mesh(new T3.CylinderGeometry(r*.6,r*.6,.06,16),sec);dsk.rotation.z=Math.PI/2;dsk.position.set(ox*.92,0,0);sp2.add(dsk);
+    const lip=new T3.Mesh(new T3.TorusGeometry(r*.62,r*.05,6,18),chr);lip.rotation.y=Math.PI/2;lip.position.set(ox*.98,0,0);sp2.add(lip);
+    for(let i=0;i<RSP[0];i++){const a=i*Math.PI*2/RSP[0],sk=new T3.Mesh(new T3.BoxGeometry(.07,r*.55,r*RSP[1]*1.4),chr);sk.position.set(ox*1.02,Math.cos(a)*r*.32,Math.sin(a)*r*.32);sk.rotation.x=a;sp2.add(sk);}
+    for(let i=0;i<5;i++){const a=i*Math.PI*2/5,nt=new T3.Mesh(new T3.CylinderGeometry(r*.045,r*.045,.08,6),chr);nt.rotation.z=Math.PI/2;nt.position.set(ox*1.05,Math.cos(a)*r*.2,Math.sin(a)*r*.2);sp2.add(nt);}
+    const cap=new T3.Mesh(new T3.CylinderGeometry(r*.14,r*.14,.1,8),new T3.MeshBasicMaterial({color:KP===6?0x7cf0ff:0xffe24a}));cap.rotation.z=Math.PI/2;cap.position.set(ox*1.06,0,0);sp2.add(cap);
+    const bd=new T3.Mesh(new T3.CylinderGeometry(r*.48,r*.48,.03,14),toon(0x6a6e80));bd.rotation.z=Math.PI/2;bd.position.set(ox*.5,0,0);sp2.add(bd);
     wheels.push({st,sp:sp2,front,r,side:Math.sign(x),ph:Math.random()*6});};
   wheel(.98,1.4,.45,.4,true);wheel(-.98,1.4,.45,.4,true);wheel(1.05,-1.2,.58,.62,false);wheel(-1.05,-1.2,.58,.62,false);
   const dr=new T3.Group();dr.position.set(0,0,-.35);body.add(dr);
@@ -1202,7 +1238,7 @@ function setPause(v){
 let paused=false;
 function frame(t){
   const dt=Math.min(.05,(t-last)/1000);last=t;
-  try{if(P0){if(!(paused&&mode!=='online'))update(dt);gfxFollow();gfxAuto(dt);gfxRender();if(state==='race'||state==='over'||state==='count')hud();}}catch(e){console.error(e);}
+  try{if(P0){if(!(paused&&mode!=='online'))update(dt);if(window.__co)window.__co(camera,P0);gfxFollow();gfxAuto(dt);gfxRender();if(state==='race'||state==='over'||state==='count')hud();}}catch(e){console.error(e);}
   requestAnimationFrame(frame);
 }
 function setAbil(){const a=P0.pl.ab,ab=$('abil');ab.firstChild.textContent=a.i;ab.children[1].textContent=a.a?'Q':'passif';ab.classList.toggle('ps',!a.a);$('ba').style.display=a.a?'':'none';$('ba').textContent=a.i;}
