@@ -165,6 +165,27 @@ input.t{min-height:44px;border-radius:12px;border:2px solid #B88B45;background:#
 .gload.rm .lg-fan i:nth-child(even){color:#c8232c}
 @media (max-width:560px){.center .pc{--cw:clamp(48px,15vw,66px)}.hnd .pc{--cw:20px}}
 .pc.jk{padding:0;background:#fff}.pc.jk img{position:absolute;inset:0;width:100%;height:100%;display:block;object-fit:fill}.pc.jk .pjv{background:#111;color:#FFE066;box-shadow:0 0 0 2px #fff;top:auto;bottom:4%;right:6%}
+
+/* ===== Rami : dos, animations, carte piochée ===== */
+.pc.back{background:#0f2150 url("data:image/svg+xml,%3Csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20viewBox=%270%200%2060%2084%27%20preserveAspectRatio=%27none%27%3E%3Cdefs%3E%3Cpattern%20id=%27p%27%20width=%277%27%20height=%277%27%20patternUnits=%27userSpaceOnUse%27%20patternTransform=%27rotate%2845%29%27%3E%3Cpath%20d=%27M0%203.5H7M3.5%200V7%27%20stroke=%27%232f55b3%27%20stroke-width=%27.8%27/%3E%3C/pattern%3E%3CradialGradient%20id=%27g%27%20cx=%2750%25%27%20cy=%2740%25%27%20r=%2770%25%27%3E%3Cstop%20offset=%270%27%20stop-color=%27%23274a9e%27/%3E%3Cstop%20offset=%271%27%20stop-color=%27%230f2150%27/%3E%3C/radialGradient%3E%3C/defs%3E%3Crect%20width=%2760%27%20height=%2784%27%20fill=%27url%28%23g%29%27/%3E%3Crect%20x=%275%27%20y=%275%27%20width=%2750%27%20height=%2774%27%20rx=%273.5%27%20fill=%27url%28%23p%29%27%20stroke=%27%23f5c542%27%20stroke-width=%271.3%27/%3E%3Crect%20x=%278.5%27%20y=%278.5%27%20width=%2743%27%20height=%2767%27%20rx=%272%27%20fill=%27none%27%20stroke=%27%23f5c54299%27%20stroke-width=%27.6%27/%3E%3Ccircle%20cx=%2730%27%20cy=%2742%27%20r=%2714%27%20fill=%27%230f2150%27%20stroke=%27%23f5c542%27%20stroke-width=%271.6%27/%3E%3Cpolygon%20points=%2730%2C29%2033%2C39%2043%2C36%2036%2C43%2043%2C50%2033%2C47%2030%2C57%2027%2C47%2017%2C50%2024%2C43%2017%2C36%2027%2C39%27%20fill=%27%23f5c542%27/%3E%3Ccircle%20cx=%2730%27%20cy=%2742%27%20r=%274%27%20fill=%27%23c8232c%27%20stroke=%27%23fff3b0%27%20stroke-width=%27.8%27/%3E%3Cpath%20d=%27M13%2013l4%204M47%2013l-4%204M13%2071l4-4M47%2071l-4-4%27%20stroke=%27%23f5c542%27%20stroke-width=%271.2%27%20stroke-linecap=%27round%27/%3E%3C/svg%3E") center/100% 100% no-repeat;border:3px solid #fffdf6;box-shadow:0 2px 0 rgba(10,20,60,.6),0 5px 10px rgba(0,0,0,.3)}
+.deck .pc.back{box-shadow:2px 2px 0 #1b3a86,4px 4px 0 #13296a,6px 6px 0 #0c1b4a,0 10px 14px rgba(0,0,0,.35)}
+.deck.pile .pc{box-shadow:0 3px 0 rgba(60,35,10,.5),0 8px 12px rgba(0,0,0,.3)}
+.pc.mine{transition:transform .2s cubic-bezier(.2,.9,.3,1.25),box-shadow .2s}
+.pc.mine:active{transform:translateY(-2px) scale(.96)}
+.pc.mine.fresh{transform:translateY(-12px);outline:3px solid #FFE066;outline-offset:2px;box-shadow:0 0 0 2px #fff7c2,0 0 22px #FFE066,0 0 44px rgba(255,224,102,.55);animation:freshp 1.1s ease-in-out infinite;z-index:2}
+.pc.mine.fresh::after{content:'★ NEW';position:absolute;right:4%;top:4%;background:#E5484D;color:#fff;font:800 calc(var(--cw)*.19)/1 var(--f-body);padding:3px 5px;border-radius:99px;box-shadow:0 0 0 2px #fff}
+.pc.mine.fresh.sel{transform:translateY(-22px)}
+@keyframes freshp{50%{box-shadow:0 0 0 2px #fff7c2,0 0 30px #FFE066,0 0 60px rgba(255,224,102,.8)}}
+.pc.land{animation:landp .6s ease-out}
+@keyframes landp{0%{box-shadow:0 0 0 4px #FFE066,0 0 40px #FFE066;transform:scale(1.12)}100%{}}
+.pc.dealin{animation:dealin .5s cubic-bezier(.2,.9,.3,1.2) both}
+@keyframes dealin{from{opacity:0;transform:translateY(-140px) scale(.5) rotate(-14deg)}}
+.flyc{position:fixed;z-index:200;pointer-events:none;perspective:700px;transform-origin:center}
+.flyc .fi{position:relative;width:100%;height:100%;transform-style:preserve-3d}
+.flyc .ff,.flyc .fb{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.flyc .fb{transform:rotateY(180deg)}
+.flyc .pc{box-shadow:0 14px 26px rgba(0,0,0,.45)}
+@media (prefers-reduced-motion:reduce){.pc.mine.fresh,.pc.land,.pc.dealin{animation:none}}
 </style></head><body><div class="gload rm" id="gload" role="status" aria-live="polite"><div class="lg-cloud c1"></div><div class="lg-cloud c2"></div><div class="lg-fan" aria-hidden="true"><i>♠</i><i>♥</i><i>🃏</i><i>♦</i><i>♣</i></div><div class="lg-sign">Loading<b>.</b><b>.</b><b>.</b></div><div class="lg-bar" aria-hidden="true"></div></div><div id="app"></div>
 <script>
 /*ENGINE_START*/
@@ -521,6 +542,80 @@ const Snd=(()=>{
   };
   return{play(n){if(!on||!init())return;try{S[n](ctx.currentTime+.01);}catch(e){}},get on(){return on;},set(v){on=!!v;lsSet('rdsfx',v?'1':'0');if(v)init();}};
 })();
+
+/* ---- animations de pioche / défausse ---- */
+let pv=null,nwc=new Set(),evt=null,evtTurn=false;
+const RM=()=>matchMedia('(prefers-reduced-motion:reduce)').matches;
+function fxSnap(s){return{g:s.gid+':'+s.round,deck:s.deck.length,disc:s.disc.length,top:s.disc[s.disc.length-1]||'',hn:Object.fromEntries(s.players.map(p=>[p.id,s.hands[p.id].length])),mine:(s.hands[uid]||[]).slice(),turn:rdTurnId(s),step:s.step};}
+function fxPre(){
+  evt=null;evtTurn=false;
+  if(!S||S.phase!=='play'||!mode){pv=null;nwc.clear();return;}
+  const n=fxSnap(S),o=pv;pv=n;
+  if(!o||o.g!==n.g){nwc.clear();evt={k:'deal'};return;}
+  if(!isSpec()){
+    const was=new Set(o.mine);n.mine.forEach(c=>{if(!was.has(c))nwc.add(c);});
+    [...nwc].forEach(c=>{if(!n.mine.includes(c))nwc.delete(c);});
+    if(n.turn===uid&&n.step==='draw'&&o.turn!==uid){nwc.clear();evtTurn=true;}
+  }
+  const by=f=>{for(const id in n.hn){if(f(n.hn[id]-(o.hn[id]||0)))return id;}return null;};
+  const dDeck=o.deck-n.deck,dDisc=n.disc-o.disc;
+  if(dDeck===1){const id=by(d=>d>0);if(id)evt=({k:'draw',from:'deck',by:id,card:id===uid?n.mine.find(c=>!new Set(o.mine).has(c)):''});}
+  else if(dDisc===-1){const id=by(d=>d>0);if(id)evt={k:'draw',from:'disc',by:id,card:o.top};}
+  else if(dDisc===1){const id=by(d=>d<0);if(id)evt={k:'disc',by:id,card:n.top};}
+  if(!evt&&o.turn!==n.turn&&o.turn!==uid){
+    if(dDeck===1&&dDisc===1)evt={k:'combo',by:o.turn,from:'deck',dcard:'',card:n.top};
+    else if(dDeck===0&&dDisc===0&&o.top&&o.top!==n.top)evt={k:'combo',by:o.turn,from:'disc',dcard:o.top,card:n.top};
+  }
+}
+function fxRect(sel,root){const e=(root||document).querySelector(sel);return e?e.getBoundingClientRect():null;}
+function fxFly(card,faceUp,flip,src,dst,hideEl,after){
+  if(!src||!dst||RM()){if(hideEl)hideEl.style.visibility='';return;}
+  const W=src.width,H=src.height;
+  const fe=h('div',{class:'ff',style:'--cw:'+W+'px'},card?cardEl(card):backEl());
+  const be=h('div',{class:'fb',style:'--cw:'+W+'px'},backEl());
+  const fi=h('div',{class:'fi'},fe,be);
+  const el=h('div',{class:'flyc',style:'left:'+src.left+'px;top:'+src.top+'px;width:'+W+'px;height:'+H+'px'},fi);
+  document.body.append(el);
+  const dx=dst.left+dst.width/2-(src.left+W/2),dy=dst.top+dst.height/2-(src.top+H/2),sc=dst.width/W;
+  const dur=720;
+  el.animate([{transform:'translate(0,0) scale(1)'},{transform:'translate('+dx*.5+'px,'+(dy*.5-46)+'px) scale('+(1.1+(sc-1)*.4)+')',offset:.5},{transform:'translate('+dx+'px,'+dy+'px) scale('+sc+')'}],{duration:dur,easing:'cubic-bezier(.4,.1,.2,1)',fill:'forwards'});
+  const rot=faceUp?(flip?['rotateY(180deg)','rotateY(0deg)']:['rotateY(0deg)','rotateY(0deg)']):['rotateY(180deg)','rotateY(180deg)'];
+  fi.animate([{transform:rot[0]},{transform:rot[1]}],{duration:dur*.85,easing:'ease-in-out',fill:'forwards'});
+  setTimeout(()=>{el.remove();if(hideEl){hideEl.style.visibility='';hideEl.classList.add('land');setTimeout(()=>hideEl.classList.remove('land'),650);}if(after)after();},dur+30);
+}
+function fxRun(){
+  if(evtTurn){evtTurn=false;banner('🎯 À toi de jouer !','#2FB67C');}
+  if(!evt||!S||S.phase!=='play'){evt=null;return;}
+  const e=evt;evt=null;
+  const deckR=fxRect('.deck:not(.pile) .pc'),pileEl=document.querySelector('.deck.pile .pc'),pileR=pileEl?pileEl.getBoundingClientRect():null;
+  const seatR=id=>{const t=document.querySelector('[data-seat="'+id+'"] .plate');return t?t.getBoundingClientRect():null;};
+  const handR=fxRect('.mehand');
+  const centerRect=(r,w,hh)=>r?{left:r.left+r.width/2-w/2,top:r.top+r.height/2-hh/2,width:w,height:hh}:null;
+  if(e.k==='combo'&&pileEl&&pileR&&deckR){
+    const sr=seatR(e.by);if(!sr)return;
+    const small=centerRect(sr,pileR.width*.55,pileR.height*.55);
+    pileEl.style.visibility='hidden';
+    fxFly(e.dcard,e.from==='disc',false,e.from==='deck'?deckR:pileR,small,null,()=>{
+      fxFly(e.card,true,true,small,pileR,pileEl);
+    });
+    return;
+  }
+  if(e.k==='draw'){
+    const base=e.from==='deck'?deckR:pileR;
+    if(e.by===uid){
+      const dst=e.card?document.querySelector('.mehand .pc[data-c="'+e.card+'"]'):null;
+      if(dst){dst.style.visibility='hidden';fxFly(e.card,true,e.from==='deck',base,dst.getBoundingClientRect(),dst);}
+    }else{
+      const sr=seatR(e.by);if(!sr||!base)return;
+      fxFly(e.from==='disc'?e.card:'',e.from==='disc',false,base,centerRect(sr,base.width*.55,base.height*.55));
+    }
+  }else if(e.k==='disc'&&pileEl&&pileR){
+    pileEl.style.visibility='hidden';
+    const sr=e.by===uid?centerRect(handR,pileR.width,pileR.height):centerRect(seatR(e.by),pileR.width*.55,pileR.height*.55);
+    if(!sr){pileEl.style.visibility='';return;}
+    fxFly(e.card,true,e.by!==uid,sr,pileR,pileEl);
+  }
+}
 /* ---- état ---- */
 const NAME_K='f7name';
 function atPres(g){
@@ -696,10 +791,12 @@ function render(){
   const app=$('app');
   prune();
   let view;
+  if(!mode||(mode==='online'&&!S)){pv=null;evt=null;nwc.clear();}else fxPre();
   if(!mode)view=renderPicker();else if(mode==='online'&&!S)view=renderLobby();else view=renderGame();
   const keep=document.activeElement&&document.activeElement.id==='nm-in'?{v:document.activeElement.value,s:document.activeElement.selectionStart}:null;
   app.replaceChildren(h('div',{class:'wrap'},view));
   if(keep){const i=$('nm-in');if(i){i.focus();i.value=keep.v;try{i.setSelectionRange(keep.s,keep.s);}catch(e){}}}
+  try{fxRun();}catch(e){}
   if(S&&mode==='solo')botStep();
   handOverlays();
 }
@@ -780,8 +877,10 @@ function renderGame(){
   const melds=h('div',{class:'melds'},s.melds.length?s.melds.map(meldEl):h('div',{class:'empty'},'Aucune combinaison posée'));
   const st=stagedSet();
   const mine=spec?[]:sortHand(s.hands[uid].filter(c=>!st.has(c)));
-  const hand=h('div',{class:'mehand'},mine.map(c=>{
-    const e=cardEl(c,{cls:'mine'+(sel.has(c)?' sel':'')+(c===s.took?' took':'')});
+  const dealing=evt&&evt.k==='deal';
+  const hand=h('div',{class:'mehand'},mine.map((c,ci)=>{
+    const e=cardEl(c,{cls:'mine'+(sel.has(c)?' sel':'')+(c===s.took?' took':'')+(nwc.has(c)?' fresh':'')+(dealing?' dealin':'')});
+    if(dealing)e.style.animationDelay=(ci*70)+'ms';
     if(mt&&s.step==='play'){e.tabIndex=0;e.setAttribute('role','button');e.addEventListener('click',()=>toggleSel(c));
       e.addEventListener('keydown',ev=>{if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();toggleSel(c);}});}
     return e;
