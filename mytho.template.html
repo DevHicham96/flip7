@@ -722,10 +722,12 @@ function renderTop(sub,right){
   const chip=myName?h('span',{class:'pchip',title:'Ton profil'},avEl({id:mySlug||uid,name:myName,av:myAv},'sm'),h('b',null,myName),mySlug==='hitch'?h('span',{class:'shd',title:'Admin'},'🛡'):null):null;
   const jeux=h('a',{class:'btn sm',href:'index.html#jeux'},'🎮 Jeux');
   jeux.addEventListener('click',ev=>{ev.preventDefault();showLoader('f7');setTimeout(()=>{location.href="index.html#jeux";},200);});
+  const acc=h('a',{class:'btn sm',href:'index.html#home'},'🏠 Accueil');
+  acc.addEventListener('click',ev=>{ev.preventDefault();showLoader('f7');setTimeout(()=>{location.href='index.html#home';},250);});
   return h('div',{class:'top'},h('div',{class:'brand'},'MYTHO',h('small',null,sub||'Bluff & accusations')),
     right||null,chip,
     h('button',{class:'btn sm',type:'button',onclick:()=>{Snd.set(!Snd.on);render();}},Snd.on?'🔊 Sons':'🔇 Sons'),
-    jeux);
+    acc,jeux);
 }
 function render(){
   const app=$('app');

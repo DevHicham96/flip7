@@ -431,7 +431,9 @@ body.fs details{display:none}
 .chat-list li{font-size:14px;overflow-wrap:anywhere;background:var(--card);border-radius:10px;padding:5px 9px}
 .chat-list li.me{border:1px solid var(--accent)}
 .chat-list b{font-weight:700}
-.chat-form{display:flex;gap:6px;position:relative}
+.chat-form{display:flex;flex-wrap:wrap;gap:6px;position:relative}
+.chat-form input{order:-1;flex:1 1 100%!important;min-height:44px!important;font-size:16px!important}
+.chat-form .btn[type=submit]{margin-left:auto}
 .emo-b{padding:0 10px;font-size:18px;flex:none}
 .emopop{position:absolute;left:0;bottom:calc(100% + 6px);z-index:30;background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:0 10px 30px rgba(0,0,0,.35);padding:8px;display:grid;grid-template-columns:repeat(8,1fr);gap:2px;width:min(300px,86vw);max-height:230px;overflow:auto}
 .emopop[hidden]{display:none}
@@ -1111,6 +1113,7 @@ li:hover>.rxrow .rxadd,li:focus-within>.rxrow .rxadd,.rxadd.on{opacity:1}
       <button class="btn sm" id="snd-btn" type="button" aria-pressed="true" title="Effets sonores">🔊 Sons</button>
       <button class="btn sm" id="mus-btn" type="button" aria-pressed="false" title="Musique de fond">🎵 Musique</button>
       <span class="tbwrap"><button class="btn sm" id="tb-btn" type="button" aria-haspopup="true" aria-expanded="false" title="Thème de la table">🎨 Table</button><div class="tbpop" id="tb-pop" hidden></div></span>
+      <button class="btn sm" id="home-btn" type="button" title="Retour à l'accueil">🏠 Accueil</button>
       <button class="btn sm" id="games-btn" type="button" title="Changer de jeu">🎮 Jeux</button>
     <button class="btn sm" id="room-btn" type="button" hidden title="Changer de salle">↩ Salles</button>
       <button class="btn sm" id="rk-btn" type="button" title="Classement et historique" hidden>🏆 Classement</button>
@@ -3496,6 +3499,7 @@ function tryHub(){
   if(!hubWanted||$('hub')||$('home'))return;
   if(!$('profov').hidden)return;
   if(location.hash==='#jeux'){showHub();return;}
+  if(location.hash==='#home'){ssSet('f7game','');try{history.replaceState(null,'',location.pathname);}catch(e){}if(db&&!devOn){showHome();return;}showHub();return;}
   if(ssGet('f7game')==='flip7'){hubWanted=false;return;}
   if(db&&!devOn)showHome();else showHub();
 }
@@ -4275,6 +4279,7 @@ async function boot(){
   $('rk-btn').addEventListener('click',()=>openRk('cur'));
   $('room-btn').addEventListener('click',leaveRoom);
   $('games-btn').addEventListener('click',()=>{hubWanted=true;ssSet('f7game','');showHub();});
+  $('home-btn').addEventListener('click',()=>{hubWanted=true;ssSet('f7game','');if(db&&!devOn)showHome();else showHub();});
   $('rk').addEventListener('click',ev=>{if(ev.target===$('rk'))closeRk();});
   initTables();
   initSnd();

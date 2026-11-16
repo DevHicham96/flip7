@@ -1,5 +1,5 @@
 <style>
-#atm{position:fixed;left:max(10px,env(safe-area-inset-left));bottom:max(10px,env(safe-area-inset-bottom));z-index:90;display:flex;align-items:center;gap:8px;font:600 13px system-ui,sans-serif}
+#atm{position:fixed;left:max(10px,env(safe-area-inset-left));bottom:max(10px,env(safe-area-inset-bottom));z-index:145;display:flex;align-items:center;gap:8px;font:600 13px system-ui,sans-serif}
 #atm .b{width:38px;height:38px;border-radius:50%;border:2px solid rgba(255,255,255,.55);background:rgba(20,10,60,.78);color:#fff;font-size:19px;cursor:pointer;display:grid;place-items:center;backdrop-filter:blur(6px);box-shadow:0 4px 14px rgba(0,0,0,.35);padding:0}
 #atm .b.off{opacity:.65}
 #atm .p{display:none;align-items:center;gap:8px;background:rgba(20,10,60,.85);color:#fff;border:2px solid rgba(255,255,255,.35);border-radius:99px;padding:6px 14px 6px 10px;backdrop-filter:blur(6px)}
