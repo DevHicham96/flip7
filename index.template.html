@@ -3583,7 +3583,7 @@ async function dirReg(){
   }catch(e){}
 }
 function agoTxt(t){if(!t)return 'Hors ligne';const m=Math.max(1,Math.round((Date.now()-t)/60000));return 'Vu '+(m<60?'il y a '+m+' min':m<1440?'il y a '+Math.round(m/60)+' h':'il y a '+Math.round(m/1440)+' j');}
-const GAMEN={flip7:'Flip 7',ronda:'Ronda',rami:'Rami',mytho:'Mytho',quiz:'Quiz',loupgarou:'Loup-Garou',skyjo:'Skyjo',kart:'Kart Rush'};
+const GAMEN={flip7:'Flip 7',ronda:'Ronda',rami:'Rami',mytho:'Mytho',quiz:'Quiz',loupgarou:'Loup-Garou',skyjo:'Skyjo',kart:'Kart Racers'};
 function homeRefresh(){
   const o=$('home');if(!o)return;
   const rows=Object.keys(FR.dir||{}).map(sl=>{const i=FR.info[sl]||{},d=FR.dir[sl]||{};return{sl,name:i.name||d.n||sl,av:i.av||d.a||'',st:presState(sl),t:(FR.pres[sl]||{}).t||0,g:String((FR.pres[sl]||{}).g||'')};});
@@ -3695,7 +3695,7 @@ function showHub(){
     {id:'mytho',cls:'my',t:'bluff',title:'Mytho',sub:'Pose, mens, et repère les menteurs.',pl:'3–8 joueurs',dur:'~15 min',art:'<span>🤥</span><span>🫵</span>'},
     {id:'loup',cls:'lg',t:'bluff',title:'Loup-Garou',sub:'Rôles secrets, nuit et jour : qui est le loup ?',pl:'4–16 joueurs',dur:'~30 min',art:'<span>🐺</span><span>🌙</span>'},
     {id:'skyjo',cls:'sk',t:'cartes',title:'Skyjo',sub:'Le moins de points gagne : retourne, échange, évite les gros chiffres.',pl:'2–8 joueurs',dur:'~20 min',art:'<span>-2</span><span>12</span>'},
-    {id:'kart',cls:'kt',t:'course',title:'Kart Rush',sub:'Course de karts 3D : drift, objets, en ligne.',pl:'1–6 joueurs',dur:'~5 min',art:'<span>🏎️</span><span>🏁</span>'},
+    {id:'kart',cls:'kt',t:'course',title:'Kart Racers',sub:'Course de karts 3D : drift, objets, en ligne.',pl:'1–6 joueurs',dur:'~5 min',art:'<span>🏎️</span><span>🏁</span>'},
     {id:'quiz',cls:'qz',t:'quiz',title:'Quiz',sub:'8 thèmes, des questions pour tous, scanne le QR.',pl:'1–30 joueurs',dur:'~10 min',art:'<span>❓</span><span>🏆</span>'}
   ];
   let flt=ssGet('hubf')||'all';if(!TYPES.some(t=>t[0]===flt))flt='all';

@@ -1,4 +1,4 @@
-// Atelier Gaming — serveur temps réel de Kart Rush (Cloudflare Durable Object + WebSocket hibernation)
+// Atelier Gaming — serveur temps réel de Kart Racers (Cloudflare Durable Object + WebSocket hibernation)
 const ROOMS=[1,2,3,4],MAXP=6;
 export class KartHub{
   constructor(ctx,env){this.ctx=ctx;this.env=env;ctx.setWebSocketAutoResponse(new WebSocketRequestResponsePair('ping','pong'));}
