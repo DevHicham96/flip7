@@ -104,7 +104,15 @@ html,body{margin:0;height:100%;overflow:hidden;background:#12082e;font-family:'N
 .chip{pointer-events:auto;touch-action:manipulation;font:700 16px 'Nunito',sans-serif;border-radius:10px;border:2px solid rgba(255,255,255,.35);background:rgba(255,255,255,.1);color:#fff;padding:3px 8px;cursor:pointer}.chip.on{border-color:#ffe24a;background:rgba(255,226,74,.3)}
 .btns{display:grid;gap:10px;width:min(340px,92vw)}
 .btns .btn{font-size:22px;padding:10px 18px}
-.rooms{display:grid;gap:8px}
+.rooms{display:grid;gap:8px}.rooms.g2{grid-template-columns:1fr 1fr}.rooms.g3{grid-template-columns:repeat(3,1fr)}
+#lcard{max-height:94dvh;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+#lobby{align-items:flex-start!important}#lobby>.card{margin:auto}
+.pg.sm{grid-template-columns:repeat(6,1fr);gap:4px}
+#ldov{position:fixed;inset:0;z-index:60;display:grid;place-items:center;background:linear-gradient(160deg,#120a3a,#2a1466 60%,#4a1fb8);color:#fff;font-family:'Lilita One',Nunito,sans-serif;text-align:center}
+#ldov[hidden]{display:none}#ldov .in{display:grid;gap:14px;justify-items:center;width:min(440px,88vw)}
+#ldov img{width:min(300px,70vw);border-radius:18px;box-shadow:0 8px 30px rgba(0,0,0,.5)}
+#ldov .bar{width:100%;height:16px;border-radius:99px;background:rgba(0,0,0,.45);border:2px solid #ffe24a;overflow:hidden}#ldov .bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#ff7a1f,#ffe24a);transition:width .25s}
+#ldov p{margin:0;font-size:20px;letter-spacing:.04em}#ldov small{font:700 13px Nunito,sans-serif;opacity:.8}
 .chat{display:grid;gap:6px;text-align:left;width:100%}.cls{height:130px;overflow-y:auto;background:rgba(0,0,0,.3);border-radius:12px;padding:8px 10px;font:600 14px Nunito,sans-serif;color:#fff;display:flex;flex-direction:column;gap:3px}
 .cl b{color:#ffe24a}.cl.me b{color:#7cf0ff}.cl{word-break:break-word}.clr{display:flex;gap:6px}.clr input{flex:1;min-width:0;font:700 15px Nunito,sans-serif;border-radius:12px;border:2px solid rgba(255,255,255,.4);background:rgba(255,255,255,.12);color:#fff;padding:8px 10px}.clr .btn{padding:8px 14px;font-size:15px}
 .rm{pointer-events:auto;touch-action:manipulation;text-align:left;font:700 15px 'Nunito',sans-serif;color:#fff;background:rgba(255,255,255,.12);border:2px solid rgba(255,255,255,.3);border-radius:14px;padding:10px 14px;cursor:pointer;display:grid;gap:2px}
@@ -142,6 +150,8 @@ html,body{margin:0;height:100%;overflow:hidden;background:#12082e;font-family:'N
 </div>
 <div id="spd"></div>
 <div class="ov" id="pause" hidden><div class="card"><div class="logo" style="font-size:clamp(34px,9vw,60px)">PAUSE</div><div class="ctr" id="pzn"></div><div class="pzm"><button class="btn" id="pzr">▶ Reprendre</button><button class="btn alt" id="pza">🔁 Recommencer</button><button class="btn alt" id="pzi" hidden>↔ Inverser l'inclinaison</button><button class="btn alt" id="pzg">Qualité</button><button class="btn alt" id="pzq">🏠 Quitter la course</button></div></div></div>
+<div id="ldov" hidden><div class="in"><img src="kart/logo.webp" alt="Kart Racers"><p id="ldt">Chargement…</p><div class="bar"><i id="ldb"></i></div><small id="ldm"></small></div></div>
+<script>try{if(sessionStorage.getItem("ktj"))document.getElementById("ldov").hidden=false;}catch(e){}</script>
 <div class="ov" id="lobby" hidden><div class="card" id="lcard"></div></div>
 <div class="ov" id="end" hidden><div class="card"><div class="logo" style="font-size:clamp(34px,9vw,60px)">ARRIVÉE !</div><div class="res" id="res"></div><div><button class="btn" id="again">🔁 Rejouer</button> <button class="btn alt" id="hubb">🎮 Jeux</button></div></div></div>
 <script src="three.min.js"></script>
@@ -1129,7 +1139,7 @@ function connect(){
   if(!/^https?:$/.test(location.protocol)){net.err='Mode en ligne indisponible hors du site.';renderLobby();return;}
   try{ws=new WebSocket((location.protocol==='https:'?'wss://':'ws://')+location.host+'/kart-ws');}catch(e){net.err='Connexion impossible.';renderLobby();return;}
   const me=ws;
-  me.onopen=()=>{wsOk=true;net.err='';send({k:'hi',uid,name:mySpec.n,spec:mySpec});if(net.room)send({k:'join',room:net.room,t:net.t});renderLobby();};
+  me.onopen=()=>{wsOk=true;net.err='';send({k:'hi',uid,name:mySpec.n,spec:mySpec});if(!net.room&&net.pend&&net.pend.room)net.room=net.pend.room;if(net.room)send({k:'join',room:net.room,t:net.t,mi:net.mi|0});if(net.pend&&net.pend.rid){send({k:'ready',rid:net.pend.rid});}renderLobby();};
   me.onmessage=e=>{let m;try{m=JSON.parse(e.data);}catch(_){return;}onMsg(m);};
   me.onclose=()=>{if(ws===me){ws=null;wsOk=false;}renderLobby();clearTimeout(wsTimer);wsTimer=setTimeout(()=>{if(wsWanted())connect();},2000);};
   me.onerror=()=>{if(!wsOk)net.err='Serveur indisponible.';};
@@ -1152,8 +1162,10 @@ function chatShow(){chatBuild();chat.list.replaceChildren(...chat.log.map(l=>cha
 function onMsg(m){
   if(m.k==='chat'){chat.log.push({n:String(m.n||'?').slice(0,16),t:String(m.t||'').slice(0,120),me:m.u===uid});if(chat.log.length>40)chat.log.shift();if(chat.list&&net.room){chat.list.appendChild(chatLine(chat.log[chat.log.length-1].n,chat.log[chat.log.length-1].t,m.u===uid));while(chat.list.children.length>40)chat.list.firstChild.remove();chat.list.scrollTop=1e9;}return;}
   if(m.k==='rooms'){roomsInfo=m.r||{};renderLobby();}
-  else if(m.k==='room'){if(m.n===net.room||!net.room){net.room=m.n;roomMembers=(m.members||[]).map(p=>({id:p.id,name:String(p.name||'?').slice(0,16),t:p.t,spec:p.spec}));const mine=roomMembers.find(p=>p.id===uid);if(mine)net.t=mine.t;renderLobby();}}
-  else if(m.k==='ctl'){const c=m.c;if(c&&Array.isArray(c.players)&&c.players.some(p=>p.id===uid)&&(state==='lobby'||state==='over'))startNet(c);}
+  else if(m.k==='room'){if(m.n===net.room||!net.room){net.room=m.n;net.map=m.map|0;roomMembers=(m.members||[]).map(p=>({id:p.id,name:String(p.name||'?').slice(0,16),t:p.t,spec:p.spec}));const mine=roomMembers.find(p=>p.id===uid);if(mine)net.t=mine.t;renderLobby();}}
+  else if(m.k==='prep'){onPrep(m);}
+  else if(m.k==='abort'){net.pend=null;loadHide();toast('Départ annulé (un joueur est parti)');}
+  else if(m.k==='ctl'){const c=m.c;if(c&&Array.isArray(c.players)&&c.players.some(p=>p.id===uid)&&(state==='lobby'||state==='over')){net.pend=null;startNet(c);setTimeout(loadHide,500);}}
   else if(m.k==='st'){applyNet(kartById(m.u),m.d);}
   else if(m.k==='bots'){if(!isHost()&&m.d)(m.d.b||[]).forEach(b=>applyNet(kartById(b.u),Object.assign({rid:m.d.rid},b)));}
 }
@@ -1163,9 +1175,18 @@ function isHost(){
   const hs=net.humans.filter(id=>id===uid||roomMembers.some(p=>p.id===id));
   return(hs[0]||uid)===uid;
 }
-function joinRoom(n){if(!wsOk||mySpec.n.trim().length<2)return;chat.log=[];net.room=n;roomMembers=[];send({k:'join',room:n});renderLobby();}
+function joinRoom(n){if(!wsOk||mySpec.n.trim().length<2)return;chat.log=[];net.room=n;net.mi=MI;net.map=MI;roomMembers=[];send({k:'join',room:n,mi:MI});renderLobby();}
 function leaveRoom(keepUi){send({k:'leave'});chat.log=[];net.room=0;net.rid=0;roomMembers=[];if(!keepUi)renderLobby();}
 function hostStart(){if(roomMembers.length<2){toast('Il faut au moins 2 joueurs');return;}send({k:'start'});}
+function onPrep(m){
+  net.pend={rid:m.rid,map:m.map|0};const mp=MAPS[m.map|0]||MAPS[0];
+  loadShow('Chargement de la carte…',mp.ic+' '+mp.n);
+  clearTimeout(onPrep.to);onPrep.to=setTimeout(()=>{if(net.pend&&net.pend.rid===m.rid){net.pend=null;loadHide();toast('Chargement trop long, réessaie');}},40000);
+  if((m.map|0)!==MI){try{sessionStorage.setItem('ktj',JSON.stringify({room:net.room,rid:m.rid,map:m.map|0}));sessionStorage.setItem('kto','1');}catch(e){}sv('ktm',m.map|0);setTimeout(()=>location.reload(),350);}
+  else send({k:'ready',rid:m.rid});
+}
+function setRoomMap(i){net.map=i;send({k:'map',i});renderLobby();}
+function resendSpec(){send({k:'hi',uid,name:mySpec.n,spec:mySpec});}
 const hsh=s=>{let x=0;for(let i=0;i<s.length;i++)x=(x*31+s.charCodeAt(i))|0;return x;};
 function startNet(c){
   audio();if(AC&&AC.state==='suspended')AC.resume();
@@ -1226,29 +1247,36 @@ function buildPilot(){
   show();
 }
 function showTitle(){state='title';mode='solo';clearTimeout(wsTimer);clearInterval(connect.ping);if(ws){try{ws.close();}catch(e){}ws=null;wsOk=false;}net.room=0;roomMembers=[];$('title').hidden=false;$('lobby').hidden=true;$('hud').hidden=true;$('end').hidden=true;$('fx').classList.remove('on');resetPreview();}
-const MI=Math.max(0,MAPS.indexOf(MAP)),RB=MI*4;
+const MI=Math.max(0,MAPS.indexOf(MAP)),RB=0;
+let ldTm=null,ldPct=0;
+function loadShow(t,m){$('ldov').hidden=false;$('ldt').textContent=t||'Chargement…';$('ldm').textContent=m||'';ldPct=8;$('ldb').style.width='8%';clearInterval(ldTm);ldTm=setInterval(()=>{ldPct=Math.min(92,ldPct+(92-ldPct)*.06);$('ldb').style.width=ldPct+'%';},250);}
+function loadHide(){clearInterval(ldTm);$('ldb').style.width='100%';setTimeout(()=>{$('ldov').hidden=true;},350);try{sessionStorage.removeItem('ktj');}catch(e){}}
+function loadSet(t,m){$('ldt').textContent=t;if(m!=null)$('ldm').textContent=m;}
 function openLobby(){tiltInit();audio();state='lobby';$('lcard').dataset.sig='';net.err='';connect();$('title').hidden=true;$('lobby').hidden=false;renderLobby();}
 function renderLobby(){
   const box=$('lobby'),card=$('lcard');if(!box||box.hidden)return;
-  const ok=wsOk&&mySpec.n.trim().length>=2;
-  const sig=JSON.stringify([wsOk,net.err,net.room,ok,net.room?roomMembers.map(p=>[p.id,p.name,sanSpec(p.spec).col]):[1,2,3,4].map(n=>(roomsInfo[n+RB]||[]).map(p=>p.name))]);
+  const ok=wsOk&&mySpec.n.trim().length>=2,NR=[1,2,3,4,5,6,7,8];
+  const sig=JSON.stringify([wsOk,net.err,net.room,ok,mySpec.pid,net.map,net.room?roomMembers.map(p=>[p.id,p.name,sanSpec(p.spec).pid]):NR.map(n=>(roomsInfo[n]||[]).map(p=>p.name))]);
   if(card.dataset.sig===sig)return;card.dataset.sig=sig;
   const back=el('button',{class:'btn alt',type:'button',onclick:()=>{showTitle();}},'⬅ Retour');
-  const kids=[el('div',{class:'logo',style:'font-size:clamp(32px,8vw,54px)'},'SALON EN LIGNE')];
+  const kids=[el('div',{class:'logo',style:'font-size:clamp(30px,7vw,48px)'},'SALON EN LIGNE')];
   if(net.err)kids.push(el('div',{class:'err'},net.err));
   if(!wsOk){kids.push(el('div',{class:'ctr'},'Connexion au serveur…'));kids.push(el('div',null,back));}
   else if(!net.room){
     if(!ok)kids.push(el('div',{class:'err'},'Choisis un pseudo (2 lettres min) dans « Mon pilote ».'));
-    kids.push(el('div',{class:'ctr'},'🗺️ Choisis la carte (les salons sont séparés par carte) :'));
-    kids.push(el('div',{class:'rooms'},MAPS.map((m,i)=>el('button',{class:'rm'+(m===MAP?' on':''),type:'button',style:m===MAP?'outline:3px solid #ffe24a':'',onclick:()=>{if(m===MAP)return;sv('ktm',i);try{sessionStorage.setItem('kto','1');}catch(e){}location.reload();}},el('b',null,m.ic+' '+m.n),m.d))));
-    kids.push(el('div',{class:'rooms'},[1,2,3,4].map(n=>{const ps=roomsInfo[n+RB]||[];return el('button',{class:'rm',type:'button',disabled:!ok,onclick:()=>joinRoom(n+RB)},el('b',null,'Salon '+n),ps.length?ps.map(p=>p.name).join(', '):'Libre');})));
+    kids.push(el('div',{class:'ctr'},'Choisis un salon (retrouve tes amis dans le même) :'));
+    kids.push(el('div',{class:'rooms g2'},NR.map(n=>{const ps=roomsInfo[n]||[];return el('button',{class:'rm',type:'button',disabled:!ok||ps.length>=6,onclick:()=>joinRoom(n)},el('b',null,'Salon '+n+(ps.length?' · '+ps.length+'/6':'')),ps.length?ps.map(p=>p.name).join(', '):'Libre');})));
     kids.push(el('div',null,back));
   }else{
-    const ps=roomMembers,host=ps[0]&&ps[0].id===uid;
-    kids.push(el('div',{class:'ctr'},MAP.n+' · Salon '+(net.room-RB)+' · joueurs uniquement, pas de bots (2 min.)'));
-    kids.push(el('div',{class:'res'},ps.map((p,i)=>el('div',{class:'pl'},el('u',{style:'background:'+hx(sanSpec(p.spec).col)}),el('span',null,p.name+(p.id===uid?' (toi)':'')),i===0?'👑':''))));
+    const ps=roomMembers,host=ps[0]&&ps[0].id===uid,cm=MAPS[net.map|0]||MAPS[0];
+    kids.push(el('div',{class:'ctr'},'Salon '+net.room+' · '+ps.length+' joueur'+(ps.length>1?'s':'')+' · pas de bots'));
+    kids.push(el('div',{class:'res'},ps.map((p,i)=>{const sp=sanSpec(p.spec);return el('div',{class:'pl'},el('u',{style:'background:'+hx(sp.col)}),el('span',null,p.name+(p.id===uid?' (toi)':'')+' · '+PILOTS[sp.pid].n),i===0?'👑':'');})));
+    kids.push(el('div',{class:'ctr'},'1. Choisis ton pilote :'));
+    kids.push(el('div',{class:'pg sm'},PILOTS.map(p=>el('button',{class:'pp'+(p.id===mySpec.pid?' on':''),type:'button',title:p.n,onclick:()=>{mySpec=sanSpec({pid:p.id},mySpec.n);mySpec.pid=p.id;saveSpec();resendSpec();refreshPreview();card.dataset.sig='';renderLobby();}},el('img',{src:'kart/p'+p.id+'.webp',alt:p.n})))));
+    kids.push(el('div',{class:'ctr'},host?'2. Choisis la carte :':'2. Carte choisie par l\'hôte 👑 :'));
+    kids.push(el('div',{class:'rooms g3'},MAPS.map((m,i)=>el('button',{class:'rm'+(i===(net.map|0)?' on':''),type:'button',style:i===(net.map|0)?'outline:3px solid #ffe24a':'',disabled:!host,onclick:()=>setRoomMap(i)},el('b',null,m.ic+' '+m.n),m.d))));
     kids.push(chatBuild());
-    kids.push(host?el('div',null,el('button',{class:'btn',type:'button',onclick:hostStart},'▶ Lancer la course')):el('div',{class:'ctr'},'⏳ En attente de l\'hôte…'));
+    kids.push(host?el('div',null,el('button',{class:'btn',type:'button',onclick:hostStart},'▶ Lancer · '+cm.n)):el('div',{class:'ctr'},'⏳ En attente de l\'hôte…'));
     kids.push(el('div',null,el('button',{class:'btn alt',type:'button',onclick:()=>leaveRoom()},'🚪 Quitter le salon')));
   }
   card.replaceChildren(...kids);if(net.room)chatShow();
@@ -1343,6 +1371,7 @@ $('pzq').addEventListener('click',()=>{setPause(false);if(mode==='online'){leave
 addEventListener('keydown',e=>{if(e.code==='Escape'||e.code==='KeyP'){if(paused)setPause(false);else setPause(true);}});
 document.addEventListener('visibilitychange',()=>{if(document.hidden&&mode!=='online')setPause(true);});
 $('onl').addEventListener('click',openLobby);
+try{const j=sessionStorage.getItem('ktj');if(j){const o=JSON.parse(j);net.room=o.room|0;net.mi=o.map|0;net.map=o.map|0;net.pend={rid:o.rid,map:o.map|0,room:o.room|0};const mp=MAPS[o.map|0]||MAPS[0];loadShow('Chargement de la carte…',mp.ic+' '+mp.n);setTimeout(()=>{if(net.pend){net.pend=null;loadHide();toast('Chargement trop long, réessaie');}},40000);}}catch(e){}
 try{if(sessionStorage.getItem('kto')){sessionStorage.removeItem('kto');setTimeout(()=>$('onl').click(),600);}}catch(e){}
 $('home').addEventListener('click',()=>{location.href='index.html#home';});
 $('again').addEventListener('click',()=>{if(mode==='online')backToRoom();else start();});
