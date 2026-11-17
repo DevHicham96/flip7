@@ -66,6 +66,7 @@ body{background:radial-gradient(120% 90% at 50% 0%,#2c1a78 0,#150c3e 55%,#080519
 .ball8::after{content:'';position:absolute;left:16px;top:10px;width:26px;height:14px;border-radius:50%;background:radial-gradient(#fffc,#fff0);transform:rotate(-30deg)}
 input.nm{width:100%;font:900 18px 'Nunito';border-radius:14px;border:3px solid #6a5cd0;background:#1b1450;color:#fff;padding:10px 14px;text-align:center;user-select:text;-webkit-user-select:text;touch-action:auto}
 .vr{display:flex;gap:8px;width:100%}.vr button{flex:1;touch-action:manipulation;pointer-events:auto;font:400 18px 'Lilita One';color:#cfd6ff;background:#1b1450;border:3px solid #4a3fa0;border-radius:14px;padding:9px 6px;cursor:pointer}.vr button.on{color:#3a1a00;background:linear-gradient(#ffe97a,#ffb81f);border-color:#fff}
+.cn{display:inline-block;background:#0007;border:2px solid #ffd23f;border-radius:99px;padding:1px 10px;color:#ffe24a;font:400 16px 'Lilita One'}.op.lock{opacity:.9}.op small{font:900 12px Nunito;color:#ffe24a}.op.buy{border-color:#4ade80}.op.no{opacity:.5}
 .opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(86px,1fr));gap:8px;width:100%}.op{pointer-events:auto;touch-action:manipulation;border:3px solid #4a3fa0;background:#1b1450;border-radius:14px;padding:7px 4px;color:#fff;font:400 14px 'Lilita One';cursor:pointer;display:grid;gap:5px;justify-items:center}.op.on{border-color:#ffd23f;box-shadow:0 0 14px #ffd23f88}.op i{display:block;width:100%;height:34px;border-radius:8px}
 .rooms{display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%}
 .rm{pointer-events:auto;touch-action:manipulation;text-align:left;font:700 15px 'Nunito';color:#fff;background:#2a2068;border:3px solid #4a3fa0;border-radius:14px;padding:10px 14px;cursor:pointer;display:grid;gap:2px}
@@ -98,14 +99,14 @@ input.nm{width:100%;font:900 18px 'Nunito';border-radius:14px;border:3px solid #
   <input class="nm" id="nm" maxlength="14" placeholder="Ton pseudo" aria-label="Pseudo">
   <div class="vr" id="vr"><button data-v="us">🎱 Américain</button><button data-v="ma">🇲🇦 Marocain</button></div>
   <div class="ctr" id="vrd"></div>
-  <button class="btn sm alt" id="bCust" style="align-self:center">🎨 Table & queue</button>
+  <button class="btn sm alt" id="bCust" style="align-self:center">🎨 Boutique · Table & queue <span class="cn" id="cn0"></span></button>
   <button class="btn" id="bOn">🌐 Jouer en ligne (1 vs 1)</button>
   <button class="btn alt" id="bBot">🤖 Jouer contre le robot</button>
   <a class="ctr" href="index.html" style="color:#cfd6ff">⬅ Retour aux jeux</a>
 </div></div>
 <div class="ov" id="cust" hidden><div class="card"><div class="big" style="font-size:clamp(28px,6vw,42px)">PERSONNALISER</div>
   <div class="ctr" style="font-weight:900">Table</div><div class="opts" id="optM"></div>
-  <div class="ctr" style="font-weight:900">Queue</div><div class="opts" id="optC"></div>
+  <div class="ctr" style="font-weight:900">Queue · <span id="cn" class="cn"></span></div><div class="opts" id="optC"></div>
   <canvas id="cprev" width="640" height="150" style="width:100%;max-width:520px;border-radius:14px;background:#0003"></canvas>
   <button class="btn" id="bCok">✔ OK</button></div></div>
 <div class="ov" id="lobby" hidden><div class="card" id="lcard"></div></div>
@@ -218,8 +219,17 @@ const SKINS=[
  {n:'Ébène',sh:['#7a6a5a','#40342a','#1e1812'],bt:['#1a1a1a','#050505','#000'],tip:'#ffd23f',ring:'#ffd23f'},
  {n:'Flamme',sh:['#ffd58a','#ff9a3c','#c4451a'],bt:['#8a1212','#3d0606','#1a0303'],tip:'#ff4d3c',ring:'#ffcf5a'},
  {n:'Glace',sh:['#ffffff','#bfe9ff','#6bb8e0'],bt:['#1d4a7a','#0f2d52','#08182f'],tip:'#7ff0ff',ring:'#c9f6ff'},
- {n:'Or royal',sh:['#fff3b0','#e8c24a','#a8801c'],bt:['#5a2080','#2a0f45','#14072a'],tip:'#ffffff',ring:'#ffe97a'}];
-let MAPI=Math.min(THEMES.length-1,Math.max(0,+ld('plmap',0)||0)),CUEI=Math.min(SKINS.length-1,Math.max(0,+ld('plcue',0)||0));
+ {n:'Or royal',sh:['#fff3b0','#e8c24a','#a8801c'],bt:['#5a2080','#2a0f45','#14072a'],tip:'#ffffff',ring:'#ffe97a'},
+ {n:'Émeraude',sh:['#c9ffd9','#3ecf7a','#17744a'],bt:['#0b3a24','#06241a','#03130d'],tip:'#b9ffcf',ring:'#8dffb6'},
+ {n:'Rose',sh:['#ffe0f0','#ff8fc4','#c93a86'],bt:['#5a1840','#340d26','#1a0613'],tip:'#fff',ring:'#ffc2e0'},
+ {n:'Galaxie',sh:['#c9b6ff','#6b4de0','#2a1a8a'],bt:['#0a0624','#05031a','#020110'],tip:'#4af0ff',ring:'#c9b6ff'}];
+const PRICE=[0,150,300,450,800,250,200,1200];
+const ADM=()=>ld('f7prof','')==='hitch';
+let coins=Math.max(0,+ld('plcoins',200)||0),streak=+ld('plstreak',0)||0,own;try{own=JSON.parse(ld('plown','[0]'))}catch(e){own=[0];}
+const owns=i=>ADM()||PRICE[i]===0||own.includes(i);
+const saveCoins=()=>{sv('plcoins',coins);sv('plstreak',streak);sv('plown',JSON.stringify(own));};
+const coinTxt=()=>ADM()?'∞':String(coins);
+let MAPI=Math.min(THEMES.length-1,Math.max(0,+ld('plmap',0)||0)),CUEI=Math.min(SKINS.length-1,Math.max(0,+ld('plcue',0)||0));if(!owns(CUEI))CUEI=0;
 /* ---------- état ---------- */
 const myAv0=()=>{const a=ld('f7av','');return validAv(a)?a:'';};
 let balls=[],sim={on:false},G=null,mode='title',myIdx=0,vs='bot',names=['Moi','Robot'],ws=null,wsOk=false,roomsInfo={},roomMembers=[],room=0,uid=ld('f7id','');
@@ -790,9 +800,15 @@ function toTitle(){
   $('title').hidden=false;$('lobby').hidden=true;$('end').hidden=true;$('app').hidden=true;
 }
 function showEnd(w,extra){
-  const won=w===myIdx;$('endt').textContent=won?'🏆 Victoire !':'Défaite…';$('endm').textContent=extra||(won?'Bien joué '+names[myIdx]+' !':names[w]+' remporte la partie');
+  const won=w===myIdx;let gain=0,bonus='';
+  if(!G||!G.paid){if(G)G.paid=1;
+    if(!extra){if(won){gain=vs==='online'?100:30;streak++;if(streak===3){gain+=50;bonus=' · série de 3 : +50';}else if(streak===5){gain+=100;bonus=' · série de 5 : +100';streak=0;}}else streak=0;
+      if(!ADM())coins+=gain;saveCoins();}}
+  $('endt').textContent=won?'🏆 Victoire !':'Défaite…';$('endm').textContent=(extra||(won?'Bien joué '+names[myIdx]+' !':names[w]+' remporte la partie'))+(gain?'  ·  +'+gain+' 🪙'+bonus:'');
+  $('cn0').textContent='🪙 '+coinTxt();
   $('end').hidden=false;
 }
+
 $('bBot').onclick=()=>{audio();sv('f7name',myName());vs='bot';myIdx=0;names=[myName(),'Robot'];mode='game';$('title').hidden=true;$('app').hidden=false;layout();newGame(0);toast('Tu casses !',1800);};
 $('bOn').onclick=()=>{audio();sv('f7name',myName());if(myName().length<2){$('nm').focus();return;}mode='lobby';$('title').hidden=true;$('lobby').hidden=false;neterr='';connect();renderLobby();};
 $('bQuit').onclick=toTitle;
@@ -815,9 +831,12 @@ function cprev(){const c=$('cprev'),x=c.getContext('2d'),W=c.width,H=c.height,T=
 function buildOpts(){
   const m=$('optM'),c=$('optC');m.replaceChildren();c.replaceChildren();
   THEMES.forEach((t,i)=>{const b=document.createElement('button');b.className='op'+(i===MAPI?' on':'');const sw=document.createElement('i');sw.style.background='linear-gradient('+t.wood[0]+' 0 22%,'+t.felt[1]+' 22% 78%,'+t.wood[2]+' 78%)';b.append(sw,t.n);b.onclick=()=>{MAPI=i;sv('plmap',i);buildOpts();};m.append(b);});
-  SKINS.forEach((k,i)=>{const b=document.createElement('button');b.className='op'+(i===CUEI?' on':'');const sw=document.createElement('i');sw.style.background='linear-gradient(90deg,'+k.bt[1]+' 0 38%,'+k.ring+' 38% 41%,'+k.sh[1]+' 41% 94%,#fff 94% 98%,'+k.tip+' 98%)';sw.style.height='14px';sw.style.margin='10px 0';b.append(sw,k.n);b.onclick=()=>{CUEI=i;sv('plcue',i);buildOpts();};c.append(b);});
+  SKINS.forEach((k,i)=>{const o=owns(i),b=document.createElement('button');b.className='op'+(i===CUEI?' on':'')+(o?'':(coins>=PRICE[i]?' buy':' no'));const sw=document.createElement('i');sw.style.background='linear-gradient(90deg,'+k.bt[1]+' 0 38%,'+k.ring+' 38% 41%,'+k.sh[1]+' 41% 94%,#fff 94% 98%,'+k.tip+' 98%)';sw.style.height='14px';sw.style.margin='10px 0';const sm=document.createElement('small');sm.textContent=o?(i===CUEI?'Équipée':'Possédée'):'🪙 '+PRICE[i];b.append(sw,k.n,sm);
+    b.onclick=()=>{if(o){CUEI=i;sv('plcue',i);buildOpts();return;}if(coins<PRICE[i]){sm.textContent='Pas assez de 🪙';setTimeout(buildOpts,1100);return;}if(b.dataset.c!=='1'){b.dataset.c='1';sm.textContent='Acheter ? 🪙 '+PRICE[i];setTimeout(()=>{if(b.isConnected){b.dataset.c='';sm.textContent='🪙 '+PRICE[i];}},3000);return;}coins-=PRICE[i];own.push(i);CUEI=i;sv('plcue',i);saveCoins();buildOpts();};c.append(b);});
+  $('cn').textContent='🪙 '+coinTxt();$('cn0').textContent='🪙 '+coinTxt();
   cprev();
 }
+$('cn0').textContent='🪙 '+coinTxt();
 $('bCust').onclick=()=>{$('title').hidden=true;$('cust').hidden=false;buildOpts();};
 $('bCok').onclick=()=>{$('cust').hidden=true;$('title').hidden=false;};
 $('nm').value=ld('f7name','');
