@@ -410,17 +410,18 @@ function newGame(first){avs[myIdx]=myAv0();if(vs==='bot')avs[1-myIdx]=null;
   const c=cueBall();aim.a=0;updHud();requestAnimationFrame(()=>{if(mode!=='title')layout();});
 }
 const mine=()=>G&&G.turn===myIdx;
-function eligible(p){ // billes visables par le joueur p
+function eligible(p,extra){ // billes visables par le joueur p (extra = billes empochées pendant ce tir, comptées comme encore présentes)
+  extra=extra||[];
   const g=G.groups[p];
   const left=id=>balls.some(b=>b.id===id&&b.alive);
-  if(!g)return balls.filter(b=>b.alive&&b.id>0&&b.id!==8).map(b=>b.id);
-  const mineIds=balls.filter(b=>b.alive&&b.id>0&&b.id!==8&&grpOf(b.id)===g).map(b=>b.id);
+  if(!g)return balls.filter(b=>(b.alive||extra.includes(b.id))&&b.id>0&&b.id!==8).map(b=>b.id);
+  const mineIds=balls.filter(b=>(b.alive||extra.includes(b.id))&&b.id>0&&b.id!==8&&grpOf(b.id)===g).map(b=>b.id);
   return mineIds.length?mineIds:[8];
 }
 function evalShot(){
   const p=G.turn,S=sim,pot=S.pocketed.slice(),scratch=pot.includes(0),first=S.first;
   const potObj=pot.filter(i=>i>0);
-  const el=eligible(p);let foul=false,why='';
+  const el=eligible(p,pot);let foul=false,why='';
   if(scratch){foul=true;why='Blanche empochée';}
   else if(first<0){foul=true;why='Aucune bille touchée';}
   else if(!el.includes(first)&&!(G.groups[p]==null&&first!==8)){foul=true;why='Mauvaise bille touchée';}
