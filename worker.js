@@ -63,6 +63,7 @@ export class KartHub{
 export default{
   async fetch(req,env){
     const u=new URL(req.url);
+    if(u.pathname==='/pool-ws')return env.KART.get(env.KART.idFromName('pool')).fetch(req);
     if(u.pathname==='/kart-ws')return env.KART.get(env.KART.idFromName('hub')).fetch(req);
     return env.ASSETS.fetch(req);
   }
