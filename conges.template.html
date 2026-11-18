@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Congés malins · Atelier Gaming</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%234da3ff'/%3E%3Ctext x='32' y='44' font-size='34' text-anchor='middle'%3E🏖️%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Nunito:wght@600;700;900&display=swap">
+<style>
+:root{--bg:#0b0826;--card:#17114a;--card2:#1f1860;--line:#3a2f8f;--fg:#f1f3ff;--mut:#a9b0e6;--gold:#ffd23f;--green:#34d399;--red:#ff5a6a;--blue:#4da3ff;--gray:#4b4f73;color-scheme:dark}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:radial-gradient(120% 80% at 50% 0%,#2c1a78 0,#150c3e 50%,#080519 100%) fixed;color:var(--fg);font:600 15px/1.45 'Nunito',system-ui,sans-serif;padding-block:18px 60px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));min-height:100vh}
+.w{max-width:1120px;margin:0 auto;display:grid;gap:18px}
+.lil{font-family:'Lilita One','Nunito',sans-serif;font-weight:400}
+header{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+h1{margin:0;font:400 clamp(28px,6vw,44px)/1 'Lilita One',sans-serif;color:var(--gold);text-shadow:0 4px 0 #2a0f5c}
+.sub{color:var(--mut);margin:4px 0 0;max-width:62ch}
+a.back{color:var(--mut);text-decoration:none;font-weight:900;border:2px solid var(--line);border-radius:12px;padding:6px 12px;background:#ffffff0d}
+.card{background:linear-gradient(var(--card2),var(--card));border:2px solid var(--line);border-radius:18px;padding:16px;box-shadow:0 8px 24px #0006,inset 0 1px 0 #ffffff14;min-width:0}
+.card h2{margin:0 0 10px;font:400 20px 'Lilita One',sans-serif;color:var(--gold)}
+.form{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;align-items:end}
+label{display:grid;gap:5px;font-weight:900;font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--mut)}
+input,select{font:800 16px 'Nunito';color:var(--fg);background:#0e0a33;border:2px solid var(--line);border-radius:12px;padding:10px 12px;width:100%;min-width:0}
+input:focus,select:focus{outline:none;border-color:var(--gold)}
+.fr{display:flex;align-items:center;gap:8px;background:#0e0a33;border:2px solid var(--line);border-radius:12px;padding:10px 12px;font-size:16px;text-transform:none;letter-spacing:0;color:var(--fg)}
+.days{display:flex;gap:6px;flex-wrap:wrap}
+.days label{display:flex;align-items:center;gap:0;text-transform:none;letter-spacing:0;font-size:14px;color:var(--fg)}
+.days input{display:none}.days span{display:grid;place-items:center;width:42px;height:38px;border-radius:10px;border:2px solid var(--line);background:#0e0a33;cursor:pointer;color:var(--mut)}
+.days input:checked+span{background:linear-gradient(#ffe97a,#ffb81f);color:#3a1a00;border-color:#fff}
+.opt{grid-column:1/-1;display:flex;align-items:center;gap:8px;text-transform:none;letter-spacing:0;font-size:14px;color:var(--mut);cursor:pointer}.opt input{width:18px;height:18px;padding:0;flex:none}
+.main{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:18px;align-items:start}
+@media(max-width:900px){.main{grid-template-columns:1fr}.main>.cal{order:-1}}
+.list{display:grid;gap:12px}
+.prop{position:relative;text-align:left;cursor:pointer;background:linear-gradient(var(--card2),var(--card));border:2px solid var(--line);border-radius:16px;padding:14px 14px 12px;color:var(--fg);font:inherit;display:grid;gap:8px;transition:.15s;width:100%}
+.prop:hover{border-color:#6a5cd0;transform:translateY(-1px)}
+.prop.on{border-color:var(--blue);box-shadow:0 0 0 3px #4da3ff44,0 8px 22px #0007}
+.rk{position:absolute;top:-10px;left:12px;background:var(--gold);color:#3a1a00;font:400 14px 'Lilita One';border-radius:99px;padding:1px 10px}
+.ph{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.ph b{font:400 18px 'Lilita One';color:#fff}
+.chip{display:inline-block;border-radius:99px;padding:2px 10px;font-weight:900;font-size:12px;background:#ffffff14;color:var(--mut);white-space:nowrap}
+.chip.g{background:#34d39922;color:var(--green)}.chip.b{background:#4da3ff22;color:var(--blue)}.chip.y{background:#ffd23f22;color:var(--gold)}
+.big{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}.big strong{font:400 34px/1 'Lilita One';color:var(--green)}.big span{color:var(--mut)}
+.det{color:var(--mut);font-size:13.5px}.det b{color:var(--fg)}
+.row{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.cmp{font:900 12px Nunito;color:var(--mut);display:flex;gap:6px;align-items:center;cursor:pointer;justify-self:start}.cmp input{width:auto}
+.cal h3{margin:0;font:400 22px 'Lilita One';color:#fff;text-align:center;flex:1}
+.calh{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.grid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}
+.dw{text-align:center;color:var(--mut);font:900 11px Nunito;text-transform:uppercase;padding:2px 0}
+.d{aspect-ratio:1/.86;min-height:42px;border-radius:10px;display:grid;place-items:center;font:900 15px Nunito;position:relative;border:2px solid transparent;user-select:none;-webkit-user-select:none}
+.d.work{background:var(--gray);color:#dfe2ff;cursor:pointer}.d.work:hover{border-color:#8f9bff}
+.d.we{background:#34d39933;color:var(--green);border-color:#34d39955}
+.d.ferie{background:#ff5a6a33;color:var(--red);border-color:#ff5a6a77}
+.d.leave{background:var(--blue);color:#06204a;border-color:#fff;box-shadow:0 0 14px #4da3ff88;cursor:pointer}
+.d.out{opacity:.38}
+.d.run::after{content:'';position:absolute;inset:-3px;border-radius:12px;border:2px dashed #ffd23faa;pointer-events:none}
+.d small{position:absolute;bottom:2px;left:0;right:0;text-align:center;font:700 8px/1 Nunito;opacity:.9;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:0 2px}
+.leg{display:flex;gap:12px;flex-wrap:wrap;margin-top:10px;color:var(--mut);font-size:13px}.leg i{display:inline-block;width:12px;height:12px;border-radius:4px;margin-right:5px;vertical-align:-1px}
+.btn{font:400 16px 'Lilita One';color:#3a1a00;border:0;border-radius:14px;padding:9px 16px;background:linear-gradient(#ffe97a,#ffb81f);box-shadow:0 4px 0 #b36b00;cursor:pointer}
+.btn:active{transform:translateY(2px);box-shadow:0 2px 0 #b36b00}
+.btn.alt{background:linear-gradient(#cfd6ff,#8f9bff);color:#1a1450;box-shadow:0 4px 0 #4a55c7}
+.btn.sm{font-size:14px;padding:6px 12px}
+.nav{border:2px solid var(--line);background:#0e0a33;color:var(--fg);border-radius:10px;width:38px;height:36px;font:900 18px Nunito;cursor:pointer}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:8px;margin:12px 0}
+.st{background:#0e0a33;border:2px solid var(--line);border-radius:12px;padding:8px 10px;text-align:center}.st b{display:block;font:400 24px 'Lilita One';color:var(--gold)}.st span{font-size:11px;color:var(--mut);font-weight:900;text-transform:uppercase;letter-spacing:.04em}
+.runs{display:grid;gap:6px;margin:6px 0 10px}.runs div{background:#0e0a33;border-radius:10px;padding:8px 10px;border-left:4px solid var(--blue)}
+table{width:100%;border-collapse:collapse;font-size:14px}th,td{padding:8px 6px;text-align:center;border-bottom:1px solid var(--line)}th{color:var(--gold);font:400 15px 'Lilita One'}td:first-child,th:first-child{text-align:left;color:var(--mut)}.best{color:var(--green);font-weight:900}
+.empty{color:var(--mut);padding:18px;text-align:center}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(30px);background:#000d;border:2px solid var(--gold);color:var(--gold);border-radius:99px;padding:8px 18px;font:400 17px 'Lilita One';opacity:0;transition:.25s;pointer-events:none;z-index:50;text-align:center;max-width:92vw}
+.toast.on{opacity:1;transform:translateX(-50%)}
+.ver{text-align:center;font:600 10px ui-monospace,monospace;color:#fff6}
+</style></head><body>
+<div class="w">
+<header>
+  <div><h1>🏖️ Congés malins</h1><p class="sub">Dis-moi combien de jours tu as et en quel mois tu veux partir : je te propose les meilleures dates à poser pour décrocher un maximum de jours de repos. Jours fériés de France 🇫🇷 inclus.</p></div>
+  <a class="back" href="index.html">⬅ Retour aux jeux</a>
+</header>
+
+<section class="card">
+  <div class="form">
+    <label>Solde de congés (jours)<input id="bal" type="number" min="0" max="60" step="1" inputmode="numeric"></label>
+    <label>Mois<select id="mon"></select></label>
+    <label>Année<input id="yr" type="number" min="2024" max="2100" step="1" inputmode="numeric"></label>
+    <label>Pays<div class="fr">🇫🇷 France</div></label>
+    <label>Préférence<select id="pref"><option value="auto">Équilibré (max de jours gagnés)</option><option value="long">Longues périodes de repos</option><option value="short">Petits week-ends prolongés</option></select></label>
+  </div>
+  <div class="form" style="margin-top:14px;align-items:center">
+    <label style="grid-column:1/-1">Jours travaillés habituellement<div class="days" id="wd"></div></label>
+    <label class="opt"><input type="checkbox" id="als"> Alsace-Moselle (Vendredi saint, 26 déc.)</label>
+  </div>
+</section>
+
+<div class="main">
+  <section>
+    <div class="row" style="justify-content:space-between;margin-bottom:10px"><h2 class="lil" style="margin:0;color:var(--gold);font-size:22px">Propositions</h2><button class="btn alt sm" id="reset">↺ Réinitialiser</button></div>
+    <div class="list" id="list"></div>
+  </section>
+  <section class="card cal" id="calsec">
+    <div class="calh"><button class="nav" id="prev" aria-label="Mois précédent">‹</button><h3 id="ct"></h3><button class="nav" id="next" aria-label="Mois suivant">›</button></div>
+    <div class="grid" id="cal"></div>
+    <div class="leg"><span><i style="background:var(--green)"></i>Week-ends / non travaillés</span><span><i style="background:var(--red)"></i>Jours fériés</span><span><i style="background:var(--blue)"></i>Congés recommandés</span><span><i style="background:var(--gray)"></i>Jours travaillés</span></div>
+    <p class="det" style="margin:8px 0 0">💡 Clique sur un jour travaillé pour l'ajouter ou le retirer de ton scénario.</p>
+    <div id="detail"></div>
+  </section>
+</div>
+
+<section class="card" id="cmpbox" hidden><h2>⚖️ Comparaison des scénarios</h2><div style="overflow-x:auto" id="cmp"></div></section>
+<div class="ver" id="ver"></div>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+'use strict';
+const $=id=>document.getElementById(id);
+const MONTHS=['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
+const DOWS=['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'],DOWL=['lundi','mardi','mercredi','jeudi','vendredi','samedi','dimanche'];
+const ld=(k,d)=>{try{const v=localStorage.getItem(k);return v==null?d:v;}catch(e){return d;}};
+const sv=(k,v)=>{try{localStorage.setItem(k,v);}catch(e){}};
+$('ver').textContent=window.AT_VER||'';
+/* ---------- dates ---------- */
+const D=(y,m,d)=>new Date(y,m,d,12);
+const pad=n=>String(n).padStart(2,'0');
+const key=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+const fromKey=k=>{const [y,m,d]=k.split('-').map(Number);return D(y,m-1,d);};
+const addDays=(d,n)=>D(d.getFullYear(),d.getMonth(),d.getDate()+n);
+const dn=d=>Math.round(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate())/864e5);
+const dow=d=>(d.getDay()+6)%7; // 0 = lundi
+const fmt=(d,y)=>DOWL[dow(d)]+' '+d.getDate()+' '+MONTHS[d.getMonth()].toLowerCase()+(y?' '+d.getFullYear():'');
+const sh=d=>DOWS[dow(d)].toLowerCase()+'. '+d.getDate();
+/* ---------- jours fériés (France) ---------- */
+function easter(y){const a=y%19,b=Math.floor(y/100),c=y%100,d=Math.floor(b/4),e=b%4,f=Math.floor((b+8)/25),g=Math.floor((b-f+1)/3),h=(19*a+b-d-g+15)%30,i=Math.floor(c/4),k=c%4,l=(32+2*e+2*i-h-k)%7,m=Math.floor((a+11*h+22*l)/451),mo=Math.floor((h+l-7*m+114)/31),da=((h+l-7*m+114)%31)+1;return D(y,mo-1,da);}
+const HC={};
+function holidays(y){const ck=y+(S.als?'a':'');if(HC[ck])return HC[ck];const E=easter(y),m=new Map();
+  const add=(d,n)=>m.set(key(d),n);
+  add(D(y,0,1),"Jour de l'An");add(addDays(E,1),'Lundi de Pâques');add(D(y,4,1),'Fête du Travail');add(D(y,4,8),'Victoire 1945');add(addDays(E,39),'Ascension');add(addDays(E,50),'Lundi de Pentecôte');add(D(y,6,14),'Fête nationale');add(D(y,7,15),'Assomption');add(D(y,10,1),'Toussaint');add(D(y,10,11),'Armistice');add(D(y,11,25),'Noël');
+  if(S.als){add(addDays(E,-2),'Vendredi saint');add(D(y,11,26),'Saint-Étienne');}
+  return HC[ck]=m;}
+const holName=d=>holidays(d.getFullYear()).get(key(d));
+/* ---------- état ---------- */
+const S={bal:10,mon:new Date().getMonth()+1,yr:new Date().getFullYear(),pref:'auto',wd:[1,1,1,1,1,0,0],als:false};
+if(S.mon>11){S.mon=0;S.yr++;}
+try{Object.assign(S,JSON.parse(ld('cg_in','{}')));}catch(e){}
+let props=[],active=null,cmpSel=[],custom=false;
+const isWork=d=>!!S.wd[dow(d)]&&!holName(d);
+const status=d=>holName(d)?'ferie':(!S.wd[dow(d)]?'we':'work');
+/* ---------- évaluation d'un ensemble de jours de congé ---------- */
+function evalLeave(keys){
+  const set=new Set(keys),dates=[...set].map(fromKey).sort((a,b)=>a-b),seen=new Set(),runs=[];
+  const off=d=>!isWork(d)||set.has(key(d));
+  for(const d of dates){if(seen.has(key(d)))continue;
+    let s=d,e=d;while(off(addDays(s,-1)))s=addDays(s,-1);while(off(addDays(e,1)))e=addDays(e,1);
+    const r={s,e,days:dn(e)-dn(s)+1,leave:[],ferie:[],we:0};
+    for(let x=s;dn(x)<=dn(e);x=addDays(x,1)){const k=key(x);if(set.has(k)){r.leave.push(x);seen.add(k);}else if(holName(x))r.ferie.push(x);else if(!S.wd[dow(x)])r.we++;}
+    runs.push(r);}
+  const L=dates.length,R=runs.reduce((a,r)=>a+r.days,0);
+  return{keys:[...set].sort(),dates,runs,L,R,gain:R-L,ratio:L?R/L:0,rem:S.bal-L};
+}
+/* ---------- génération des propositions ---------- */
+function monthWork(y,m){const out=[],n=new Date(y,m+1,0).getDate();for(let i=1;i<=n;i++){const d=D(y,m,i);if(isWork(d))out.push(d);}return out;}
+function genProps(){
+  const N=Math.max(0,Math.min(60,S.bal|0)),W=monthWork(S.yr,S.mon);if(!N||!W.length)return[];
+  const blocks=[],seen=new Set();
+  for(let i=0;i<W.length;i++)for(let j=i;j<W.length;j++){const L=j-i+1;if(L>N)break;
+    const ks=W.slice(i,j+1).map(key),id=ks.join();if(seen.has(id))continue;seen.add(id);
+    const ev=evalLeave(ks);if(ev.runs.length!==1)continue;ev.rs=dn(ev.runs[0].s);ev.re=dn(ev.runs[0].e);blocks.push(ev);}
+  let good=blocks.filter(b=>b.gain>=2);if(!good.length)good=blocks.filter(b=>b.gain>=1);
+  if(!good.length)return[];
+  good.sort((a,b)=>a.rs-b.rs||a.re-b.re);
+  const nxt=good.map((b,i)=>{for(let j=i+1;j<good.length;j++)if(good[j].rs>b.re+1)return j;return good.length;});
+  function dp(list,idxMap,wf){ // knapsack d'intervalles disjoints
+    const memo=new Map();
+    const nx=list.map((b,i)=>{for(let j=i+1;j<list.length;j++)if(list[j].rs>b.re+1)return j;return list.length;});
+    const f=(i,b)=>{if(i>=list.length||b<=0)return{v:0,p:[]};const k=i*100+b;if(memo.has(k))return memo.get(k);
+      let best=f(i+1,b);const bl=list[i];
+      if(bl.L<=b){const r=f(nx[i],b-bl.L),v=wf(bl)+r.v;if(v>best.v)best={v,p:[bl].concat(r.p)};}
+      memo.set(k,best);return best;};
+    return f(0,N).p;}
+  const make=(label,tag,blks)=>{if(!blks.length)return null;const ks=[].concat(...blks.map(b=>b.keys));const ev=evalLeave(ks);ev.label=label;ev.tag=tag;return ev;};
+  const out=[];
+  const single=(label,tag,cmp)=>{const b=[...good].sort(cmp)[0];return b&&make(label,tag,[b]);};
+  out.push(single('Meilleur rendement','Le plus rentable',(a,b)=>b.ratio-a.ratio||b.R-a.R));
+  out.push(single('Grande période de repos','Le plus long',(a,b)=>b.R-a.R||b.ratio-a.ratio));
+  out.push(make('Tout le solde bien utilisé','Plusieurs périodes',dp(good,null,b=>b.R*1000-b.L)));
+  out.push(make('Gains maximum','Plusieurs périodes',dp(good,null,b=>b.gain*1000-b.L)));
+  out.push(make('Petits week-ends prolongés','Escapades',dp(good.filter(b=>b.L<=2),null,b=>b.gain*1000-b.L)));
+  // autres blocs simples intéressants
+  [...good].sort((a,b)=>b.ratio*Math.log(b.R+1)-a.ratio*Math.log(a.R+1)).slice(0,10).forEach(b=>out.push(make('Variante','Une seule période',[b])));
+  // dédoublonnage
+  const ids=new Set(),res=[];let vn=0;for(const p of out){if(!p)continue;const id=p.keys.join();if(ids.has(id))continue;ids.add(id);if(p.label==='Variante')p.label='Variante '+(++vn);res.push(p);}
+  const cmp=S.pref==='long'?(a,b)=>b.R-a.R||b.ratio-a.ratio:S.pref==='short'?(a,b)=>b.ratio-a.ratio||a.L-b.L:(a,b)=>b.gain-a.gain||b.ratio-a.ratio;
+  res.sort(cmp);return res.slice(0,8);
+}
+/* ---------- rendu ---------- */
+const plural=(n,s,p)=>n+' '+(n>1?(p||s+'s'):s);
+function runText(r){return fmt(r.s)+' → '+fmt(r.e)+(r.e.getFullYear()!==r.s.getFullYear()?' '+r.e.getFullYear():'');}
+function runTextShort(r){const m=r.s.getMonth()===r.e.getMonth();return DOWL[dow(r.s)]+' '+r.s.getDate()+(m?'':' '+MONTHS[r.s.getMonth()].toLowerCase())+' → '+DOWL[dow(r.e)]+' '+r.e.getDate()+' '+MONTHS[r.e.getMonth()].toLowerCase();}
+function breakdown(r){const p=[];p.push(plural(r.leave.length,'congé'));if(r.we)p.push(plural(r.we,'jour non travaillé','jours non travaillés'));if(r.ferie.length)p.push(r.ferie.length>1?r.ferie.length+' jours fériés':'1 jour férié ('+holName(r.ferie[0])+')');return p.join(' + ');}
+function renderList(){
+  const box=$('list');box.replaceChildren();
+  if(!S.wd.some(Boolean)){box.innerHTML='<div class="card empty">Coche au moins un jour travaillé.</div>';return;}
+  if(!(S.bal>0)){box.innerHTML='<div class="card empty">Indique un solde de congés supérieur à 0.</div>';return;}
+  if(!props.length){box.innerHTML='<div class="card empty">Aucune combinaison intéressante ce mois-ci avec ton solde. Essaie un autre mois 😉</div>';return;}
+  props.forEach((p,i)=>{
+    const b=document.createElement('div');b.className='prop'+(active&&!custom&&active.ref===p?' on':'');b.tabIndex=0;b.setAttribute('role','button');
+    b.innerHTML='<span class="rk">#'+(i+1)+'</span><div class="ph"><b>'+p.label+'</b><span class="chip y">'+p.tag+'</span></div>'+
+      '<div class="big"><strong>'+p.R+'</strong><span>jours de repos pour <b style="color:#fff">'+plural(p.L,'jour')+'</b> posé'+(p.L>1?'s':'')+'</span></div>'+
+      '<div class="row"><span class="chip g">+'+p.gain+' offerts</span><span class="chip b">×'+p.ratio.toFixed(2).replace('.',',')+'</span><span class="chip">Solde restant : '+p.rem+' j</span></div>'+
+      '<div class="det">'+p.runs.map(r=>'<div>📅 <b>'+runTextShort(r)+'</b> · '+r.days+' j<br><span>Poser : '+r.leave.map(sh).join(' · ')+'</span></div>').join('')+'</div>';
+    const pick=()=>{select(p);if(innerWidth<=900)$('calsec').scrollIntoView({behavior:'smooth',block:'start'});};b.onclick=pick;b.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();pick();}};
+    const c=document.createElement('label');c.className='cmp';const ck=document.createElement('input');ck.type='checkbox';ck.checked=cmpSel.includes(p);ck.onclick=e=>e.stopPropagation();ck.onchange=()=>{if(ck.checked){if(cmpSel.length>=3){ck.checked=false;toast('3 scénarios maximum');return;}cmpSel.push(p);}else cmpSel=cmpSel.filter(x=>x!==p);renderCmp();};c.onclick=e=>e.stopPropagation();c.append(ck,'Comparer');b.append(c);
+    box.append(b);});
+}
+function select(p){active={keys:new Set(p.keys),label:p.label,ref:p};custom=false;const m=fromKey(p.keys[0]);if(m.getMonth()!==S.mon){} renderAll(true);}
+function renderCal(){
+  const y=S.yr,m=S.mon;$('ct').textContent=MONTHS[m]+' '+y;
+  const first=D(y,m,1),lead=dow(first),n=new Date(y,m+1,0).getDate(),total=Math.ceil((lead+n)/7)*7;
+  const g=$('cal');g.replaceChildren();DOWS.forEach(x=>{const e=document.createElement('div');e.className='dw';e.textContent=x;g.append(e);});
+  const ev=active?evalLeave([...active.keys]):null;
+  const runIdx=new Set();if(ev)ev.runs.forEach(r=>{for(let x=r.s;dn(x)<=dn(r.e);x=addDays(x,1))runIdx.add(key(x));});
+  for(let i=0;i<total;i++){const d=addDays(first,i-lead),k=key(d),inM=d.getMonth()===m;
+    const e=document.createElement('div');let st=status(d);const lv=active&&active.keys.has(k);
+    e.className='d '+(lv?'leave':st)+(inM?'':' out')+(runIdx.has(k)?' run':'');
+    e.textContent=d.getDate();const hn=holName(d);if(hn){const s=document.createElement('small');s.textContent=hn;e.append(s);e.title=hn;}
+    if(lv||st==='work'){e.onclick=()=>toggle(d);}
+    g.append(e);}
+}
+function toggle(d){
+  if(!(S.bal>0))return;
+  if(!active)active={keys:new Set(),label:'Mon scénario',ref:null};
+  const k=key(d);
+  if(active.keys.has(k))active.keys.delete(k);
+  else{if(active.keys.size>=S.bal){toast('Solde de '+S.bal+' j atteint');return;}active.keys.add(k);}
+  active.label='Personnalisé';custom=true;active.ref=null;renderAll(true);
+}
+function renderDetail(){
+  const box=$('detail');box.replaceChildren();if(!active)return;
+  if(!active.keys.size){box.innerHTML='<p class="det" style="margin-top:12px">Aucun jour sélectionné. Choisis une proposition ou clique sur le calendrier.</p>';return;}
+  const e=evalLeave([...active.keys]);
+  box.innerHTML='<div class="stats"><div class="st"><b>'+e.L+'</b><span>congés posés</span></div><div class="st"><b>'+e.R+'</b><span>jours de repos</span></div><div class="st"><b>+'+e.gain+'</b><span>jours gagnés</span></div><div class="st"><b>×'+e.ratio.toFixed(2).replace('.',',')+'</b><span>rendement</span></div><div class="st"><b>'+e.rem+'</b><span>solde restant</span></div></div>'+
+   '<div class="runs">'+e.runs.map(r=>'<div><b>'+runText(r)+'</b> · '+plural(r.days,'jour')+' de repos<br><span class="det">'+breakdown(r)+'</span><br><span class="det">Poser : <b>'+r.leave.map(x=>fmt(x)).join(', ')+'</b></span></div>').join('')+'</div>'+
+   '<div class="row"><button class="btn sm" id="ics">📥 Exporter (.ics)</button><button class="btn alt sm" id="cp">📋 Copier le planning</button><button class="btn alt sm" id="addc">⚖️ Comparer</button></div>';
+  $('ics').onclick=()=>exportIcs(e);$('cp').onclick=()=>copyPlan(e);
+  $('addc').onclick=()=>{const snap=Object.assign({},e,{label:active.label,tag:'',ref:null});if(cmpSel.length>=3){toast('3 scénarios maximum');return;}cmpSel.push(snap);renderList();renderCmp();toast('Ajouté à la comparaison');};
+}
+function renderCmp(){
+  const box=$('cmpbox');if(cmpSel.length<2){box.hidden=true;return;}box.hidden=false;
+  const best=(f,hi=true)=>{const v=cmpSel.map(f);return hi?Math.max(...v):Math.min(...v);};
+  const rows=[['Congés posés',p=>p.L,false],['Jours de repos',p=>p.R,true],['Jours gagnés',p=>p.gain,true],['Rendement',p=>p.ratio,true],['Solde restant',p=>p.rem,true]];
+  let h='<table><tr><th></th>'+cmpSel.map(p=>'<th>'+p.label+'</th>').join('')+'</tr>';
+  rows.forEach(([l,f,hi])=>{const b=best(f,hi);h+='<tr><td>'+l+'</td>'+cmpSel.map(p=>'<td class="'+(f(p)===b&&cmpSel.length>1?'best':'')+'">'+(l==='Rendement'?'×'+f(p).toFixed(2).replace('.',','):f(p))+'</td>').join('')+'</tr>';});
+  h+='<tr><td>Périodes</td>'+cmpSel.map(p=>'<td style="font-size:12px">'+p.runs.map(runTextShort).join('<br>')+'</td>').join('')+'</tr></table>';
+  $('cmp').innerHTML=h;
+}
+function renderAll(keepActive){props=keepActive?props:genProps();renderList();renderCal();renderDetail();renderCmp();}
+/* ---------- export ---------- */
+function planText(e){return 'Planning de congés ('+MONTHS[S.mon]+' '+S.yr+')\n'+e.runs.map(r=>'• '+runText(r)+' — '+r.days+' j de repos\n  Poser : '+r.leave.map(x=>fmt(x)).join(', ')).join('\n')+'\nTotal : '+e.L+' j posés, '+e.R+' j de repos (+'+e.gain+' offerts). Solde restant : '+e.rem+' j.';}
+function copyPlan(e){const t=planText(e);const done=()=>toast('Planning copié ✔');
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(done,()=>fallbackCopy(t,done));}else fallbackCopy(t,done);}
+function fallbackCopy(t,cb){const a=document.createElement('textarea');a.value=t;a.style.cssText='position:fixed;opacity:0';document.body.append(a);a.select();try{document.execCommand('copy');cb();}catch(x){toast('Copie impossible');}a.remove();}
+function exportIcs(e){
+  const L=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Atelier Gaming//Conges malins//FR','CALSCALE:GREGORIAN'];
+  const stamp=new Date().toISOString().replace(/[-:]/g,'').slice(0,15)+'Z';
+  const ds=d=>d.getFullYear()+pad(d.getMonth()+1)+pad(d.getDate());
+  // segments de congés consécutifs
+  const segs=[];let cur=null;e.dates.forEach(d=>{if(cur&&dn(d)===dn(cur.e)+1)cur.e=d;else{cur={s:d,e:d};segs.push(cur);}});
+  // fusionne aussi les congés séparés seulement par des jours non travaillés
+  const merged=[];segs.forEach(sg=>{const l=merged[merged.length-1];if(l){let ok=true;for(let x=addDays(l.e,1);dn(x)<dn(sg.s);x=addDays(x,1))if(isWork(x)){ok=false;break;}if(ok){l.e=sg.e;return;}}merged.push({s:sg.s,e:sg.e});});
+  merged.forEach((sg,i)=>{L.push('BEGIN:VEVENT','UID:cg-'+ds(sg.s)+'-'+i+'@atelier-gaming','DTSTAMP:'+stamp,'DTSTART;VALUE=DATE:'+ds(sg.s),'DTEND;VALUE=DATE:'+ds(addDays(sg.e,1)),'SUMMARY:Congés','TRANSP:TRANSPARENT','END:VEVENT');});
+  L.push('END:VCALENDAR');
+  const blob=new Blob([L.join('\r\n')],{type:'text/calendar;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');
+  a.href=url;a.download='conges-'+S.yr+'-'+pad(S.mon+1)+'.ics';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),2000);toast('Fichier .ics téléchargé');
+}
+let tT=0;function toast(t){const e=$('toast');e.textContent=t;e.classList.add('on');clearTimeout(tT);tT=setTimeout(()=>e.classList.remove('on'),1800);}
+/* ---------- formulaire ---------- */
+MONTHS.forEach((m,i)=>{const o=document.createElement('option');o.value=i;o.textContent=m;$('mon').append(o);});
+DOWS.forEach((d,i)=>{const l=document.createElement('label'),c=document.createElement('input'),s=document.createElement('span');c.type='checkbox';c.checked=!!S.wd[i];s.textContent=d;c.onchange=()=>{S.wd[i]=c.checked?1:0;changed();};l.append(c,s);$('wd').append(l);});
+function syncForm(){$('bal').value=S.bal;$('mon').value=S.mon;$('yr').value=S.yr;$('pref').value=S.pref;$('als').checked=!!S.als;}
+function changed(){sv('cg_in',JSON.stringify(S));active=null;custom=false;cmpSel=[];props=genProps();if(props.length)select(props[0]);else renderAll(true);}
+$('bal').oninput=()=>{S.bal=Math.max(0,Math.min(60,parseInt($('bal').value)||0));changed();};
+$('mon').onchange=()=>{S.mon=+$('mon').value;changed();};
+$('yr').onchange=()=>{S.yr=Math.max(2024,Math.min(2100,parseInt($('yr').value)||S.yr));changed();};
+$('pref').onchange=()=>{S.pref=$('pref').value;changed();};
+$('als').onchange=()=>{S.als=$('als').checked;changed();};
+$('reset').onclick=()=>{cmpSel=[];custom=false;props=genProps();if(props.length)select(props[0]);else{active=null;renderAll(true);}toast('Propositions réinitialisées');};
+$('prev').onclick=()=>{S.mon--;if(S.mon<0){S.mon=11;S.yr--;}syncForm();changed();};
+$('next').onclick=()=>{S.mon++;if(S.mon>11){S.mon=0;S.yr++;}syncForm();changed();};
+syncForm();changed();
+window.__cg={S,genProps,evalLeave,holidays,get props(){return props;}};
+</script>
+</body></html>

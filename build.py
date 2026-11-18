@@ -26,7 +26,7 @@ if os.path.isdir('sounds'):shutil.copytree('sounds','dist/sounds',dirs_exist_ok=
 if os.path.isfile('vendor/three.min.js'):shutil.copy('vendor/three.min.js','dist/three.min.js')
 if os.path.isdir('kart'):shutil.copytree('kart','dist/kart',dirs_exist_ok=True)
 if os.path.isdir('avatars'):shutil.copytree('avatars','dist/avatars',dirs_exist_ok=True)
-for src,dst in (('index.template.html','index.html'),('ronda.template.html','ronda.html'),('rami.template.html','rami.html'),('mytho.template.html','mytho.html'),('quiz.template.html','quiz.html'),('loupgarou.template.html','loupgarou.html'),('skyjo.template.html','skyjo.html'),('kart.template.html','kart.html'),('pool.template.html','pool.html')):
+for src,dst in (('index.template.html','index.html'),('ronda.template.html','ronda.html'),('rami.template.html','rami.html'),('mytho.template.html','mytho.html'),('quiz.template.html','quiz.html'),('loupgarou.template.html','loupgarou.html'),('skyjo.template.html','skyjo.html'),('kart.template.html','kart.html'),('pool.template.html','pool.html'),('conges.template.html','conges.html')):
     s=open(src,encoding='utf-8').read()
     i=s.index('<script>')
     out=s[:i]+'<script>window.F7_FIREBASE='+json.dumps(cfg)+';</script>\n'+s[i:]

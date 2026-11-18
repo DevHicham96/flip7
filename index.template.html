@@ -3583,7 +3583,7 @@ async function dirReg(){
   }catch(e){}
 }
 function agoTxt(t){if(!t)return 'Hors ligne';const m=Math.max(1,Math.round((Date.now()-t)/60000));return 'Vu '+(m<60?'il y a '+m+' min':m<1440?'il y a '+Math.round(m/60)+' h':'il y a '+Math.round(m/1440)+' j');}
-const GAMEN={flip7:'Flip 7',ronda:'Ronda',rami:'Rami',mytho:'Mytho',quiz:'Quiz',loupgarou:'Loup-Garou',skyjo:'Skyjo',kart:'Kart Racers',pool:'Billard Atelier'};
+const GAMEN={flip7:'Flip 7',ronda:'Ronda',rami:'Rami',mytho:'Mytho',quiz:'Quiz',loupgarou:'Loup-Garou',skyjo:'Skyjo',kart:'Kart Racers',pool:'Billard Atelier',conges:'Congés malins'};
 function homeRefresh(){
   const o=$('home');if(!o)return;
   const rows=Object.keys(FR.dir||{}).map(sl=>{const i=FR.info[sl]||{},d=FR.dir[sl]||{};return{sl,name:i.name||d.n||sl,av:i.av||d.a||'',st:presState(sl),t:(FR.pres[sl]||{}).t||0,g:String((FR.pres[sl]||{}).g||'')};});
@@ -3684,10 +3684,10 @@ function showHub(){
   if($('hub'))return;hideHome();
   const nm=(prof&&prof.name)||lsGet('f7name')||'';
   const logo=(document.querySelector('.logo')||{outerHTML:'<b>FLIP 7</b>'}).outerHTML;
-  const LOAD={flip7:'f7',rami:'rm',mytho:'my',quiz:'qz',loup:'lg',ronda:'rd',skyjo:'sk',kart:'kt',pool:'kt'},URL={pool:'pool.html',kart:'kart.html',skyjo:'skyjo.html',rami:'rami.html',mytho:'mytho.html',quiz:'quiz.html',loup:'loupgarou.html',ronda:'ronda.html'};
+  const LOAD={flip7:'f7',rami:'rm',mytho:'my',quiz:'qz',loup:'lg',ronda:'rd',skyjo:'sk',kart:'kt',pool:'kt',conges:'kt'},URL={conges:'conges.html',pool:'pool.html',kart:'kart.html',skyjo:'skyjo.html',rami:'rami.html',mytho:'mytho.html',quiz:'quiz.html',loup:'loupgarou.html',ronda:'ronda.html'};
   const choose=g=>{hubWanted=false;showLoader(LOAD[g]||'rd');if(g==='flip7'){ssSet('f7game','flip7');try{history.replaceState(null,'',location.pathname);}catch(e){}setTimeout(()=>{hideHub();endLoader();},250);}else setTimeout(()=>{location.href=URL[g];},250);};
-  const TYPES=[['all','🎮 Tous'],['cartes','🃏 Cartes'],['bluff','🎭 Bluff & déduction'],['quiz','🧠 Quiz & culture'],['course','🏎️ Course'],['sport','🎱 Sport']];
-  const TN={cartes:'🃏 Cartes',bluff:'🎭 Bluff',quiz:'🧠 Quiz',course:'🏎️ Course',sport:'🎱 Sport'};
+  const TYPES=[['all','🎮 Tous'],['cartes','🃏 Cartes'],['bluff','🎭 Bluff & déduction'],['quiz','🧠 Quiz & culture'],['course','🏎️ Course'],['sport','🎱 Sport'],['outil','🛠️ Outils']];
+  const TN={cartes:'🃏 Cartes',bluff:'🎭 Bluff',quiz:'🧠 Quiz',course:'🏎️ Course',sport:'🎱 Sport',outil:'🛠️ Outils'};
   const GAMES=[
     {id:'flip7',cls:'f7',t:'cartes',title:'Flip 7',sub:'Pioche, tente ta chance et évite les doublons.',pl:'2–8 joueurs',dur:'~15 min',art:logo},
     {id:'ronda',cls:'rd',t:'cartes',title:'Ronda',sub:'Le jeu de cartes marocain : ramasse, annonce, marque.',pl:'2–4 joueurs',dur:'~15 min',art:'<img src="'+HUB_IMG2+'" alt=""><img src="'+HUB_IMG+'" alt="">'},
@@ -3697,6 +3697,7 @@ function showHub(){
     {id:'skyjo',cls:'sk',t:'cartes',title:'Skyjo',sub:'Le moins de points gagne : retourne, échange, évite les gros chiffres.',pl:'2–8 joueurs',dur:'~20 min',art:'<span>-2</span><span>12</span>'},
     {id:'kart',cls:'kt',t:'course',title:'Kart Racers',sub:'Course de karts 3D : drift, objets, en ligne.',pl:'1–6 joueurs',dur:'~5 min',art:'<span>🏎️</span><span>🏁</span>'},
     {id:'pool',cls:'kt',t:'sport',title:'Billard Atelier',sub:'Billard 8 ball américain ou marocain : 1 contre 1 en ligne ou contre le robot.',pl:'1–2 joueurs',dur:'~8 min',art:'<span>🎱</span><span>🏆</span>'},
+    {id:'conges',cls:'kt',t:'outil',title:'Congés malins',sub:'Outil : trouve les meilleures dates de congés pour un max de jours de repos (jours fériés France).',pl:'Solo',dur:'~2 min',art:'<span>🏖️</span><span>📅</span>'},
     {id:'quiz',cls:'qz',t:'quiz',title:'Quiz',sub:'8 thèmes, des questions pour tous, scanne le QR.',pl:'1–30 joueurs',dur:'~10 min',art:'<span>❓</span><span>🏆</span>'}
   ];
   let flt=ssGet('hubf')||'all';if(!TYPES.some(t=>t[0]===flt))flt='all';
