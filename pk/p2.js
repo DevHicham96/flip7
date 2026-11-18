@@ -134,8 +134,8 @@ function buildCar(spec,simple){
   if(s&&!simple){
     if(s<=2){g.add(new T3.Mesh(mg.rb[0],mat('st'+s,()=>stdm(s===1?0xf4f4f4:0xff7a1a,.3,0,{polygonOffset:true,polygonOffsetFactor:-2,polygonOffsetUnits:-2}))));
       if(s===1)g.add(new T3.Mesh(mg.rb[1],mat('stb',()=>stdm(0x1b2a6a,.3,0,{polygonOffset:true,polygonOffsetFactor:-3,polygonOffsetUnits:-3}))));}
-    else{const k=s-1,dm=new T3.MeshBasicMaterial({map:decalTex(k===1?2:k===2?3:k===3?4:5,'#ff7a1a'),transparent:true,polygonOffset:true,polygonOffsetFactor:-2,polygonOffsetUnits:-2});
-      for(const sg of [1,-1]){const p=new T3.Mesh(new T3.PlaneGeometry(k===3?.9:2,k===3?.9:.5),dm);p.position.set(k===3?M.L*.06:-.2,M.belt-.34,sg*(M.W/2+.005));if(sg<0)p.rotation.y=Math.PI;g.add(p);}}}
+    else{const k=s-3,dm=new T3.MeshBasicMaterial({map:decalTex([2,3,4,5][k],'#ff7a1a'),transparent:true,polygonOffset:true,polygonOffsetFactor:-2,polygonOffsetUnits:-2});
+      for(const sg of [1,-1]){const p=new T3.Mesh(new T3.PlaneGeometry(k===2?.9:2,k===2?.9:.5),dm);p.position.set(k===2?M.L*.06:-.2,M.belt-.34,sg*(M.W/2+.005));if(sg<0)p.rotation.y=Math.PI;g.add(p);}}}
   const wheels=[],fr=[];
   const rk=(spec.r|0)+'_'+M.r,rg=RIMG[rk]||(RIMG[rk]=rimGeo(spec.r|0,M.r));
   const tireG=MG['t'+M.r]||(MG['t'+M.r]=(()=>{const gg=new T3.CylinderGeometry(M.r,M.r,.26,20);gg.rotateX(Math.PI/2);return gg;})());
