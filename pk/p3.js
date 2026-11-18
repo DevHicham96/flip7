@@ -116,7 +116,7 @@ function mkVan(c){const g=new T3.Group(),p=mat('pp'+c+'_v',()=>paintMat(c,0));
   const b=new T3.Mesh(new T3.BoxGeometry(5.0,1.7,2.0),p);b.position.set(0,1.15,0);b.castShadow=true;g.add(b);
   const cab=new T3.Mesh(new T3.BoxGeometry(1.6,.9,2.0),p);cab.position.set(1.7,2.15,0);g.add(cab);
   const gm=glassMat(1);const w=new T3.Mesh(new T3.BoxGeometry(.12,.7,1.7),gm);w.position.set(2.5,2.15,0);g.add(w);
-  g.add(Object.assign(new T3.Mesh(new T3.PlaneGeometry(2.6,2.4),mat('blob',()=>BLOB().clone())),{rotation:new T3.Euler(-Math.PI/2,0,0),position:new T3.Vector3(0,.02,0)}));
+  {const bl=new T3.Mesh(new T3.PlaneGeometry(2.6,2.4),mat('blob',()=>BLOB().clone()));bl.rotation.set(-Math.PI/2,0,0);bl.position.set(0,.02,0);g.add(bl);}
   const tm=mat('tm',()=>stdm(0x15161a,.85,0));for(const x of [1.6,-1.6])for(const z of [.9,-.9]){const t=new T3.Mesh(new T3.CylinderGeometry(.38,.38,.3,14),tm);t.rotation.x=Math.PI/2;t.position.set(x,.38,z);g.add(t);}
   g.add(new T3.Mesh(new T3.BoxGeometry(.06,.14,1.6),mat('lt',()=>new T3.MeshBasicMaterial({color:0xffffff}))).translateX(2.52).translateY(.95));
   return g;}

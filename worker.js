@@ -128,13 +128,22 @@ export class ParkHub{
     }else if(m.k==='lb'){
       const lb=(await this.ctx.storage.get('LB'))||{};const L=Object.entries(lb).map(([id,v])=>Object.assign({id},v)).sort((x,y)=>y.pts-x.pts||y.w-x.w);
       this.tx(ws,{k:'lb',top:L.slice(0,20).map((v,i)=>({r:i+1,n:v.n,w:v.w,l:v.l,pts:v.pts,me:v.id===a.id})),me:lb[a.id]||null,rank:L.findIndex(v=>v.id===a.id)+1});
-    }else if(m.k==='rdy'||m.k==='nx'||m.k==='park'||m.k==='quit'||m.k==='pos'||m.k==='ms'){
+    }else if(m.k==='rdy'||m.k==='nx'||m.k==='park'||m.k==='crash'||m.k==='quit'||m.k==='pos'||m.k==='ms'){
       const M=await this.mOf(a.id);if(!M)return;const i=M.ps.findIndex(p=>p.id===a.id);if(i<0)return;
       if(m.k==='pos'){if(typeof m.x==='number')this.tid(M.ps[1-i].id,{k:'pos',x:m.x,z:m.z,a:m.a,s:m.s});return;}
       if(m.k==='ms'){this.tid(M.ps[1-i].id,{k:'ms',d:m.d});return;}
       if(m.k==='quit'){await this.finish(M,1-i,'ab');return;}
       if(m.k==='rdy'){if(M.ph!=='ready')return;M.rd1=M.rd1||[0,0];M.rd1[i]=1;if(M.rd1[0]&&M.rd1[1])await this.round(M);else await this.putM(M);return;}
       if(m.k==='nx'){if(M.ph!=='between')return;M.nx=M.nx||[0,0];M.nx[i]=1;if(M.nx[0]&&M.nx[1])await this.round(M);else{this.tid(M.ps[1-i].id,{k:'nxo'});await this.putM(M);}return;}
+      if(m.k==='crash'){
+        if((M.ph!=='cd'&&M.ph!=='run')||m.r!==M.r||Date.now()<M.st)return;
+        const now=Date.now();M.sc[1-i]++;M.rd.push({w:1-i,t:0});M.ph='between';M.nx=[0,0];M.dl=now+30000;
+        const over=M.sc[0]>=PK_WIN||M.sc[1]>=PK_WIN||M.r+1>=PK_MAXR;
+        for(const p of M.ps)this.tid(p.id,{k:'rw',r:M.r,w:1-i,t:0,x:1,sc:M.sc,fin:over});
+        if(over)await this.finish(M,M.sc[0]>M.sc[1]?0:M.sc[1]>M.sc[0]?1:-1,'',true);
+        else{M.r++;await this.putM(M);}
+        return;
+      }
       if(m.k==='park'){
         if((M.ph!=='cd'&&M.ph!=='run')||m.r!==M.r)return;
         const lv=PLV[Math.min(M.r,PLV.length-1)],now=Date.now(),el=(now-M.st)/1000;

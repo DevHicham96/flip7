@@ -63,10 +63,10 @@ function beginRound(r,lv,st){
 function startSolo(){audio();R={mode:'solo',idx:0,sc:[0,0],res:[],names:[myName(),'Robot'],bot:true,r:0,my:{t:[],col:0,dist:0},op:{t:[],col:0,dist:0},rt:[],coinsR:0};
   R.oppAv='';soloRound();}
 function soloRound(){const r=R.r,lv=Math.min(r,LV.length-1);srvOff=0;R.skill=Math.min(.95,.66+lv*.035)*(.94+Math.random()*.1);beginRound(r,lv,Date.now()+5600);}
-function myRoundEnd(winner,t){ // winner: 0 moi,1 adversaire,-1 nul
+function myRoundEnd(winner,t,why){ // winner: 0 moi,1 adversaire,-1 nul
   R.fin=true;R.phase='between';R.sc=R.sc.slice();R.res[R.r]=winner===R.idx?'w':winner<0?'d':'l';
   R.my.col+=R.col;R.my.dist+=R.dist;if(winner===R.idx)R.my.t.push(t);else if(winner>=0&&t)R.op.t.push(t);
-  showRes(winner,t);
+  showRes(winner,t,why);
 }
 function showRes(w,t,why){
   const me=R.idx,won=w===me,draw=w===-1,fin=R.finFlag;
@@ -75,16 +75,16 @@ function showRes(w,t,why){
     $('rSub').textContent=`Manche ${R.r+1} · ${R.O.L.diff}`;
     $('rTt').textContent=w===-2?'ABANDON':won?'MANCHE GAGNÉE !':draw?'TEMPS ÉCOULÉ':'MANCHE PERDUE';$('rTt').className='tt '+(won?'w':draw||w===-2?'d':'l');
     $('rVs').innerHTML=`<div><b>${R.names[me]}</b></div><span>${R.sc[me]} – ${R.sc[1-me]}</span><div><b>${R.names[1-me]}</b></div>`;
-    $('rInf').textContent=w>=0&&t?`${R.names[w]} s'est garé en ${fmt(t)}`:draw?'Personne ne s\'est garé à temps':'';
+    $('rInf').textContent=why==='crash'?(won?'Ton adversaire a touché un obstacle':'Tu as touché un obstacle'):w>=0&&t?`${R.names[w]} s'est garé en ${fmt(t)}`:draw?'Personne ne s\'est garé à temps':'';
     $('rNx').disabled=false;$('rNx').firstChild.textContent=R.finFlag?'VOIR LE RÉSULTAT ▶':'CONTINUER ▶';}},won?1800:1100);
 }
 $('rNx').onclick=()=>{audio();
   if(R.finFlag){endMatch();return;}
   if(R.mode==='solo'){R.r++;show();soloRound();}
   else{send({k:'nx'});$('rNx').disabled=true;$('rNx').firstChild.textContent='EN ATTENTE DE L\'ADVERSAIRE…';}};
-function soloResult(w,t){ // w: 0 moi, 1 robot
+function soloResult(w,t,why){R.why=why; // w: 0 moi, 1 robot
   if(w===0)R.sc[0]++;else R.sc[1]++;
-  R.finFlag=R.sc[0]>=WINR||R.sc[1]>=WINR||R.r+1>=MAXR;myRoundEnd(w,t);}
+  R.finFlag=R.sc[0]>=WINR||R.sc[1]>=WINR||R.r+1>=MAXR;myRoundEnd(w,t,why);}
 function endMatch(){
   const me=R.idx,w=R.endW!==undefined?R.endW:(R.sc[me]>R.sc[1-me]?me:R.sc[1-me]>R.sc[me]?1-me:-1),won=w===me;
   const on=R.mode==='online',rw=R.my.t.length;
@@ -138,10 +138,11 @@ function playFrame(dt){
   const run=R.phase==='run'&&!R.fin;
   $('tm').textContent=R.phase==='cd'?'0:00.0':fmt(R.fin&&R.ft!=null?R.ft:t);
   // physique
-  const step=1/120;let acc=dt,hit=0;
+  const step=1/120;let acc=dt,hit=0;myCar.touch=0;
   const ui=run?inp:{t:0,b:1,steer:0};
   let sp0=Math.abs(myCar.v);
   while(acc>0){const h=Math.min(step,acc);acc-=h;if(R.phase==='cd'){myCar.v=0;break;}const px=myCar.x,pz=myCar.z;stepCar(myCar,ui,h);hit=Math.max(hit,collide(myCar,R.O.cols));R.dist+=Math.hypot(myCar.x-px,myCar.z-pz);}
+  if(myCar.touch&&run&&!R.fin&&!R.crashed){R.crashed=1;R.col++;thud(Math.max(hit,4));shake=.7;vib(200);R.ft=t;toast('💥 Contact ! Manche perdue');if(R.mode==='solo')soloResult(1,0,'crash');else send({k:'crash',r:R.r});}
   if(hit>1.2&&nowS()-(R.lastHit||0)>450){R.lastHit=nowS();R.col++;shake=Math.min(.7,hit*.09);thud(hit);vib(40+hit*8);if(hit>3)for(let i=0;i<8;i++)emit(myCar.x+Math.cos(myCar.a)*(Math.random()>.5?2:-2),.5,myCar.z+Math.sin(myCar.a)*2*(Math.random()-.5),(Math.random()-.5)*6,2+Math.random()*3,(Math.random()-.5)*6,.5,.25,0xffd34a,0,9,1);}
   R.topv=Math.max(R.topv,Math.abs(myCar.v));
   poseCar(myG,myCar,dt);fxCar(myCar,dt,ui,spec);
@@ -203,7 +204,7 @@ function onNet(m){
     if(m.w===-2){R.fin=true;R.phase='between';return;}
     const t=m.t;if(m.w===R.idx){R.ft=t;}R.res[R.r]=m.w===R.idx?'w':m.w<0?'d':'l';
     R.fin=true;R.phase='between';R.my.col+=R.col;R.my.dist+=R.dist;if(m.w===R.idx)R.my.t.push(t);else if(m.w>=0)R.op.t.push(t);
-    showRes(m.w,t);}
+    showRes(m.w,t,m.x?'crash':'');}
   else if(m.k==='end'&&R&&R.mode==='online'){R.endW=m.w;R.endWhy=m.why;R.sc=m.sc;if(m.why==='ab'||m.why==='dc'){R.finFlag=true;R.fin=true;R.phase='between';setTimeout(()=>{if(R&&!R.over)endMatch();},600);}}
   else if(m.k==='opp'){setOpp(m.on);if(R&&R.mode==='online')toast(m.on?'Adversaire reconnecté':'Adversaire déconnecté…');}
   else if(m.k==='pos'){oppT.x=m.x;oppT.z=m.z;oppT.a=m.a;oppT.s=m.s;}
@@ -278,7 +279,7 @@ function simBot(i,withCol,skill){const L=LV[i],c=mkCar(L.start.x,L.start.z,L.sta
   while(t<150){const bi=botInput(c,L,1/60,skill||.85);for(let k=0;k<2;k++){stepCar(c,bi,1/120);if(withCol&&collide(c,cols)>1)hits++;}t+=1/60;
     const p=parkInfo(c,L.slot);minD=Math.min(minD,p.out);if(p.out<=.1&&p.ang<=.2&&Math.abs(c.v)<.4)c.hold+=1/60;else c.hold=0;if(c.hold>=.7){pk=true;break;}}
   return{t:+t.toFixed(1),pk,hits,minD:+minD.toFixed(2),minT:L.minT};}
-window.__pk={botInput,mkCar,colsOf,get R(){return R;},get car(){return myCar;},simBot,LV,startSolo,stepCar,collide,parkInfo,get mode(){return mode;},setMode,toHome,show,openLobby,onNet,get cam(){return cam;},scene,renderer};
+window.__pk={get myCar(){return myCar},soloRound,botInput,mkCar,colsOf,get R(){return R;},get car(){return myCar;},simBot,LV,startSolo,stepCar,collide,parkInfo,get mode(){return mode;},setMode,toHome,show,openLobby,onNet,get cam(){return cam;},scene,renderer};
 /* ---------- démarrage ---------- */
 function init(){
   resize();showEnv=envMap(['#0a0e1c','#1b2440','#0a0e1c'],[[0xff7a1a,-30,12,10,40,4,5],[0x2b9dff,30,14,-10,40,4,5],[0xffffff,0,22,25,50,6,3],[0xffffff,0,22,-25,50,6,3]]);

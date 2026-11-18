@@ -26,7 +26,7 @@ function sat(c,o){
 function collide(c,cols){
   let imp=0;
   for(const o of cols){if(o.off)continue;
-    const h=sat(c,o);if(!h)continue;
+    const h=sat(c,o);if(!h)continue;c.touch=1;
     c.x+=h.nx*(h.d+.005);c.z+=h.nz*(h.d+.005);
     const vx=Math.cos(c.a)*c.v,vz=Math.sin(c.a)*c.v,vn=vx*h.nx+vz*h.nz;
     if(vn<0){imp=Math.max(imp,-vn);const nx=vx-vn*h.nx*1.15,nz=vz-vn*h.nz*1.15;c.v=(nx*Math.cos(c.a)+nz*Math.sin(c.a))*.8;}
@@ -74,7 +74,7 @@ function resetRound(lv,oppSpec,oppName){
   myG=buildCar(spec,false);world.add(myG);
   if(oppSpec){oppG=buildCar(oppSpec,true);ghostify(oppG);world.add(oppG);const tg=nameTag(oppName||'Adversaire','#ff7a1a');tg.position.y=2.6;oppG.add(tg);oppT={x:s.x,z:s.z,a:s.a,s:0,got:0};oppG.position.set(s.x,0,s.z);}
   botCar=R.bot?mkCar(s.x,s.z,s.a):null;if(botCar){botCar.k=1;botCar.wait=0;botCar.done=0;botCar.hold=0;}
-  R.hold=0;hold=0;R.col=0;R.dist=0;R.parked=false;R.claim=0;R.fin=false;R.topv=0;
+  R.hold=0;hold=0;R.crashed=0;R.col=0;R.dist=0;R.parked=false;R.claim=0;R.fin=false;R.topv=0;
   camYaw=s.a;showLevelSky();
 }
 /* ---------- robot (entraînement) ---------- */
