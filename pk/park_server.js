@@ -92,7 +92,7 @@ export class ParkHub{
   }
   async round(M){
     const lv=PLV[Math.min(M.r,PLV.length-1)];
-    M.ph='cd';M.st=Date.now()+3800;M.nx=[0,0];M.dl=M.st+lv.maxT*1000;await this.putM(M);
+    M.ph='cd';M.st=Date.now()+5600;M.nx=[0,0];M.dl=M.st+lv.maxT*1000;await this.putM(M);
     for(const p of M.ps)this.tid(p.id,{k:'rnd',r:M.r,lv:Math.min(M.r,PLV.length-1),st:M.st,sc:M.sc});
   }
   async endRound(M,w,el,col){

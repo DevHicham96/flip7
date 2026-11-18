@@ -63,6 +63,9 @@ const bx=(w,h,d,x,y,z,rx,ry,rz)=>{const g=new T3.BoxGeometry(w,h,d);if(rx)g.rota
 const MAT={};const mat=(k,f)=>MAT[k]||(MAT[k]=f());
 const stdm=(c,r,m,o)=>new T3.MeshStandardMaterial(Object.assign({color:c,roughness:r,metalness:m},o||{}));
 /* ---------- voitures ---------- */
+function smoothN(g){const P=g.attributes.position.array,N=g.attributes.normal.array,m=new Map(),k=i=>Math.round(P[i*3]*400)+'_'+Math.round(P[i*3+1]*400)+'_'+Math.round(P[i*3+2]*400),n=P.length/3;
+  for(let i=0;i<n;i++){const q=k(i);let a=m.get(q);if(!a){a=[0,0,0];m.set(q,a);}a[0]+=N[i*3];a[1]+=N[i*3+1];a[2]+=N[i*3+2];}
+  for(let i=0;i<n;i++){const a=m.get(k(i)),l=Math.hypot(a[0],a[1],a[2])||1;N[i*3]=a[0]/l;N[i*3+1]=a[1]/l;N[i*3+2]=a[2]/l;}g.attributes.normal.needsUpdate=true;return g;}
 const chaikin=(p,it)=>{for(let k=0;k<it;k++){const q=[];for(let i=0;i<p.length;i++){const a=p[i],b=p[(i+1)%p.length];q.push([a[0]*.75+b[0]*.25,a[1]*.75+b[1]*.25],[a[0]*.25+b[0]*.75,a[1]*.25+b[1]*.75]);}p=q;}return p;};
 const MODELS=[
  {n:'Citadine',L:4.0,W:1.78,belt:.98,r:.3,hl:.62,tl:.82,wing:0,pr:0,pts:[[.04,.22],[0,.5],[0,1.05],[.04,1.25],[.12,1.4],[.3,1.5],[.55,1.52],[.64,1.46],[.74,1.0],[.9,.92],[.985,.72],[1,.5],[.97,.28],[.92,.22]]},
@@ -79,7 +82,7 @@ function modelGeo(mi){
   if(MG[mi])return MG[mi];const M=MODELS[mi],L=M.L,W=M.W;
   const raw=M.pts.map(p=>[(p[0]-.5)*L*.96,p[1]]),sm=chaikin(raw,2);
   const sh=new T3.Shape(sm.map(p=>new T3.Vector2(p[0],p[1])));
-  const d=W-.22,bod=new T3.ExtrudeGeometry(sh,{depth:d,bevelEnabled:true,bevelThickness:.11,bevelSize:.1,bevelSegments:3,curveSegments:1});bod.translate(0,0,-d/2);
+  const d=W-.22,bod=new T3.ExtrudeGeometry(sh,{depth:d,bevelEnabled:true,bevelThickness:.11,bevelSize:.1,bevelSegments:3,curveSegments:1});bod.translate(0,0,-d/2);smoothN(bod);
   const up=sm.filter(p=>p[1]>M.belt);let ym=0;up.forEach(p=>ym=Math.max(ym,p[1]));
   const cx=up.reduce((s,p)=>s+p[0],0)/up.length,cyy=up.reduce((s,p)=>s+p[1],0)/up.length;
   const ins=up.map(p=>new T3.Vector2(cx+(p[0]-cx)*.93,cyy+(p[1]-cyy)*.9));
@@ -97,6 +100,7 @@ function modelGeo(mi){
   if(M.wing>=2)tail.push(bx(.06,.09,W*.7,-fw+.02,M.tl,0));
   for(const s of [1,-1])for(const x of [wx,-wx]){const g=new T3.CylinderGeometry(M.r+.08,M.r+.08,.02,20);g.rotateX(Math.PI/2);g.translate(x,M.r,s*(W/2+.004));dark.push(g);}
   for(const s of [1,-1]){const g=new T3.CylinderGeometry(.045,.045,.3,8);g.rotateZ(Math.PI/2);g.translate(-L*.48,.3,s*.5);dark.push(g);}
+  dark.push(bx(L*.74,.12,W+.02,0,.24,0));
   const wing=[];
   if(M.wing){const y=M.wing===3?M.tl+.42:M.tl+.3;wing.push(bx(.3,.05,W*.92,-L*.47,y,0),bx(.05,.34,.05,-L*.46,y-.18,W*.3),bx(.05,.34,.05,-L*.46,y-.18,-W*.3));}
   return MG[mi]={M,bod,glass,rb:[rib(.22,.112),rib(.06,.114)],dark:merge(dark),lite:merge(lite),tail:merge(tail),wing:wing.length?merge(wing):null,wx};
@@ -104,17 +108,17 @@ function modelGeo(mi){
 function rimGeo(st,r){const a=[];const disc=(rad,h,z)=>{const g=new T3.CylinderGeometry(rad,rad,h,24);g.rotateX(Math.PI/2);g.translate(0,0,z);return g;};
   const tor=(rad,z)=>{const g=new T3.TorusGeometry(rad,.025,6,24);g.translate(0,0,z);return g;};
   const sp=(n,len,w,th,z,rot)=>{for(let i=0;i<n;i++){const g=new T3.BoxGeometry(len,w,th);g.translate(len/2,0,z);g.rotateZ(i/n*Math.PI*2+(rot||0));a.push(g);}};
-  a.push(disc(r*.2,.06,.13));
-  if(st===0)sp(5,r*.82,r*.16,.05,.1);else if(st===1)sp(10,r*.82,r*.06,.04,.1);
-  else if(st===2){a.push(disc(r*.8,.03,.1),tor(r*.72,.12));}
-  else if(st===3){sp(12,r*.82,r*.05,.03,.1);sp(12,r*.82,r*.05,.03,.09,.13);a.push(tor(r*.5,.1));}
-  else sp(3,r*.84,r*.32,.05,.1);
-  a.push(tor(r*.84,.1));return merge(a);}
+  a.push(disc(r*.22,.06,.15));
+  if(st===0)sp(5,r*.8,r*.17,.05,.15);else if(st===1)sp(10,r*.8,r*.07,.05,.15);
+  else if(st===2){a.push(disc(r*.78,.03,.145),tor(r*.7,.15));}
+  else if(st===3){sp(12,r*.8,r*.06,.04,.15);sp(12,r*.8,r*.06,.04,.145,.13);a.push(tor(r*.5,.15));}
+  else sp(3,r*.82,r*.34,.05,.15);
+  a.push(tor(r*.82,.15));return merge(a);}
 const RIMG={};
 const FINISH=[{n:'Brillant',f:{roughness:.25,metalness:.2,clearcoat:1,clearcoatRoughness:.04}},{n:'Mat',f:{roughness:.85,metalness:.1,clearcoat:0}},{n:'Métallisé',f:{roughness:.28,metalness:.75,clearcoat:1,clearcoatRoughness:.05}},{n:'Chrome',f:{roughness:.04,metalness:1,clearcoat:0}},{n:'Nacré',f:{roughness:.2,metalness:.3,clearcoat:1,iridescence:1,iridescenceIOR:1.6}}];
 const paintMat=(col,fi)=>new T3.MeshPhysicalMaterial(Object.assign({color:col},FINISH[fi||0].f,{envMapIntensity:1.2}));
 const TINT=[.08,.35,.7,.95];
-const glassMat=t=>mat('gl'+t,()=>new T3.MeshPhysicalMaterial({color:0x0a1018,roughness:.05,metalness:.2,transparent:true,opacity:.55+TINT[t]*.4,envMapIntensity:1.6,clearcoat:1}));
+const glassMat=t=>mat('gl'+t,()=>new T3.MeshPhysicalMaterial({color:0x142030,roughness:.03,metalness:.35,transparent:true,opacity:.62+TINT[t]*.35,envMapIntensity:2.4,clearcoat:1}));
 function decalTex(k,col){return ctex(512,128,(c,w,h)=>{c.clearRect(0,0,w,h);
   if(k===3){for(let i=0;i<16;i++)for(let j=0;j<4;j++){c.fillStyle=(i+j)%2?'#111':'#fff';c.fillRect(i*32,j*32,32,32);}}
   else if(k===2){const g=c.createLinearGradient(0,h,0,0);g.addColorStop(0,'#ffe25a');g.addColorStop(.5,'#ff8a1f');g.addColorStop(1,'#d82a10');c.fillStyle=g;c.beginPath();c.moveTo(0,h);for(let i=0;i<8;i++){const x=i*64;c.quadraticCurveTo(x+20,h*.5,x+32,h*(.1+(i%3)*.15));c.quadraticCurveTo(x+40,h*.55,x+64,h);}c.lineTo(w,h);c.fill();}

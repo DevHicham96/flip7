@@ -121,16 +121,14 @@ function showFrame(dt){
   if(showCar){showCar.rotation.y=showA;for(const w of showCar.userData.wheels)w.rotation.z-=dt*2;}
   const asp=innerWidth/innerHeight,por=asp<.9,g=mode==='garage';
   const d=g?(por?9.5:8):(por?12:9.5),a=g?.9+Math.sin(tNow*.3)*.25:-.7+Math.sin(tNow*.2)*.3;
-  const px=Math.cos(a)*d,pz=Math.sin(a)*d,py=g?2.2:2.8;
-  cam.position.lerp(new T3.Vector3(px,py,pz),.1);
-  const rx=-(-pz)/d,rz=-px/d;// vecteur droit approx
-  const sh=g?(por?0:-2.4):(por?0:2.6);let lx=-px/d*0,lz=0;
-  const dirx=-px/d,dirz=-pz/d,rgx=-dirz,rgz=dirx;
-  cam.lookAt(rgx*sh*-1*-1*-1*1,por?(g?-.2:-2.6):.9,rgz*sh*-1*-1*-1*1);
+  cam.position.lerp(new T3.Vector3(Math.cos(a)*d,g?2.2:2.8,Math.sin(a)*d),.1);
+  const dx=-Math.cos(a),dz=-Math.sin(a),rx=-dz,rz=dx,sh=por?0:(g?-2.4:2.6);
+  cam.lookAt(-rx*sh,por?(g?-1.2:-2.8):.9,-rz*sh);
 }
 function playFrame(dt){
-  const L=R.O.L,t=(nowS()-R.st)/1000,inp=inputs();
-  if(R.mode==='solo')tNowS=0;
+  const L=R.O.L;
+  if(R.phase==='wait'){camIntro(.4+Math.sin(tNow*.5)*.3,L);setPoseNow(dt);return;}
+  const t=(nowS()-R.st)/1000,inp=inputs();
   updGates(t);
   // phases
   if(t<-3){camIntro((t+5.6)/2.6,L);setPoseNow(dt);$('intro').hidden=false;return;}
@@ -178,7 +176,6 @@ function playFrame(dt){
   if(od!=null){const o=Math.max(0,od-2.5);$('hdo').textContent=`${R.names[1-R.idx]} · ${o.toFixed(0)} m`;$('bo').style.width=clamp(100-o*2.2,4,100)+'%';}
   camUpdate(dt);
 }
-let tNowS=0;
 function setPoseNow(dt){poseCar(myG,myCar,0);if(oppG)setPose(oppG,oppT.x,oppT.z,oppT.a,0,0,0);}
 /* ---------- réseau ---------- */
 let ws=null,wsOk=false,wsTimer=0,wsWant=false,netN=0;
@@ -281,7 +278,7 @@ function simBot(i,withCol,skill){const L=LV[i],c=mkCar(L.start.x,L.start.z,L.sta
   while(t<150){const bi=botInput(c,L,1/60,skill||.85);for(let k=0;k<2;k++){stepCar(c,bi,1/120);if(withCol&&collide(c,cols)>1)hits++;}t+=1/60;
     const p=parkInfo(c,L.slot);minD=Math.min(minD,p.out);if(p.out<=.1&&p.ang<=.2&&Math.abs(c.v)<.4)c.hold+=1/60;else c.hold=0;if(c.hold>=.7){pk=true;break;}}
   return{t:+t.toFixed(1),pk,hits,minD:+minD.toFixed(2),minT:L.minT};}
-window.__pk={get R(){return R;},get car(){return myCar;},simBot,LV,startSolo,stepCar,collide,parkInfo,get mode(){return mode;},setMode,toHome,show,openLobby,onNet,get cam(){return cam;},scene,renderer};
+window.__pk={botInput,mkCar,colsOf,get R(){return R;},get car(){return myCar;},simBot,LV,startSolo,stepCar,collide,parkInfo,get mode(){return mode;},setMode,toHome,show,openLobby,onNet,get cam(){return cam;},scene,renderer};
 /* ---------- démarrage ---------- */
 function init(){
   resize();showEnv=envMap(['#0a0e1c','#1b2440','#0a0e1c'],[[0xff7a1a,-30,12,10,40,4,5],[0x2b9dff,30,14,-10,40,4,5],[0xffffff,0,22,25,50,6,3],[0xffffff,0,22,-25,50,6,3]]);

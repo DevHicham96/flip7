@@ -26,9 +26,6 @@ function groundTex(L,kind){
     const X=x=>(x-x0)*S,Z=z=>(z-z0)*S;
     c.strokeStyle=kind===1?'#ffd23f':'#f2f2f2';c.lineWidth=.14*S;c.lineCap='square';
     for(const s of L.slots){const top=s.z<L.slot.z+1,xa=X(s.x-s.w/2),xb=X(s.x+s.w/2),za=Z(s.z-s.l/2),zb=Z(s.z+s.l/2);c.beginPath();c.moveTo(xa,top?zb:za);c.lineTo(xa,top?za:zb);c.lineTo(xb,top?za:zb);c.lineTo(xb,top?zb:za);c.stroke();}
-    // flèches de circulation
-    c.fillStyle='rgba(255,255,255,.55)';const lz=Z((L.slot.z+SLd()/2+(L.b[3]-L.slot.z-SLd()/2)*.0)+0.0);
-    function SLd(){return 5.2;}
     c.strokeStyle='rgba(255,210,63,.8)';c.lineWidth=.12*S;c.strokeRect(1,1,w-2,h-2);
     c.fillStyle='rgba(255,255,255,.35)';c.font=`900 ${Math.round(S*1.5)}px Arial`;c.textAlign='center';
     L.slots.forEach((s,i)=>{if(s.z<L.slot.z+1&&Math.abs(s.x-L.slot.x)>.1)c.fillText(String(i+1),X(s.x),Z(s.z+s.l/2-.5));});
