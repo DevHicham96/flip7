@@ -185,7 +185,7 @@ export class ParkHub{
       if(!M.dl||now<M.dl)continue;
       if(M.ph==='ready'){await this.round(M);}
       else if(M.ph==='cd'||M.ph==='run'){M.rd.push({w:-1,t:0});M.ph='between';M.nx=[0,0];M.dl=now+30000;await this.endRound(M,-1,0,0);}
-      else if(M.ph==='between'){M.r++;await this.round(M);}
+      else if(M.ph==='between'){await this.round(M);}
     }
     await this.sched();
   }
