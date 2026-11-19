@@ -1157,7 +1157,7 @@ function syncVis(k){
   if(k.fly>0){if(!k.wg){k.wg=mkWings();k.g.add(k.wg);}k.wg.visible=true;const f=Math.sin(time*14)*.45;k.wg.children[0].rotation.z=.45+f;k.wg.children[1].rotation.z=-.45-f;}else if(k.wg)k.wg.visible=false;
   k.g.visible=!(k.gh>0)||((time*10)%1)<.6;
   const sl=SL[k.idx]||0;
-  k.g.position.set(k.pos.x,k.pos.y,k.pos.z);k.g.rotation.y=k.yaw+k.spinYaw;
+  k.g.position.set(k.pos.x,k.pos.y,k.pos.z);k.g.rotation.set(0,k.yaw+k.spinYaw,0);
   if(k.tb){tubeBasis(k);_X.crossVectors(_U,_F).normalize();_m4.makeBasis(_X,_U,_F);k.g.quaternion.setFromRotationMatrix(_m4);if(k.spinYaw)k.g.rotateY(k.spinYaw);}
   const dv=k.drift?k.driftDir*.42:0;k.hy+=(dv-k.hy)*.2;
   k.body.rotation.y=k.hy;k.body.rotation.x=-Math.atan(sl);k.body.rotation.z=(-k.st*.07*Math.min(1,Math.abs(k.speed)/30))-(k.drift?k.driftDir*.07:0);
