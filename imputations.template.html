@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Suivi Imputations · Atelier Gaming</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2334d399'/%3E%3Ctext x='32' y='44' font-size='34' text-anchor='middle'%3E✅%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Nunito:wght@600;700;900&display=swap">
+<style>
+:root{--bg:#0b0826;--card:#17114a;--card2:#1f1860;--line:#3a2f8f;--fg:#f1f3ff;--mut:#a9b0e6;--gold:#ffd23f;--green:#34d399;--red:#ff5a6a;--blue:#4da3ff;--orange:#ffa94d;--gray:#4b4f73;color-scheme:dark}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:radial-gradient(120% 80% at 50% 0%,#2c1a78 0,#150c3e 50%,#080519 100%) fixed;color:var(--fg);font:600 15px/1.45 'Nunito',system-ui,sans-serif;padding-block:18px 60px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));min-height:100vh}
+.w{max-width:1120px;margin:0 auto;display:grid;gap:16px}
+header{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+h1{margin:0;font:400 clamp(26px,6vw,42px)/1 'Lilita One',sans-serif;color:var(--gold);text-shadow:0 4px 0 #2a0f5c}
+.sub{color:var(--mut);margin:4px 0 0;max-width:64ch}
+a.back{color:var(--mut);text-decoration:none;font-weight:900;border:2px solid var(--line);border-radius:12px;padding:6px 12px;background:#ffffff0d}
+.card{background:linear-gradient(var(--card2),var(--card));border:2px solid var(--line);border-radius:18px;padding:16px;box-shadow:0 8px 24px #0006,inset 0 1px 0 #ffffff14;min-width:0}
+.card h2{margin:0 0 10px;font:400 20px 'Lilita One',sans-serif;color:var(--gold)}
+.tabs{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px}
+.tab{flex:none;font:900 14px 'Nunito';color:var(--mut);background:#ffffff0d;border:2px solid var(--line);border-radius:12px;padding:8px 14px;cursor:pointer}
+.tab.on{background:linear-gradient(#ffe97a,#ffb81f);color:#3a1a00;border-color:#fff}
+.btn{font:900 14px 'Nunito';border:0;border-radius:12px;padding:9px 14px;cursor:pointer;color:#3a1a00;background:linear-gradient(#ffe97a,#ffb81f);box-shadow:0 3px 0 #8a6212}
+.btn.alt{background:#ffffff14;color:var(--fg);box-shadow:none;border:2px solid var(--line)}
+.btn.ok{background:linear-gradient(#6ee7b7,#10b981);color:#04281c;box-shadow:0 3px 0 #0a6b4c}
+.btn.bad{background:linear-gradient(#ff8b97,#ff5a6a);color:#3a0008;box-shadow:0 3px 0 #99303b}
+.btn.sm{padding:5px 10px;font-size:12px}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+label{display:grid;gap:5px;font-weight:900;font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--mut)}
+input,select,textarea{font:800 15px 'Nunito';color:var(--fg);background:#0e0a33;border:2px solid var(--line);border-radius:12px;padding:9px 11px;width:100%;min-width:0}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--gold)}
+.form{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;align-items:end}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.kpi{background:#0e0a33;border:2px solid var(--line);border-radius:14px;padding:12px}
+.kpi b{display:block;font:400 30px 'Lilita One';line-height:1.1}.kpi span{font-size:12px;color:var(--mut);font-weight:900;text-transform:uppercase;letter-spacing:.04em}
+.kpi.g b{color:var(--green)}.kpi.r b{color:var(--red)}.kpi.o b{color:var(--orange)}.kpi.b b{color:var(--blue)}
+.two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px}
+@media(max-width:860px){.two{grid-template-columns:1fr}}
+.bar{display:grid;grid-template-columns:minmax(80px,32%) 1fr auto;gap:8px;align-items:center;margin:7px 0;font-size:13px}
+.bar i{display:block;height:12px;border-radius:8px;background:#ffffff14;overflow:hidden}.bar i u{display:block;height:100%;background:linear-gradient(90deg,var(--blue),var(--green))}
+.bar span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.alert{display:flex;gap:10px;align-items:flex-start;border-radius:12px;padding:10px 12px;margin:8px 0;border:2px solid;font-size:14px}
+.alert.r{border-color:var(--red);background:#ff5a6a1c}.alert.o{border-color:var(--orange);background:#ffa94d1c}.alert.g{border-color:var(--green);background:#34d3991c}.alert.b{border-color:var(--blue);background:#4da3ff1c}
+.alert button{margin-left:auto;flex:none}
+.calh{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px}
+.calh h3{margin:0;font:400 22px 'Lilita One';color:var(--gold);text-align:center;flex:1}
+.nav{width:40px;height:40px;border-radius:12px;border:2px solid var(--line);background:#ffffff0d;color:var(--fg);font-size:22px;cursor:pointer}
+.grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px}
+.dh{text-align:center;color:var(--mut);font-size:12px;font-weight:900;text-transform:uppercase}
+.cell{min-height:64px;border-radius:12px;border:2px solid var(--line);background:#0e0a33;padding:5px 6px;cursor:pointer;text-align:left;color:var(--fg);font:800 13px 'Nunito';display:flex;flex-direction:column;justify-content:space-between;min-width:0}
+.cell small{font-size:10px;color:var(--mut);font-weight:800;line-height:1.2;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cell.out{opacity:.25;pointer-events:none}.cell.off{background:#171a3a;color:var(--mut);border-style:dashed}
+.cell.ok{border-color:var(--green);background:#34d39922}.cell.part{border-color:var(--orange);background:#ffa94d22}.cell.miss{border-color:var(--red);background:#ff5a6a22}
+.cell.conge{border-color:var(--blue);background:#4da3ff22}.cell.today{box-shadow:0 0 0 3px var(--gold)}.cell.fut{opacity:.8}
+.leg{display:flex;gap:12px;flex-wrap:wrap;margin-top:10px;font-size:12px;color:var(--mut)}.leg i{display:inline-block;width:12px;height:12px;border-radius:4px;margin-right:5px;vertical-align:-1px}
+table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:8px 9px;border-bottom:1px solid #ffffff1f;text-align:left;vertical-align:top}th{color:var(--mut);font-size:11px;text-transform:uppercase;letter-spacing:.05em}
+.tw{overflow-x:auto}
+.pill{display:inline-block;border-radius:99px;padding:2px 9px;font-size:11px;font-weight:900}.pill.g{background:#34d39933;color:var(--green)}.pill.r{background:#ff5a6a33;color:var(--red)}.pill.o{background:#ffa94d33;color:var(--orange)}
+.ov{position:fixed;inset:0;background:#000b;display:grid;place-items:center;padding:14px;z-index:50}
+.ov[hidden]{display:none}
+.mod{width:min(640px,100%);max-height:92vh;overflow:auto;background:linear-gradient(160deg,#2a1d78,#120c38);border:2px solid var(--line);border-radius:20px;padding:16px;display:grid;gap:12px}
+.ent{border:2px solid var(--line);border-radius:14px;padding:10px;display:grid;gap:8px;background:#0e0a3366}
+.ent .form{grid-template-columns:repeat(auto-fit,minmax(120px,1fr))}
+.sug{border:2px solid var(--line);border-radius:14px;padding:10px 12px;margin:8px 0;display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;background:#0e0a3366}
+.sug b{color:var(--gold)}.mut{color:var(--mut);font-size:13px}
+.toast{position:fixed;left:50%;bottom:22px;transform:translate(-50%,20px);background:#10b981;color:#04281c;font-weight:900;padding:10px 16px;border-radius:12px;opacity:0;pointer-events:none;transition:.25s;z-index:80}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+.ver{text-align:center;color:var(--mut);font-size:12px}
+</style></head><body>
+<div class="w">
+<header>
+  <div><h1>✅ Suivi Imputations</h1><p class="sub">Note tes jours travaillés et tes tickets Jira. L'outil te dit chaque jour ce qu'il reste à imputer et où. Données gardées sur cet appareil uniquement.</p></div>
+  <a class="back" href="index.html">⬅ Retour aux jeux</a>
+</header>
+<nav class="tabs" id="tabs"></nav>
+<div id="view"></div>
+<div class="ver" id="ver"></div>
+</div>
+<div class="ov" id="ov" hidden><div class="mod" id="mod"></div></div>
+<div class="toast" id="toast"></div>
+<script>
+'use strict';
+const $=id=>document.getElementById(id);
+const MONTHS=['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
+const DOWS=['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'];
+const DAYS=[.25,.5,.75,1];
+const STAT={work:'Travaillé',conge:'Congé',rtt:'RTT',abs:'Absence'};
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const pad=n=>String(n).padStart(2,'0');
+const D=(y,m,d)=>new Date(y,m,d,12);
+const key=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+const fromKey=k=>{const [y,m,d]=k.split('-').map(Number);return D(y,m-1,d);};
+const addDays=(d,n)=>D(d.getFullYear(),d.getMonth(),d.getDate()+n);
+const dow=d=>(d.getDay()+6)%7;
+const r2=n=>Math.round(n*100)/100;
+const nf=n=>String(r2(n)).replace('.',',');
+const fmtL=k=>{const d=fromKey(k);return ['lundi','mardi','mercredi','jeudi','vendredi','samedi','dimanche'][dow(d)]+' '+d.getDate()+' '+MONTHS[d.getMonth()].toLowerCase();};
+const uid=()=>Math.random().toString(36).slice(2,9);
+$('ver').textContent=window.AT_VER||'';
+let tt=0;function toast(t){const e=$('toast');e.textContent=t;e.classList.add('on');clearTimeout(tt);tt=setTimeout(()=>e.classList.remove('on'),2200);}
+/* ---------- stockage ---------- */
+const SK='atimp1';
+let S={days:{},sprints:[]};
+try{const v=JSON.parse(localStorage.getItem(SK)||'null');if(v&&v.days&&v.sprints)S=v;}catch(e){}
+function save(){try{localStorage.setItem(SK,JSON.stringify(S));}catch(e){toast('⚠️ Sauvegarde impossible (stockage bloqué)');}}
+/* ---------- jours fériés FR ---------- */
+const hcache={};
+function holidays(y){if(hcache[y])return hcache[y];
+  const a=y%19,b=Math.floor(y/100),c=y%100,d=Math.floor(b/4),e=b%4,f=Math.floor((b+8)/25),g=Math.floor((b-f+1)/3),h=(19*a+b-d-g+15)%30,i=Math.floor(c/4),k=c%4,l=(32+2*e+2*i-h-k)%7,m=Math.floor((a+11*h+22*l)/451),mo=Math.floor((h+l-7*m+114)/31),da=((h+l-7*m+114)%31)+1;
+  const p=D(y,mo-1,da),H={};const add=(dt,n)=>{H[key(dt)]=n;};
+  add(D(y,0,1),'Jour de l\'an');add(addDays(p,1),'Lundi de Pâques');add(D(y,4,1),'Fête du travail');add(D(y,4,8),'Victoire 1945');add(addDays(p,39),'Ascension');add(addDays(p,50),'Lundi de Pentecôte');add(D(y,6,14),'Fête nationale');add(D(y,7,15),'Assomption');add(D(y,10,1),'Toussaint');add(D(y,10,11),'Armistice');add(D(y,11,25),'Noël');
+  return hcache[y]=H;}
+const holName=k=>holidays(+k.slice(0,4))[k]||'';
+const isOff=k=>{const d=fromKey(k);return dow(d)>4||!!holName(k);};
+/* ---------- calculs ---------- */
+const todayK=key(new Date());
+const rec=k=>S.days[k]||null;
+const stOf=k=>{const r=rec(k);return r&&r.st?r.st:'work';};
+const ents=k=>{const r=rec(k);return r&&r.e?r.e:[];};
+const sumD=(arr,f)=>r2(arr.reduce((s,e)=>s+(f(e)?+e.d||0:0),0));
+/* un jour travaillé "dû" = jour ouvré, statut travaillé, passé ou aujourd'hui */
+function dayInfo(k){
+  const off=isOff(k),st=stOf(k),e=ents(k);
+  const worked=!off&&st==='work',past=k<=todayK;
+  const logged=sumD(e,()=>true),imp=Math.min(1,sumD(e,x=>x.imp));
+  return{k,off,st,worked,past,due:worked&&past?1:0,logged,imp:worked?imp:0,miss:worked&&past?r2(Math.max(0,1-imp)):0,
+    state:off?'off':st!=='work'?'conge':!past?'fut':imp>=1?'ok':imp>0?'part':'miss'};}
+function monthKeys(y,m){const n=new Date(y,m+1,0).getDate(),a=[];for(let i=1;i<=n;i++)a.push(y+'-'+pad(m+1)+'-'+pad(i));return a;}
+function sprintOf(k){return S.sprints.find(s=>s.start&&s.end&&k>=s.start&&k<=s.end)||null;}
+function sprintStats(s){let w=0,im=0,miss=0;
+  for(let d=fromKey(s.start);key(d)<=s.end;d=addDays(d,1)){const i=dayInfo(key(d));w+=i.due;im+=i.imp;miss+=i.miss;}
+  const logged=Object.keys(S.days).filter(k=>k>=s.start&&k<=s.end&&!isOff(k)&&stOf(k)==='work').reduce((t,k)=>t+Math.min(1,sumD(ents(k),()=>true)),0);
+  return{w:r2(w),im:r2(im),miss:r2(miss),logged:r2(logged)};}
+function monthStats(y,m){const ks=monthKeys(y,m);let ouv=0,due=0,imp=0,miss=0,conge=0;const bySp={},byPr={};
+  for(const k of ks){const off=isOff(k);if(!off)ouv++;const i=dayInfo(k);if(!off&&i.st!=='work')conge++;due+=i.due;imp+=i.imp;miss+=i.miss;
+    if(!off&&i.st==='work')for(const e of ents(k)){if(!e.imp)continue;const sp=e.sprint||(sprintOf(k)||{}).name||'(sans sprint)',pr=e.proj||'(sans projet)';bySp[sp]=r2((bySp[sp]||0)+(+e.d||0));byPr[pr]=r2((byPr[pr]||0)+(+e.d||0));}}
+  return{ouv,due:r2(due),imp:r2(imp),miss:r2(miss),conge,pct:due?Math.round(imp/due*100):100,bySp,byPr};}
+function alerts(y,m){const out=[],ks=monthKeys(y,m).filter(k=>k<=todayK);
+  const noImp=[],part=[];for(const k of ks){const i=dayInfo(k);if(!i.worked)continue;if(i.imp===0)noImp.push(k);else if(i.imp<1)part.push(k);}
+  if(noImp.length)out.push({c:'r',t:`⛔ ${noImp.length} jour(s) travaillé(s) sans aucune imputation : ${noImp.slice(-6).map(k=>k.slice(8)+'/'+k.slice(5,7)).join(', ')}${noImp.length>6?'…':''}`,a:'reg'});
+  if(part.length)out.push({c:'o',t:`⚠️ ${part.length} jour(s) partiellement imputé(s) : ${part.slice(-6).map(k=>k.slice(8)+'/'+k.slice(5,7)).join(', ')}`,a:'reg'});
+  for(const s of S.sprints){if(s.end<todayK){const st=sprintStats(s);if(st.miss>0)out.push({c:'r',t:`🏁 Sprint « ${esc(s.name)} » terminé avec ${nf(st.miss)} jour(s) manquant(s)`,a:'reg'});}
+    else if(s.start<=todayK){const st=sprintStats(s);const left=Math.round((fromKey(s.end)-new Date())/864e5);if(left<=2&&st.miss>0)out.push({c:'o',t:`⏳ Sprint « ${esc(s.name)} » se termine bientôt (${nf(st.miss)} j à imputer)`,a:'reg'});}}
+  const now=new Date(),dw=dow(now);
+  if(dw>=3&&dw<=4){const wk=[];for(let i=0;i<=dw;i++)wk.push(key(addDays(now,i-dw)));const miss=r2(wk.reduce((t,k)=>t+dayInfo(k).miss,0));out.push({c:'b',t:dw===4?`📅 C'est vendredi : vérifie tes imputations de la semaine (${nf(miss)} j manquant${miss>1?'s':''}).`:`📅 Fin de semaine proche : ${nf(miss)} j à imputer cette semaine.`,a:'reg'});}
+  const ms=monthStats(y,m);if(ms.due&&Math.abs(ms.due-ms.imp)>=.25)out.push({c:'o',t:`📊 Écart du mois : ${nf(ms.due)} j travaillés pour ${nf(ms.imp)} j imputés.`,a:'reg'});
+  if(!out.length)out.push({c:'g',t:'✅ Tu es à jour : aucune imputation manquante.'});
+  return out;}
+/* ---------- navigation ---------- */
+let tab='dash',cur=new Date(),filt={m:'',sp:'',pr:'',tk:'',im:''};
+const TABS=[['dash','📊 Tableau de bord'],['cal','🗓️ Calendrier'],['reg','🧭 Où imputer ?'],['spr','🏁 Sprints'],['his','📚 Historique'],['dat','💾 Données']];
+function nav(){$('tabs').innerHTML=TABS.map(t=>`<button class="tab${t[0]===tab?' on':''}" data-t="${t[0]}">${t[1]}</button>`).join('');}
+$('tabs').onclick=e=>{const b=e.target.closest('.tab');if(b){tab=b.dataset.t;render();}};
+const Y=()=>cur.getFullYear(),M=()=>cur.getMonth();
+function monthBar(){return`<div class="calh"><button class="nav" data-mv="-1" aria-label="Mois précédent">‹</button><h3>${MONTHS[M()]} ${Y()}</h3><button class="nav" data-mv="1" aria-label="Mois suivant">›</button></div>`;}
+document.addEventListener('click',e=>{const b=e.target.closest('[data-mv]');if(b){cur=new Date(Y(),M()+ +b.dataset.mv,1);render();}});
+function render(){nav();const v=$('view');({dash:vDash,cal:vCal,reg:vReg,spr:vSpr,his:vHis,dat:vDat})[tab](v);}
+/* ---------- tableau de bord ---------- */
+function bars(o){const e=Object.entries(o).sort((a,b)=>b[1]-a[1]);if(!e.length)return'<p class="mut">Rien d\'imputé ce mois-ci.</p>';const mx=Math.max(...e.map(x=>x[1]));
+  return e.map(([k,v])=>`<div class="bar"><span title="${esc(k)}">${esc(k)}</span><i><u style="width:${v/mx*100}%"></u></i><b>${nf(v)} j</b></div>`).join('');}
+function donut(p){const R=52,C=2*Math.PI*R;return`<svg viewBox="0 0 140 140" width="150" height="150" role="img" aria-label="${p}% imputé"><circle cx="70" cy="70" r="${R}" fill="none" stroke="#ffffff1c" stroke-width="16"/><circle cx="70" cy="70" r="${R}" fill="none" stroke="${p>=100?'#34d399':p>=60?'#ffa94d':'#ff5a6a'}" stroke-width="16" stroke-linecap="round" stroke-dasharray="${C*Math.min(1,p/100)} ${C}" transform="rotate(-90 70 70)"/><text x="70" y="78" text-anchor="middle" font-family="Lilita One" font-size="30" fill="#f1f3ff">${p}%</text></svg>`;}
+function vDash(v){const ms=monthStats(Y(),M()),al=alerts(Y(),M()),tk=todayK,ti=dayInfo(tk),te=ents(tk);
+  let td='';if(isOff(tk))td='<p class="mut">Aujourd\'hui est un jour non travaillé 🎉</p>';
+  else td=`<p>${te.length?te.map(e=>`${e.imp?'✅':'❌'} <b>${esc(e.tk||'—')}</b> ${esc(e.desc||'')} · ${nf(e.d)} j`).join('<br>'):'<span class="mut">Rien de noté aujourd\'hui.</span>'}</p><button class="btn sm" data-open="${tk}">✏️ Renseigner aujourd'hui</button>`;
+  v.innerHTML=`<section class="card">${monthBar()}<div class="kpis">
+   <div class="kpi"><span>Jours ouvrés</span><b>${ms.ouv}</b></div><div class="kpi b"><span>Jours travaillés</span><b>${nf(ms.due)}</b></div>
+   <div class="kpi g"><span>Imputés Jira</span><b>${nf(ms.imp)}</b></div><div class="kpi ${ms.miss?'r':'g'}"><span>Restant à imputer</span><b>${nf(ms.miss)}</b></div>
+   <div class="kpi"><span>Congés / absences</span><b>${ms.conge}</b></div></div></section>
+  <div class="two"><section class="card"><h2>Aujourd'hui</h2>${td}${ti.worked?`<p class="mut">Imputé : ${nf(ti.imp)} / 1 j</p>`:''}</section>
+  <section class="card"><h2>🔔 Alertes</h2>${al.map(a=>`<div class="alert ${a.c}"><span>${a.t}</span>${a.a?`<button class="btn sm" data-go="${a.a}">Régulariser</button>`:''}</div>`).join('')}</section></div>
+  <div class="two"><section class="card" style="display:grid;place-items:center;text-align:center"><h2>Imputation du mois</h2>${donut(ms.pct)}<p class="mut">${nf(ms.imp)} j imputés sur ${nf(ms.due)} j travaillés</p></section>
+  <section class="card"><h2>Par sprint</h2>${bars(ms.bySp)}<h2 style="margin-top:14px">Par projet</h2>${bars(ms.byPr)}</section></div>`;}
+/* ---------- calendrier ---------- */
+function vCal(v){const first=D(Y(),M(),1),lead=dow(first),ks=monthKeys(Y(),M());let h=`<section class="card">${monthBar()}<div class="grid">${DOWS.map(d=>`<div class="dh">${d}</div>`).join('')}`;
+  for(let i=0;i<lead;i++)h+='<div></div>';
+  for(const k of ks){const i=dayInfo(k),hn=holName(k),e=ents(k);const cls=i.state==='off'?'off':i.state;
+    const sm=hn?hn:i.st!=='work'?STAT[i.st]:e.length?e.map(x=>x.tk||'—').join(', '):'';
+    h+=`<button class="cell ${cls}${k===todayK?' today':''}" data-open="${k}"><span>${+k.slice(8)}</span><small>${esc(sm)}</small><small>${i.worked&&(e.length||i.past)?nf(i.imp)+'/1 j':''}</small></button>`;}
+  h+=`</div><div class="leg"><span><i style="background:#34d399"></i>Imputé</span><span><i style="background:#ffa94d"></i>Partiel</span><span><i style="background:#ff5a6a"></i>Non imputé</span><span><i style="background:#4da3ff"></i>Congé / RTT / absence</span><span><i style="background:#171a3a"></i>Week-end / férié</span></div></section>`;
+  v.innerHTML=h;}
+document.addEventListener('click',e=>{const b=e.target.closest('[data-open]');if(b)openDay(b.dataset.open);const g=e.target.closest('[data-go]');if(g){tab=g.dataset.go;render();}});
+/* ---------- édition d'un jour ---------- */
+let ed=null;
+function datalist(id,vals){return`<datalist id="${id}">${[...new Set(vals)].filter(Boolean).map(v=>`<option value="${esc(v)}">`).join('')}</datalist>`;}
+function allEnts(){const a=[];for(const k in S.days)for(const e of ents(k))a.push(Object.assign({k},e));return a;}
+function openDay(k){const r=rec(k);ed={k,st:r&&r.st||'work',e:JSON.parse(JSON.stringify(ents(k)))};if(!ed.e.length&&!isOff(k)&&ed.st==='work'){const sp=sprintOf(k);ed.e.push({id:uid(),proj:sp?sp.proj:'',sprint:sp?sp.name:'',tk:'',desc:'',d:1,imp:false});}drawDay();$('ov').hidden=false;}
+function drawDay(){const k=ed.k,all=allEnts();const tot=sumD(ed.e,()=>true);
+  $('mod').innerHTML=`<div class="row" style="justify-content:space-between"><h2 style="margin:0;font:400 22px 'Lilita One';color:var(--gold)">${esc(fmtL(k))}</h2><button class="btn alt sm" id="dx">✕</button></div>
+  ${holName(k)?`<p class="mut">🎌 ${esc(holName(k))} (jour férié)</p>`:''}
+  <label>Statut<select id="dst">${Object.entries(STAT).map(([a,b])=>`<option value="${a}"${ed.st===a?' selected':''}>${b}</option>`).join('')}</select></label>
+  ${ed.st==='work'?`<div id="ents">${ed.e.map((e,i)=>`<div class="ent"><div class="form">
+    <label>Projet<input data-f="proj" data-i="${i}" list="dlp" value="${esc(e.proj)}"></label>
+    <label>Sprint<input data-f="sprint" data-i="${i}" list="dls" value="${esc(e.sprint)}"></label>
+    <label>Ticket Jira<input data-f="tk" data-i="${i}" list="dlt" placeholder="PROJ-123" value="${esc(e.tk)}"></label>
+    <label>Durée<select data-f="d" data-i="${i}">${DAYS.map(d=>`<option value="${d}"${+e.d===d?' selected':''}>${nf(d)} j</option>`).join('')}</select></label></div>
+    <label>Description<input data-f="desc" data-i="${i}" value="${esc(e.desc)}"></label>
+    <div class="row" style="justify-content:space-between"><label style="display:flex;align-items:center;gap:8px;text-transform:none;font-size:14px;color:var(--fg)"><input type="checkbox" data-f="imp" data-i="${i}" style="width:20px;height:20px"${e.imp?' checked':''}> Imputé dans Jira</label><button class="btn bad sm" data-rm="${i}">🗑 Retirer</button></div></div>`).join('')}</div>
+    <div class="row"><button class="btn alt" id="addE">➕ Ajouter un ticket</button><span class="mut">Total noté : ${nf(tot)} j${tot>1?' ⚠️ plus d\'1 jour':''}</span></div>
+    ${datalist('dlp',all.map(e=>e.proj).concat(S.sprints.map(s=>s.proj)))}${datalist('dls',S.sprints.map(s=>s.name).concat(all.map(e=>e.sprint)))}${datalist('dlt',all.map(e=>e.tk))}`:'<p class="mut">Ce jour n\'est pas compté comme travaillé.</p>'}
+  <div class="row"><button class="btn ok" id="sv">💾 Enregistrer</button><button class="btn alt" id="clr">Effacer le jour</button></div>`;}
+$('mod').addEventListener('input',e=>{const t=e.target,f=t.dataset.f;if(!f||!ed)return;const i=+t.dataset.i;ed.e[i][f]=f==='imp'?t.checked:f==='d'?+t.value:t.value;if(f==='proj'||f==='sprint'||f==='d'){}});
+$('mod').addEventListener('click',e=>{if(!ed)return;const t=e.target;
+  if(t.id==='dx'){close();}
+  else if(t.id==='addE'){const sp=sprintOf(ed.k);ed.e.push({id:uid(),proj:sp?sp.proj:'',sprint:sp?sp.name:'',tk:'',desc:'',d:r2(Math.max(.25,1-sumD(ed.e,()=>true))),imp:false});drawDay();}
+  else if(t.dataset.rm!=null){ed.e.splice(+t.dataset.rm,1);drawDay();}
+  else if(t.id==='clr'){delete S.days[ed.k];save();close();render();toast('Jour effacé');}
+  else if(t.id==='sv'){const k=ed.k,e=ed.e.filter(x=>(String(x.tk)+String(x.desc)+String(x.proj)).trim()).map(x=>Object.assign(x,{tk:String(x.tk).trim().toUpperCase()}));
+    if(ed.st==='work'&&sumD(e,()=>true)>1){toast('⚠️ Plus d\'1 jour noté : corrige les durées');return;}
+    if(ed.st==='work'&&!e.length)delete S.days[k];else S.days[k]={st:ed.st,e:ed.st==='work'?e:[]};save();close();render();toast('Enregistré ✅');}});
+$('mod').addEventListener('change',e=>{if(e.target.id==='dst'&&ed){ed.st=e.target.value;if(ed.st==='work'&&!ed.e.length)ed.e.push({id:uid(),proj:'',sprint:'',tk:'',desc:'',d:1,imp:false});drawDay();}});
+function close(){$('ov').hidden=true;ed=null;}
+$('ov').addEventListener('click',e=>{if(e.target.id==='ov')close();});
+/* ---------- assistant de régularisation ---------- */
+function suggest(k){const sp=sprintOf(k),kd=fromKey(k).getTime(),m=new Map();
+  for(const e of allEnts()){if(!e.tk)continue;const x=m.get(e.tk)||{tk:e.tk,proj:e.proj,sprint:e.sprint,desc:e.desc,n:0,sc:0,last:'',near:0,sameSp:false,own:false};
+    x.n++;if(e.k>x.last){x.last=e.k;x.desc=e.desc||x.desc;x.proj=e.proj||x.proj;x.sprint=e.sprint||x.sprint;}
+    const dd=Math.abs(fromKey(e.k).getTime()-kd)/864e5;if(dd<=3&&e.k!==k)x.near++;if(sp&&e.sprint===sp.name)x.sameSp=true;if(e.k===k)x.own=true;m.set(e.tk,x);}
+  const a=[...m.values()];a.forEach(x=>{x.sc=(x.own?5:0)+(x.sameSp?3:0)+x.near*2+Math.min(x.n,5)*.5;x.why=[x.own?'déjà noté ce jour-là':'',x.near?`utilisé ${x.near}× à ±3 jours`:'',x.sameSp?'même sprint':'',`${x.n} fois dans ton historique`].filter(Boolean).join(' · ');});
+  return a.sort((p,q)=>q.sc-p.sc||(q.last>p.last?1:-1)).slice(0,4);}
+function vReg(v){const ks=monthKeys(Y(),M()).filter(k=>dayInfo(k).miss>0);
+  let h=`<section class="card">${monthBar()}<h2>🧭 Où dois-je imputer mes jours ?</h2><p class="mut">Les propositions viennent uniquement de ton historique. Rien n'est imputé sans ta validation.</p>`;
+  if(!ks.length)h+='<div class="alert g">✅ Aucun jour à régulariser ce mois-ci.</div>';
+  for(const k of ks){const i=dayInfo(k),sp=sprintOf(k),own=ents(k).filter(e=>!e.imp),sg=suggest(k);
+    h+=`<div class="ent" style="margin:12px 0"><div class="row" style="justify-content:space-between"><b>${esc(fmtL(k))}</b><span class="pill ${i.imp>0?'o':'r'}">${nf(i.miss)} j manquant${i.miss>1?'s':''}</span></div>
+    <span class="mut">${sp?'Sprint : '+esc(sp.name)+(sp.proj?' · '+esc(sp.proj):''):'Aucun sprint défini pour cette date'}</span>`;
+    if(own.length)h+=own.map(e=>`<div class="sug"><div>Noté ce jour : <b>${esc(e.tk||'—')}</b> ${esc(e.desc||'')} · ${nf(e.d)} j</div><button class="btn ok sm" data-mark="${k}|${e.id}">Marquer imputé</button></div>`).join('');
+    if(sg.length)h+=`<div class="mut" style="margin-top:4px">Tickets proposés (tu choisis) :</div>`+sg.map(x=>`<div class="sug"><div><b>${esc(x.tk)}</b> ${esc(x.desc||'')}<br><span class="mut">${esc(x.proj||'')} ${x.why?'· '+esc(x.why):''}</span></div>
+      <div class="row"><select id="q_${k}_${esc(x.tk)}" style="width:92px">${DAYS.filter(d=>d<=i.miss+.001).map(d=>`<option value="${d}"${d===i.miss?' selected':''}>${nf(d)} j</option>`).join('')}</select><button class="btn sm" data-add="${k}|${esc(x.tk)}">Valider</button></div></div>`).join('');
+    else if(!own.length)h+='<p class="mut">Pas encore d\'historique de tickets : ouvre le jour pour en noter un.</p>';
+    h+=`<div><button class="btn alt sm" data-open="${k}">✏️ Ouvrir le jour</button></div></div>`;}
+  v.innerHTML=h+'</section>';}
+document.addEventListener('click',e=>{const m=e.target.closest('[data-mark]'),a=e.target.closest('[data-add]');
+  if(m){const[k,id]=m.dataset.mark.split('|'),x=ents(k).find(z=>z.id===id);if(x){x.imp=true;save();render();toast('Marqué imputé ✅');}}
+  if(a){const[k,tk]=a.dataset.add.split('|'),sel=document.getElementById('q_'+k+'_'+tk),src=allEnts().filter(z=>z.tk===tk).sort((p,q)=>q.k>p.k?1:-1)[0];if(!src||!sel)return;
+    const d=+sel.value;if(!S.days[k])S.days[k]={st:'work',e:[]};S.days[k].e.push({id:uid(),proj:src.proj,sprint:(sprintOf(k)||{}).name||src.sprint,tk,desc:src.desc,d,imp:true});save();render();toast('Imputation ajoutée ✅');}});
+/* ---------- sprints ---------- */
+function vSpr(v){let h=`<section class="card"><h2>➕ Nouveau sprint</h2><div class="form"><label>Nom<input id="sn" placeholder="Sprint 24"></label><label>Projet<input id="sp" placeholder="PROJ"></label><label>Début<input id="ss" type="date"></label><label>Fin<input id="se" type="date"></label><button class="btn" id="sa">Ajouter</button></div></section>
+  <section class="card"><h2>🏁 Mes sprints</h2>`;
+  if(!S.sprints.length)h+='<p class="mut">Aucun sprint. Ajoute-en un : les jours seront rattachés automatiquement selon la date.</p>';
+  else h+=`<div class="tw"><table><tr><th>Sprint</th><th>Projet</th><th>Période</th><th>Travaillés</th><th>Imputés</th><th>Restant</th><th></th></tr>${[...S.sprints].sort((a,b)=>b.start>a.start?1:-1).map(s=>{const t=sprintStats(s);return`<tr><td><b>${esc(s.name)}</b></td><td>${esc(s.proj)}</td><td>${s.start.split('-').reverse().join('/')} → ${s.end.split('-').reverse().join('/')}</td><td>${nf(t.w)}</td><td>${nf(t.im)}</td><td><span class="pill ${t.miss?'r':'g'}">${nf(t.miss)}</span></td><td><button class="btn bad sm" data-ds="${s.id}">🗑</button></td></tr>`;}).join('')}</table></div>`;
+  v.innerHTML=h+'</section>';}
+document.addEventListener('click',e=>{if(e.target.id==='sa'){const n=$('sn').value.trim(),a=$('ss').value,b=$('se').value;if(!n||!a||!b||b<a){toast('Nom, début et fin valides requis');return;}S.sprints.push({id:uid(),name:n,proj:$('sp').value.trim(),start:a,end:b});save();render();toast('Sprint ajouté');}
+  const d=e.target.closest('[data-ds]');if(d&&confirm('Supprimer ce sprint ?')){S.sprints=S.sprints.filter(s=>s.id!==d.dataset.ds);save();render();}});
+/* ---------- historique ---------- */
+function rows(){const a=[];for(const k of Object.keys(S.days).sort().reverse()){const r=S.days[k];if(r.st&&r.st!=='work'){a.push({k,st:STAT[r.st],proj:'',sprint:'',tk:'',desc:'',d:'',imp:''});continue;}
+  for(const e of r.e||[])a.push({k,st:'Travaillé',proj:e.proj||'',sprint:e.sprint||(sprintOf(k)||{}).name||'',tk:e.tk||'',desc:e.desc||'',d:e.d,imp:e.imp?'Oui':'Non'});}return a;}
+function fRows(){return rows().filter(r=>(!filt.m||r.k.startsWith(filt.m))&&(!filt.sp||r.sprint===filt.sp)&&(!filt.pr||r.proj===filt.pr)&&(!filt.tk||r.tk.includes(filt.tk.toUpperCase()))&&(!filt.im||r.imp===filt.im));}
+function vHis(v){const all=rows(),opt=(a,s)=>'<option value="">Tous</option>'+[...new Set(a)].filter(Boolean).sort().map(x=>`<option${x===s?' selected':''}>${esc(x)}</option>`).join('');
+  const r=fRows();v.innerHTML=`<section class="card"><h2>📚 Historique</h2><div class="form">
+   <label>Mois<select data-fl="m">${opt(all.map(x=>x.k.slice(0,7)),filt.m)}</select></label><label>Sprint<select data-fl="sp">${opt(all.map(x=>x.sprint),filt.sp)}</select></label>
+   <label>Projet<select data-fl="pr">${opt(all.map(x=>x.proj),filt.pr)}</select></label><label>Ticket<input data-fl="tk" value="${esc(filt.tk)}" placeholder="PROJ-123"></label>
+   <label>Imputation<select data-fl="im"><option value="">Tous</option><option${filt.im==='Oui'?' selected':''}>Oui</option><option${filt.im==='Non'?' selected':''}>Non</option></select></label></div>
+   <div class="row" style="margin:12px 0"><button class="btn" id="xx">⬇ Excel (.xlsx)</button><button class="btn alt" id="xc">⬇ CSV</button><span class="mut">${r.length} ligne(s) · ${nf(r.reduce((t,x)=>t+(+x.d||0),0))} j</span></div>
+   <div class="tw"><table><tr><th>Date</th><th>Statut</th><th>Projet</th><th>Sprint</th><th>Ticket</th><th>Description</th><th>Jours</th><th>Imputé</th></tr>${r.map(x=>`<tr><td>${x.k.split('-').reverse().join('/')}</td><td>${x.st}</td><td>${esc(x.proj)}</td><td>${esc(x.sprint)}</td><td><b>${esc(x.tk)}</b></td><td>${esc(x.desc)}</td><td>${x.d===''?'':nf(x.d)}</td><td>${x.imp?`<span class="pill ${x.imp==='Oui'?'g':'r'}">${x.imp}</span>`:''}</td></tr>`).join('')||'<tr><td colspan="8" class="mut">Aucune ligne.</td></tr>'}</table></div></section>`;}
+document.addEventListener('input',e=>{const f=e.target.dataset&&e.target.dataset.fl;if(f&&e.target.tagName==='INPUT'){filt[f]=e.target.value;const p=e.target.selectionStart;vHis($('view'));const n=document.querySelector('[data-fl="tk"]');if(n){n.focus();n.setSelectionRange(p,p);}}});
+document.addEventListener('change',e=>{const f=e.target.dataset&&e.target.dataset.fl;if(f&&e.target.tagName==='SELECT'){filt[f]=e.target.value;vHis($('view'));}});
+const HEAD=['Date','Statut','Projet','Sprint','Ticket','Description','Jours','Imputé'];
+function dl(name,blob){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},500);}
+const csvc=s=>{s=String(s==null?'':s);if(/^[=+\-@\t\r]/.test(s))s="'"+s;return'"'+s.replace(/"/g,'""')+'"';};
+function exportCSV(){const r=fRows();const t=[HEAD.map(csvc).join(';')].concat(r.map(x=>[x.k,x.st,x.proj,x.sprint,x.tk,x.desc,x.d===''?'':String(x.d).replace('.',','),x.imp].map(csvc).join(';'))).join('\r\n');dl('imputations.csv',new Blob(['﻿'+t],{type:'text/csv;charset=utf-8'}));}
+function exportXLSX(){const go=()=>{try{const r=fRows(),ws=XLSX.utils.aoa_to_sheet([HEAD].concat(r.map(x=>[x.k,x.st,x.proj,x.sprint,x.tk,x.desc,x.d===''?'':+x.d,x.imp]))),wb=XLSX.utils.book_new();ws['!cols']=[{wch:11},{wch:10},{wch:12},{wch:14},{wch:12},{wch:36},{wch:7},{wch:8}];XLSX.utils.book_append_sheet(wb,ws,'Imputations');XLSX.writeFile(wb,'imputations.xlsx');}catch(e){toast('Excel indisponible : export CSV');exportCSV();}};
+  if(window.XLSX)return go();const s=document.createElement('script');s.src='https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js';s.onload=go;s.onerror=()=>{toast('Excel indisponible hors ligne : export CSV');exportCSV();};document.head.appendChild(s);}
+document.addEventListener('click',e=>{if(e.target.id==='xc')exportCSV();if(e.target.id==='xx')exportXLSX();});
+/* ---------- données ---------- */
+function vDat(v){v.innerHTML=`<section class="card"><h2>💾 Mes données</h2>
+  <p class="mut">Tout est stocké dans ce navigateur, sur cet appareil. Fais une sauvegarde de temps en temps (et pour passer du téléphone à l'ordinateur).</p>
+  <div class="row"><button class="btn" id="bx">⬇ Sauvegarde (.json)</button><label class="btn alt" style="text-transform:none;letter-spacing:0;font-size:14px;color:var(--fg);cursor:pointer;display:inline-block">⬆ Restaurer<input id="bi" type="file" accept=".json,application/json" hidden></label><button class="btn bad" id="bz">🗑 Tout effacer</button></div></section>
+  <section class="card"><h2>🔗 Jira</h2><p class="mut">Cette version ne se connecte pas à Jira : un navigateur ne peut pas appeler l'API Jira directement, et un token ne doit pas être stocké en clair. Tu notes tes tickets ici, tu imputes dans Jira, puis tu coches « Imputé ». L'historique s'exporte en Excel pour comparer avec tes worklogs.</p></section>`;}
+document.addEventListener('click',e=>{if(e.target.id==='bx')dl('imputations-sauvegarde.json',new Blob([JSON.stringify(S)],{type:'application/json'}));
+  if(e.target.id==='bz'&&confirm('Effacer toutes les données ?')){S={days:{},sprints:[]};save();render();toast('Données effacées');}});
+document.addEventListener('change',e=>{if(e.target.id==='bi'){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const v=JSON.parse(r.result);if(!v||typeof v.days!=='object'||!Array.isArray(v.sprints))throw 0;S=v;save();render();toast('Sauvegarde restaurée ✅');}catch(x){toast('Fichier invalide');}};r.readAsText(f);}});
+render();
+</script>
+</body></html>
