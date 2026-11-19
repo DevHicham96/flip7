@@ -66,7 +66,7 @@ table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:8px 9px;b
 </style></head><body>
 <div class="w">
 <header>
-  <div><h1>✅ Suivi Imputations</h1><p class="sub">Note tes jours travaillés et tes tickets Jira. L'outil te dit chaque jour ce qu'il reste à imputer et où. Données gardées sur cet appareil uniquement.</p></div>
+  <div><h1>✅ Suivi Imputations</h1><p class="sub">Note tes jours travaillés et tes tickets Jira. L'outil te dit chaque jour ce qu'il reste à imputer et où. Données privées : sur cet appareil, avec synchro optionnelle.</p></div>
   <a class="back" href="index.html">⬅ Retour aux jeux</a>
 </header>
 <nav class="tabs" id="tabs"></nav>
@@ -99,7 +99,20 @@ let tt=0;function toast(t){const e=$('toast');e.textContent=t;e.classList.add('o
 const SK='atimp1';
 let S={days:{},sprints:[]};
 try{const v=JSON.parse(localStorage.getItem(SK)||'null');if(v&&v.days&&v.sprints)S=v;}catch(e){}
-function save(){try{localStorage.setItem(SK,JSON.stringify(S));}catch(e){toast('⚠️ Sauvegarde impossible (stockage bloqué)');}}
+function save(noSync){if(!noSync)S.t=Date.now();try{localStorage.setItem(SK,JSON.stringify(S));}catch(e){toast('⚠️ Sauvegarde impossible (stockage bloqué)');}if(!noSync)queuePush();}
+/* ---------- synchro Firebase (1 document par code secret) ---------- */
+const CK='atimpcode';let code='';try{code=localStorage.getItem(CK)||'';}catch(e){}
+let fdb=null,fl=null,pt=0,syncSt=code?'…':'off';
+async function fbLoad(){if(fdb)return fdb;if(!window.F7_FIREBASE)throw new Error('nofb');if(!fl)fl=(async()=>{const V='10.14.1',B='https://www.gstatic.com/firebasejs/'+V+'/';const[A,F]=await Promise.all([import(B+'firebase-app.js'),import(B+'firebase-firestore.js')]);const fs=F.getFirestore(A.initializeApp(window.F7_FIREBASE,'imp'));fdb={F,ref:c=>F.doc(fs,'game/imp_'+c)};return fdb;})();return fl;}
+const goodCode=c=>/^[A-Z2-9]{16}$/.test(c);
+function newCode(){const A='ABCDEFGHJKMNPQRSTUVWXYZ23456789',a=new Uint32Array(16);crypto.getRandomValues(a);return[...a].map(x=>A[x%A.length]).join('');}
+function setCode(c){code=c;try{if(c)localStorage.setItem(CK,c);else localStorage.removeItem(CK);}catch(e){}}
+function queuePush(){if(!code)return;clearTimeout(pt);syncSt='⏳';pt=setTimeout(push,3000);}
+async function push(){if(!code)return;try{const d=await fbLoad();await d.F.setDoc(d.ref(code),{j:JSON.stringify(S),t:S.t||Date.now()});syncSt='ok';}catch(e){syncSt='err';}if(tab==='dat')render();}
+async function pull(first){if(!code)return;try{const d=await fbLoad(),sn=await d.F.getDoc(d.ref(code));
+  if(sn.exists()){const r=sn.data(),v=JSON.parse(r.j);if(v&&v.days&&Array.isArray(v.sprints)&&(first==='force'||(r.t||0)>(S.t||0))){S=v;S.t=r.t||Date.now();save(true);render();syncSt='ok';return true;}syncSt='ok';if((S.t||0)>(r.t||0))push();}
+  else push();}catch(e){syncSt='err';}if(tab==='dat')render();}
+document.addEventListener('visibilitychange',()=>{if(document.hidden){if(pt){clearTimeout(pt);pt=0;push();}}else pull();});
 /* ---------- jours fériés FR ---------- */
 const hcache={};
 function holidays(y){if(hcache[y])return hcache[y];
@@ -260,12 +273,20 @@ function exportXLSX(){const go=()=>{try{const r=fRows(),ws=XLSX.utils.aoa_to_she
 document.addEventListener('click',e=>{if(e.target.id==='xc')exportCSV();if(e.target.id==='xx')exportXLSX();});
 /* ---------- données ---------- */
 function vDat(v){v.innerHTML=`<section class="card"><h2>💾 Mes données</h2>
-  <p class="mut">Tout est stocké dans ce navigateur, sur cet appareil. Fais une sauvegarde de temps en temps (et pour passer du téléphone à l'ordinateur).</p>
+  <p class="mut">Tout est stocké dans ce navigateur. Tu peux aussi le synchroniser entre tes appareils avec un code secret, ou faire une sauvegarde en fichier.</p>
   <div class="row"><button class="btn" id="bx">⬇ Sauvegarde (.json)</button><label class="btn alt" style="text-transform:none;letter-spacing:0;font-size:14px;color:var(--fg);cursor:pointer;display:inline-block">⬆ Restaurer<input id="bi" type="file" accept=".json,application/json" hidden></label><button class="btn bad" id="bz">🗑 Tout effacer</button></div></section>
+  <section class="card"><h2>🔄 Synchronisation entre appareils</h2>${code?`<p>Synchro <b>activée</b> ${syncSt==='ok'?'✅':syncSt==='err'?'⚠️ erreur réseau':'⏳'}</p><p class="mut">Ton code secret (à saisir sur ton autre appareil, ne le partage pas) :</p><p style="font:900 20px monospace;letter-spacing:.08em;word-break:break-all;color:var(--gold)">${esc(code.replace(/(.{4})/g,'$1 ').trim())}</p><div class="row"><button class="btn alt" id="sysc">📋 Copier le code</button><button class="btn" id="sysp">⬆ Forcer l'envoi</button><button class="btn alt" id="sysf">⬇ Forcer la récupération</button><button class="btn bad" id="syso">Désactiver</button></div>`:`<p class="mut">Tes imputations sont enregistrées en ligne sous un code secret aléatoire : seul qui a ce code peut les retrouver. Garde-le pour toi.</p><div class="row"><button class="btn ok" id="sysn">✨ Activer la synchro</button></div><div class="form" style="margin-top:12px"><label>J'ai déjà un code<input id="scin" placeholder="XXXX XXXX XXXX XXXX" autocapitalize="characters"></label><button class="btn" id="sysj">Rejoindre</button></div>`}</section>
   <section class="card"><h2>🔗 Jira</h2><p class="mut">Cette version ne se connecte pas à Jira : un navigateur ne peut pas appeler l'API Jira directement, et un token ne doit pas être stocké en clair. Tu notes tes tickets ici, tu imputes dans Jira, puis tu coches « Imputé ». L'historique s'exporte en Excel pour comparer avec tes worklogs.</p></section>`;}
 document.addEventListener('click',e=>{if(e.target.id==='bx')dl('imputations-sauvegarde.json',new Blob([JSON.stringify(S)],{type:'application/json'}));
+  const id=e.target.id;
+  if(id==='sysn'){if(!window.F7_FIREBASE){toast('Synchro indisponible hors du site');return;}setCode(newCode());syncSt='⏳';push();render();}
+  else if(id==='sysj'){const c=$('scin').value.toUpperCase().replace(/[^A-Z0-9]/g,'');if(!goodCode(c)){toast('Code invalide (16 caractères)');return;}setCode(c);fbLoad().then(d=>d.F.getDoc(d.ref(c))).then(sn=>{if(!sn.exists()){setCode('');toast('Code introuvable');render();return;}pull('force').then(()=>toast('Données récupérées ✅'));}).catch(()=>{setCode('');toast('Réseau indisponible');render();});}
+  else if(id==='sysc'){try{navigator.clipboard.writeText(code).then(()=>toast('Code copié'),()=>toast('Copie impossible'));}catch(x){toast('Copie impossible');}}
+  else if(id==='sysp'){S.t=Date.now();push().then(()=>toast('Envoyé'));}
+  else if(id==='sysf'){pull('force').then(()=>toast('Récupéré'));}
+  else if(id==='syso'&&confirm('Désactiver la synchro sur cet appareil ? (les données en ligne restent)')){setCode('');render();}
   if(e.target.id==='bz'&&confirm('Effacer toutes les données ?')){S={days:{},sprints:[]};save();render();toast('Données effacées');}});
 document.addEventListener('change',e=>{if(e.target.id==='bi'){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const v=JSON.parse(r.result);if(!v||typeof v.days!=='object'||!Array.isArray(v.sprints))throw 0;S=v;save();render();toast('Sauvegarde restaurée ✅');}catch(x){toast('Fichier invalide');}};r.readAsText(f);}});
-render();
+render();if(code)pull();
 </script>
 </body></html>
