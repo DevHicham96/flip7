@@ -694,7 +694,8 @@ function fitGame(){
   if(!inGame){root.style.removeProperty('--k');return;}
   let lo=.35,hi=1.7,best=lo;
   const de=document.documentElement;
-  for(let i=0;i<8;i++){const m=(lo+hi)/2;root.style.setProperty('--k',m.toFixed(3));if(de.scrollHeight<=innerHeight+1&&de.scrollWidth<=innerWidth+1){best=m;lo=m;}else hi=m;}
+  root.style.setProperty('--k',lo);const wOver=de.scrollWidth>innerWidth+1;/* débordement horizontal indépendant de --k : on l'ignore */
+  for(let i=0;i<9;i++){const m=(lo+hi)/2;root.style.setProperty('--k',m.toFixed(3));if(de.scrollHeight<=innerHeight+1&&(wOver||de.scrollWidth<=innerWidth+1)){best=m;lo=m;}else hi=m;}
   root.style.setProperty('--k',best.toFixed(3));
 }
 let fitT=0;addEventListener('resize',()=>{clearTimeout(fitT);fitT=setTimeout(()=>{try{fitGame();}catch(e){}},80);});
