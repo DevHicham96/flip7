@@ -211,6 +211,7 @@ export default{
   async fetch(req,env){
     const u=new URL(req.url);
     if(u.pathname==='/park-ws')return env.PARK.get(env.PARK.idFromName('hub')).fetch(req);
+    if(u.pathname==='/sticks-ws')return env.KART.get(env.KART.idFromName('sticks')).fetch(req);
     if(u.pathname==='/pool-ws')return env.KART.get(env.KART.idFromName('pool')).fetch(req);
     if(u.pathname==='/kart-ws')return env.KART.get(env.KART.idFromName('hub')).fetch(req);
     return env.ASSETS.fetch(req);
