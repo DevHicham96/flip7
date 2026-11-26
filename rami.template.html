@@ -710,7 +710,7 @@ function atPres(g){
 }
 let db=null,uid=null,myName=lsGet(NAME_K)||'',mySlug=lsGet('f7prof')||'',ROOM=0,mode=null /* null|'online'|'solo' */;
 let S=null,roster=[],stateUnsub=null,lobUnsub=null,hb=null,setup={bots:2,target:1000},myReady=false,chain=Promise.resolve(),lastFxc=-1,lastGid=null,lastTurnKey='',botKey='';
-let sel=new Set(),staged=[],sortMode=lsGet('rmsort')||'suit',ovKey='';
+let sel=new Set(),staged=[],sortMode=(lsGet('rmsort')==='rank'?'rank':'suit'),ovKey='';
 const fresh=p=>Date.now()-(p.seen||0)<75000;
 const roomPlayers=n=>roster.filter(p=>p.room===200+n&&fresh(p)).sort((a,b)=>a.t-b.t);
 const gp=n=>'game/rm_state_'+n;
@@ -838,7 +838,7 @@ function suggest(){
   staged=staged.concat(g);sel.clear();render();
 }
 function pileClick(){if(!myTurn())return;if(S.step==='draw')takeDisc();else if(sel.size===1)discardSel();}
-function setSort(m){sortMode=m;lsSet('rmsort',m);render();}
+function setSort(m){sortMode=m;if(m!=='free')lsSet('rmsort',m);render();}
 /* ---- bots (mode solo) ---- */
 function botStep(){
   if(mode!=='solo'||!S||S.phase!=='play')return;
@@ -870,7 +870,9 @@ function renderTop(sub,right){
     h('button',{class:'btn sm',type:'button',onclick:()=>{Snd.set(!Snd.on);render();}},Snd.on?'🔊 Sons':'🔇 Sons'),
     acc,jeux);
 }
-function render(){
+let dragging=false,pendR=false;
+function render(){if(dragging){pendR=true;return}renderNow()}
+function renderNow(){
   const app=$('app');
   prune();
   let view;
@@ -929,7 +931,38 @@ function renderLobby(){
       ps.length<2?h('p',{class:'muted'},'En attente d\'un autre joueur… partage le lien du site.'):(host&&!can?h('p',{class:'muted'},'Tout le monde doit être prêt.'):null))];
 }
 const MEDAL=['🥇','🥈','🥉','4e','5e'];
+let handOrd=[];
+function ordHand(hd){handOrd=handOrd.filter(c=>hd.includes(c));for(const c of hd)if(!handOrd.includes(c))handOrd.push(c);return handOrd.slice();}
+let justDrag=false;
+/* glisser-déposer : réorganiser librement sa main */
+function startDrag(ev,el,mine){
+  if(ev.button>0||!ev.isPrimary)return;
+  const x0=ev.clientX,y0=ev.clientY,els=[...el.parentNode.children];let on=false,tgt=-1,after=false;
+  const idx=els.indexOf(el);
+  const move=e=>{
+    const dx=e.clientX-x0,dy=e.clientY-y0;
+    if(!on){if(Math.hypot(dx,dy)<9)return;on=true;dragging=true;try{el.setPointerCapture(ev.pointerId)}catch(_){}el.style.zIndex=60;el.style.transition='none';el.style.opacity='.92';el.style.boxShadow='0 14px 22px rgba(0,0,0,.4)'}
+    el.style.transform='translate('+dx+'px,'+(dy-12)+'px) scale(1.08)';
+    let best=1e9;tgt=-1;
+    els.forEach((o,i)=>{if(o===el)return;const r=o.getBoundingClientRect(),d=Math.hypot(e.clientX-(r.left+r.width/2),e.clientY-(r.top+r.height/2));if(d<best){best=d;tgt=i;after=e.clientX>r.left+r.width/2}o.style.boxShadow=''});
+    if(tgt>=0)els[tgt].style.boxShadow=(after?'6px':'-6px')+' 0 0 0 #FFE066'
+  };
+  const up=()=>{
+    el.removeEventListener('pointermove',move);el.removeEventListener('pointerup',up);el.removeEventListener('pointercancel',up);
+    if(!on)return;
+    dragging=false;justDrag=true;setTimeout(()=>{justDrag=false},80);
+    if(tgt>=0){
+      const ord=mine.slice();const c=ord.splice(idx,1)[0];
+      let at=tgt>idx?tgt-1:tgt;if(after)at++;
+      ord.splice(Math.max(0,Math.min(ord.length,at)),0,c);
+      handOrd=ord;sortMode='free';
+    }
+    pendR=false;renderNow();
+  };
+  el.addEventListener('pointermove',move);el.addEventListener('pointerup',up);el.addEventListener('pointercancel',up);
+}
 function sortHand(hd){
+  if(sortMode==='free')return ordHand(hd);
   const so=c=>isJ(c)?-1:RS.indexOf(rs(c))*20+rk(c);
   const ro=c=>isJ(c)?-1:rk(c)*10+RS.indexOf(rs(c));
   return hd.slice().sort((a,b)=>(sortMode==='suit'?so(a)-so(b):ro(a)-ro(b))||(a<b?-1:1));
@@ -965,7 +998,8 @@ function renderGame(){
   const hand=h('div',{class:'mehand'},mine.map((c,ci)=>{
     const e=cardEl(c,{cls:'mine'+(sel.has(c)?' sel':'')+(c===s.took?' took':'')+(nwc.has(c)?' fresh':'')+(dealing?' dealin':'')});
     if(dealing)e.style.animationDelay=(ci*70)+'ms';
-    if(mt&&s.step==='play'){e.tabIndex=0;e.setAttribute('role','button');e.addEventListener('click',()=>toggleSel(c));
+    e.style.touchAction='none';e.addEventListener('pointerdown',ev=>startDrag(ev,e,mine));
+    if(mt&&s.step==='play'){e.tabIndex=0;e.setAttribute('role','button');e.addEventListener('click',()=>{if(justDrag)return;toggleSel(c)});
       e.addEventListener('keydown',ev=>{if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();toggleSel(c);}});}
     return e;
   }));
@@ -987,6 +1021,7 @@ function renderGame(){
     acts.push(h('button',{class:'btn',type:'button',disabled:sel.size!==1,onclick:discardSel},'🗑 Défausser'));
   }
   const sortBtn=h('button',{class:'btn sm',type:'button',onclick:()=>setSort(sortMode==='suit'?'rank':'suit')},sortMode==='suit'?'↕ Par valeur':'↕ Par couleur');
+
   const lastLog=s.log.slice(-2).reverse().join(' · ');
   const me=spec?null:s.players[meIdx];
   return[renderTop('Table '+(ROOM||'solo'),h('div',{class:'row'},mode==='online'&&isHostUI()?h('button',{class:'btn sm',type:'button',onclick:endGameHost},'■ Terminer'):null,h('button',{class:'btn sm',type:'button',onclick:leaveRoom},'↩ Quitter'))),
