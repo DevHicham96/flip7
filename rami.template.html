@@ -263,7 +263,8 @@ const isJ=c=>c[0]==='X';
 const rk=c=>isJ(c)?0:parseInt(c.slice(1,-1),10);
 const rs=c=>c[0];
 const rLbl=v=>({1:'A',11:'V',12:'D',13:'R',14:'A'}[v]||String(v));
-const NEED=51;
+const NEED=51,TURN_S=45;
+const needOf=s=>Math.max(NEED,(s.open||0)+1);
 function mkDeck(){const d=[];['a','b'].forEach(k=>RS.forEach(su=>{for(let v=1;v<=13;v++)d.push(su+v+k);}));for(let i=1;i<=4;i++)d.push('X'+i);return d;}
 function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));const t=a[i];a[i]=a[j];a[j]=t;}return a;}
 const nameOf=(s,id)=>(s.players.find(p=>p.id===id)||{name:'?'}).name;
@@ -306,7 +307,7 @@ function rdNew(players,target,prev){
   const s={v:3,rev:1,gid:Date.now().toString(36)+Math.random().toString(36).slice(2,6),phase:'play',
     players:players.map(p=>({id:p.id,name:p.name,av:p.av||'',bot:!!p.bot})),target:target||1000,round:prev?prev.round+1:1,
     dealer:prev?(prev.dealer+1)%n:0,scores:{},deck:shuffle(mkDeck()),disc:[],hands:{},laid:{},melds:[],mid:1,
-    turn:0,step:'draw',took:'',log:[],fx:[],fxc:0,res:{w:'',pts:{}}};
+    turn:0,step:'draw',took:'',log:[],fx:[],fxc:0,res:{w:'',pts:{}},open:0,opens:{},ts:Date.now()};
   s.players.forEach(p=>{s.scores[p.id]=prev&&prev.scores[p.id]||0;s.hands[p.id]=s.deck.splice(0,13);s.laid[p.id]=false;});
   s.disc.push(s.deck.shift());
   s.turn=(s.dealer+1)%n;
@@ -347,7 +348,7 @@ function rdCheckLay(s,pid,groups){
   const hd=s.hands[pid].slice();
   for(const c of all){const i=hd.indexOf(c);if(i<0)return{ok:false,why:'Carte absente'};hd.splice(i,1);}
   const pts=ms.reduce((a,m)=>a+meldPts(m),0),fr=ms.some(hasFranche);
-  if(!s.laid[pid]){if(!fr)return{ok:false,why:'Il faut une tierce franche (sans joker)',pts,fr};if(pts<NEED)return{ok:false,why:'Il faut '+NEED+' points ('+pts+')',pts,fr};}
+  if(!s.laid[pid]){const need=needOf(s);if(!fr)return{ok:false,why:'Il faut une tierce franche (sans joker)',pts,fr};if(pts<need)return{ok:false,why:(need>NEED?'Il faut dépasser '+(need-1):'Il faut '+NEED+' points')+' ('+pts+')',pts,fr};}
   return{ok:true,ms,all,pts,fr};
 }
 function rdLay(s,pid,groups){
@@ -355,9 +356,9 @@ function rdLay(s,pid,groups){
   const r=rdCheckLay(s,pid,groups);if(!r.ok)return false;
   const hd=s.hands[pid];r.all.forEach(c=>hd.splice(hd.indexOf(c),1));
   r.ms.forEach(a=>s.melds.push(meldOf(s,a,pid)));
-  const first=!s.laid[pid];s.laid[pid]=true;
+  const first=!s.laid[pid];s.laid[pid]=true;if(first){s.open=Math.max(s.open||0,r.pts);(s.opens=s.opens||{})[pid]=r.pts;}
   bump(s,[{k:'lay',by:pid,n:r.ms.length,first}]);
-  logp(s,nameOf(s,pid)+' pose '+r.ms.length+' combinaison'+(r.ms.length>1?'s':'')+' ('+r.pts+' pts)');
+  logp(s,nameOf(s,pid)+(first?' ouvre avec ':' pose ')+r.ms.length+' combinaison'+(r.ms.length>1?'s':'')+' ('+r.pts+' pts)');
   if(!hd.length){endRound(s,pid);}
   return true;
 }
@@ -388,7 +389,7 @@ function rdDiscard(s,pid,c){
   if(c===s.took&&hd.length>1)return false;
   hd.splice(i,1);s.disc.push(c);bump(s,[{k:'disc',by:pid,card:c}]);logp(s,nameOf(s,pid)+' défausse');
   if(!hd.length){endRound(s,pid);return true;}
-  s.turn=(s.turn+1)%s.players.length;s.step='draw';s.took='';return true;
+  s.turn=(s.turn+1)%s.players.length;s.step='draw';s.took='';s.ts=Date.now();return true;
 }
 /* ---- recherche de la meilleure pose (bots et suggestion) ---- */
 function candMelds(hand){
@@ -417,14 +418,14 @@ function candMelds(hand){
   });
   return{out,pool,nJ};
 }
-function findBest(hand,laid,cap){
+function findBest(hand,laid,cap,need){
   const {out,pool,nJ}=candMelds(hand);
   out.sort((a,b)=>b.pts-a.pts);
   const cnt=Object.assign({},pool);let jl=nJ,nodes=0,best=null,bestPts=-1;
   const cur=[];
   function rec(i,pts,fr){
     if(++nodes>(cap||40000))return;
-    if(cur.length&&(laid||(pts>=NEED&&fr))&&pts>bestPts){bestPts=pts;best=cur.slice();}
+    if(cur.length&&(laid||(pts>=(need||NEED)&&fr))&&pts>bestPts){bestPts=pts;best=cur.slice();}
     for(let x=i;x<out.length;x++){
       const c=out[x];
       if(c.j>jl)continue;
@@ -449,13 +450,13 @@ function rdBotTurn(s,pid){
   const hd=s.hands[pid],top=s.disc[s.disc.length-1];
   let take=false;
   if(top){
-    const g=findBest(hd.concat([top]),s.laid[pid],6000);
+    const g=findBest(hd.concat([top]),s.laid[pid],6000,needOf(s));
     if(g&&g.some(x=>x.includes(top)))take=true;
     else if(s.laid[pid]&&s.melds.some(m=>rdCanAdd({laid:{[pid]:true},hands:{[pid]:hd.concat([top])},melds:[m]},pid,m.id,[top])))take=true;
   }
   if(take)rdDiscSafe(s,pid);else rdDrawDeck(s,pid);
   if(s.phase!=='play')return true;
-  const g=findBest(hd,s.laid[pid]);
+  const g=findBest(hd,s.laid[pid],0,needOf(s));
   if(g&&g.length&&rdLay(s,pid,g)){if(s.phase!=='play')return true;}
   if(s.laid[pid]){
     let again=true;
@@ -833,12 +834,31 @@ function discardSel(){
 function suggest(){
   if(!myTurn()||S.step!=='play')return;
   const st=stagedSet(),hd=myHand().filter(c=>!st.has(c));
-  const g=findBest(hd,S.laid[uid]);
-  if(!g||!g.length){banner(S.laid[uid]?'Rien à poser':'Pas de pose possible (51 pts + tierce franche)','#FF8A3D');return;}
+  const g=findBest(hd,S.laid[uid],0,needOf(S));
+  if(!g||!g.length){banner(S.laid[uid]?'Rien à poser':'Pas de pose possible ('+needOf(S)+' pts + tierce franche)','#FF8A3D');return;}
   staged=staged.concat(g);sel.clear();render();
 }
 function pileClick(){if(!myTurn())return;if(S.step==='draw')takeDisc();else if(sel.size===1)discardSel();}
 function setSort(m){sortMode=m;if(m!=='free')lsSet('rmsort',m);render();}
+/* ---- chrono du tour (45 s) ---- */
+function autoPlay(pid){
+  if(!S||S.phase!=='play'||rdTurnId(S)!==pid)return;
+  const s=CLONE(S);
+  if(s.step==='draw')rdDrawDeck(s,pid);
+  const hd=s.hands[pid];if(!hd.length)return;
+  const pick=hd.filter(c=>!(c===s.took&&hd.length>1)).sort((a,b)=>(isJ(a)?-99:handPts(a))-(isJ(b)?-99:handPts(b))).pop();
+  if(!pick||!rdDiscard(s,pid,pick))return;
+  sel.clear();staged=[];Snd.play('place');banner('⏱ Temps écoulé : '+(pid===uid?'carte défaussée':nameOf(s,pid)+' passe son tour'),'#E5484D');commit(s);
+}
+setInterval(()=>{
+  if(!S||S.phase!=='play'||isSpec())return;
+  const left=Math.ceil(TURN_S-(Date.now()-(S.ts||Date.now()))/1000),cur=rdTurnId(S),bot=(S.players[S.turn]||{}).bot;
+  const t=document.getElementById('tmr');
+  if(t&&cur===uid){t.textContent='⏱ '+Math.max(0,left);t.style.background=left<=10?'#E5484D':'#3E2410'}
+  if(bot)return;
+  if(cur===uid&&left<=0&&!autoPlay.busy){autoPlay.busy=1;setTimeout(()=>{autoPlay.busy=0},1500);autoPlay(uid)}
+  else if(cur!==uid&&mode==='online'&&isHostUI()&&left<=-8&&!autoPlay.busy){autoPlay.busy=1;setTimeout(()=>{autoPlay.busy=0},3000);autoPlay(cur)}
+},500);
 /* ---- bots (mode solo) ---- */
 function botStep(){
   if(mode!=='solo'||!S||S.phase!=='play')return;
@@ -905,7 +925,8 @@ function renderPicker(){
         h('div',null,h('b',null,'Brelan / carré'),' : 3 ou 4 cartes de même valeur, couleurs différentes'),
         h('div',null,h('b',null,'Suite'),' : 3 cartes ou plus qui se suivent, même couleur (As bas ou haut)'),
         h('div',null,h('b',null,'Joker'),' : remplace n\'importe quelle carte'),
-        h('div',null,h('b',null,'1re pose'),' : 51 points minimum, avec une tierce franche (sans joker)'),
+        h('div',null,h('b',null,'1re pose'),' : 51 points minimum, avec une tierce franche (sans joker). Si un joueur a déjà ouvert à 70, les autres doivent faire plus de 70 pour ouvrir.'),
+        h('div',null,h('b',null,'Temps'),' : 45 secondes par tour. Sinon, une carte est piochée et défaussée automatiquement.'),
         h('div',null,h('b',null,'Fin'),' : celui qui n\'a plus de cartes gagne la manche, les autres prennent leurs points de pénalité. La partie s\'arrête à l\'objectif : le moins de points gagne.')),
       mySlug?null:h('p',{class:'muted'},'Tu peux jouer sans profil : choisis un pseudo.'),
       mySlug?null:nm),
@@ -982,7 +1003,7 @@ function renderGame(){
   const seat=(p)=>{
     const cur=s.phase==='play'&&rdTurnId(s)===p.id;
     return h('div',{class:'seat'+(cur?' turn':''),'data-seat':p.id},
-      h('div',{class:'plate'},avEl(p),h('div',null,h('div',{class:'nm'},p.name+(p.id===uid?' (toi)':'')),h('small',null,'🂠 '+s.hands[p.id].length+(s.laid[p.id]?' · ✅ posé':''))),h('span',{class:'sc',title:'Points cumulés'},String(s.scores[p.id]||0))),
+      h('div',{class:'plate'},avEl(p),h('div',null,h('div',{class:'nm'},p.name+(p.id===uid?' (toi)':'')),h('small',null,'🂠 '+s.hands[p.id].length+(s.laid[p.id]?' · ✅ posé'+((s.opens&&s.opens[p.id])?' ('+s.opens[p.id]+')':''):''))),h('span',{class:'sc',title:'Points cumulés'},String(s.scores[p.id]||0))),
       p.id!==uid?h('div',{class:'hnd'},s.hands[p.id].slice(0,12).map(()=>backEl())):null);
   };
   const topD=s.disc[s.disc.length-1];
@@ -1007,16 +1028,17 @@ function renderGame(){
   if(spec)status='Tu regardes la partie';
   else if(mt)status=s.step==='draw'?'🎯 À toi : pioche ou prends la défausse':(staged.length?'Pose tes combinaisons, ou défausse':'Pose des combinaisons, puis défausse une carte');
   else status='⏳ Au tour de '+nameOf(s,rdTurnId(s));
+  const needN=needOf(s),openTxt=s.open?'Ouverture : plus de '+s.open+' pts':'Ouverture : '+NEED+' pts + tierce franche';
   const stPts=staged.reduce((a,g)=>{const m=arrange(g);return a+(m?meldPts(m):0);},0);
   const stFr=staged.some(g=>{const m=arrange(g);return m&&hasFranche(m);});
   const selM=sel.size>=3?arrange([...sel]):null;
   const stagedEl=mt&&s.step==='play'&&staged.length?h('div',{class:'stage'},
-    h('div',{class:'row'},h('b',null,'À poser'),h('span',{class:'chip '+((s.laid[uid]||(stPts>=NEED&&stFr))?'good':'')},s.laid[uid]?stPts+' pts':stPts+'/'+NEED+' pts'),s.laid[uid]?null:h('span',{class:'chip '+(stFr?'good':'')},stFr?'✅ tierce franche':'tierce franche requise')),
+    h('div',{class:'row'},h('b',null,'À poser'),h('span',{class:'chip '+((s.laid[uid]||(stPts>=needN&&stFr))?'good':'')},'Pose : '+stPts+' pts'+(s.laid[uid]?'':' / '+needN)),s.laid[uid]?null:h('span',{class:'chip '+(stFr?'good':'')},stFr?'✅ tierce franche':'tierce franche requise')),
     h('div',{class:'melds'},staged.map((g,i)=>{const m=arrange(g);return h('div',{class:'meld'},h('div',{class:'cs'},m.cards.map((c,j)=>cardEl(c,{val:isJ(c)?m.vals[j]:0}))),h('button',{class:'btn sm',type:'button',onclick:()=>unstage(i)},'✕ '+meldPts(m)+' pts'));}))):null;
   const acts=[];
   if(mt&&s.step==='play'){
     acts.push(h('button',{class:'btn',type:'button',onclick:suggest},'💡 Suggestion'));
-    acts.push(h('button',{class:'btn',type:'button',disabled:!selM,onclick:stageSel},'➕ Combinaison'+(selM?' ('+sel.size+')':'')));
+    acts.push(h('button',{class:'btn',type:'button',disabled:!selM,onclick:stageSel},'➕ Combinaison'+(selM?' ('+sel.size+' · '+meldPts(selM)+' pts)':'')));
     acts.push(h('button',{class:'btn primary',type:'button',disabled:!staged.length,onclick:layNow},'✅ Poser'));
     acts.push(h('button',{class:'btn',type:'button',disabled:sel.size!==1,onclick:discardSel},'🗑 Défausser'));
   }
@@ -1029,7 +1051,7 @@ function renderGame(){
       h('div',{class:'hdr'},'Manche '+s.round+' · objectif '+s.target+' pts'),
       h('div',{class:'opps'},opps.map(seat)),
       mid,melds,
-      h('div',{class:'status'},status),
+      h('div',{class:'status'},status,mt?h('span',{class:'chip',id:'tmr',style:'margin-left:8px;background:#3E2410'},'⏱ '+TURN_S):null,spec||s.laid[uid]?null:h('div',{class:'muted',style:'font-size:12px;margin-top:2px'},openTxt)),
       stagedEl,
       h('div',{class:'acts'},acts),
       hand,
